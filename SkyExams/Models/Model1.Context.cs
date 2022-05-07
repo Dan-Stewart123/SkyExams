@@ -65,5 +65,6 @@ namespace SkyExams.Models
         public virtual DbSet<Verification_Code> Verification_Code { get; set; }
         public virtual DbSet<Zip_Code> Zip_Code { get; set; }
         public virtual DbSet<Profile_Image> Profile_Image { get; set; }
+        public virtual DbSet<Admin> Admins { get; set; }
     }
 }

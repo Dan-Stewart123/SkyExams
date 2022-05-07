@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Registration Conformation";
+}
+
+<h2>Registration Conformation</h2>
+<p>Your registration code will be emailed to you shortly, do not close this page.</p>
+
+@using (Html.BeginForm("registrationConformationScreen", "Sys_User", FormMethod.Post))
+{
+    <label>@Html.Label("Registration Code:")</label>
+    <input type="text" id="code" name="code">
+    <br />
+    <br />
+    <button id="check" onclick="verifyCode()" type="button">Validate Code</button>
+    <br />
+    <br />
+    <div id="licenceInput" style="display:none;">
+        <label>@Html.Label("Licence Number:")</label>
+        <input type="text" id="licence" name="licence">
+    </div>
+    <br />
+    <br />
+    <div id="submitButton" style="display:none;">
+        <input type="submit" , value="Submit" />
+    </div>
+}
+
+
+<script>
+    function verifyCode() {
+        var temp = document.getElementById("code").value;
+        console.log(temp);
+        if (temp == '101' || temp == '102') {
+            document.getElementById("licenceInput").style.display = "block";
+            document.getElementById("submitButton").style.display = "block";
+        }
+        else {
+            document.getElementById("submitButton").style.display = "block";
+        }
+    }
+</script>
+

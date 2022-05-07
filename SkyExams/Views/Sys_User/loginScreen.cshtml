@@ -12,13 +12,15 @@
     <br />
     <br />
     <label>@Html.Label("Password:")</label>
-    @Html.TextBox("password")
+    <input type="password" id="password" name="password">
     <input type="submit" , value="Forgot password" />
     <br />
     <br />
     <input type="submit" , value="Login" />
     <br />
     <br />
-    <input type="submit" , value="Register" />
+    <div>
+        @Html.ActionLink("Request to Register", "registerScreen")
+    </div>
 }
 
