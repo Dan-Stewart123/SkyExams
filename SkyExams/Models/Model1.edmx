@@ -4,7 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SkyExamsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SkyExamsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Admin_ID" />
+          </Key>
+          <Property Name="Admin_ID" Type="int" Nullable="false" />
+          <Property Name="SysUser_ID" Type="int" />
+        </EntityType>
         <EntityType Name="Answer">
           <Key>
             <PropertyRef Name="Answer_ID" />
@@ -331,6 +338,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Code" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityContainer Name="SkyExamsModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Booking_Status" EntityType="Self.Booking_Status" Schema="dbo" store:Type="Tables" />
@@ -377,11 +385,53 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
     FROM [dbo].[Profile_Image] AS [Profile_Image]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SkyExamsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SkyExamsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Answers" EntityType="SkyExamsModel.Answer" />
+          <EntitySet Name="Bookings" EntityType="SkyExamsModel.Booking" />
+          <EntitySet Name="Booking_Status" EntityType="SkyExamsModel.Booking_Status" />
+          <EntitySet Name="Cessna_172" EntityType="SkyExamsModel.Cessna_172" />
+          <EntitySet Name="Cessna_172_RG" EntityType="SkyExamsModel.Cessna_172_RG" />
+          <EntitySet Name="Cherokee_140" EntityType="SkyExamsModel.Cherokee_140" />
+          <EntitySet Name="Cities" EntityType="SkyExamsModel.City" />
+          <EntitySet Name="Countries" EntityType="SkyExamsModel.Country" />
+          <EntitySet Name="Employment_Status" EntityType="SkyExamsModel.Employment_Status" />
+          <EntitySet Name="EventLocations" EntityType="SkyExamsModel.EventLocation" />
+          <EntitySet Name="Instructors" EntityType="SkyExamsModel.Instructor" />
+          <EntitySet Name="Instructor_Licence" EntityType="SkyExamsModel.Instructor_Licence" />
+          <EntitySet Name="Instructor_Slots" EntityType="SkyExamsModel.Instructor_Slots" />
+          <EntitySet Name="Lesson_Plan" EntityType="SkyExamsModel.Lesson_Plan" />
+          <EntitySet Name="Licence_Type" EntityType="SkyExamsModel.Licence_Type" />
+          <EntitySet Name="Managers" EntityType="SkyExamsModel.Manager" />
+          <EntitySet Name="Planes" EntityType="SkyExamsModel.Plane" />
+          <EntitySet Name="Plane_Type" EntityType="SkyExamsModel.Plane_Type" />
+          <EntitySet Name="Question_Type" EntityType="SkyExamsModel.Question_Type" />
+          <EntitySet Name="Questions" EntityType="SkyExamsModel.Question" />
+          <EntitySet Name="Sections" EntityType="SkyExamsModel.Section" />
+          <EntitySet Name="SkyExams" EntityType="SkyExamsModel.SkyExam" />
+          <EntitySet Name="Students" EntityType="SkyExamsModel.Student" />
+          <EntitySet Name="Student_Instructor" EntityType="SkyExamsModel.Student_Instructor" />
+          <EntitySet Name="Student_Lesson_Plan" EntityType="SkyExamsModel.Student_Lesson_Plan" />
+          <EntitySet Name="Student_Licence_Type" EntityType="SkyExamsModel.Student_Licence_Type" />
+          <EntitySet Name="Student_Resource" EntityType="SkyExamsModel.Student_Resource" />
+          <EntitySet Name="Study_Resource" EntityType="SkyExamsModel.Study_Resource" />
+          <EntitySet Name="Sys_User" EntityType="SkyExamsModel.Sys_User" />
+          <EntitySet Name="Theme_Covered" EntityType="SkyExamsModel.Theme_Covered" />
+          <EntitySet Name="Titles" EntityType="SkyExamsModel.Title" />
+          <EntitySet Name="Topic_Covered" EntityType="SkyExamsModel.Topic_Covered" />
+          <EntitySet Name="Twin_Commanche" EntityType="SkyExamsModel.Twin_Commanche" />
+          <EntitySet Name="uEvents" EntityType="SkyExamsModel.uEvent" />
+          <EntitySet Name="User_Event" EntityType="SkyExamsModel.User_Event" />
+          <EntitySet Name="User_Role" EntityType="SkyExamsModel.User_Role" />
+          <EntitySet Name="UserPasswords" EntityType="SkyExamsModel.UserPassword" />
+          <EntitySet Name="Verification_Code" EntityType="SkyExamsModel.Verification_Code" />
+          <EntitySet Name="Zip_Code" EntityType="SkyExamsModel.Zip_Code" />
+          <EntitySet Name="Profile_Image" EntityType="SkyExamsModel.Profile_Image" />
+          <EntitySet Name="Admins" EntityType="SkyExamsModel.Admin" />
+        </EntityContainer>
         <EntityType Name="Answer">
           <Key>
             <PropertyRef Name="Answer_ID" />
@@ -705,49 +755,14 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Profile_Image_ID" Type="Int32" Nullable="false" />
           <Property Name="Profile_Image1" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityContainer Name="SkyExamsEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Answers" EntityType="Self.Answer" />
-          <EntitySet Name="Bookings" EntityType="Self.Booking" />
-          <EntitySet Name="Booking_Status" EntityType="Self.Booking_Status" />
-          <EntitySet Name="Cessna_172" EntityType="Self.Cessna_172" />
-          <EntitySet Name="Cessna_172_RG" EntityType="Self.Cessna_172_RG" />
-          <EntitySet Name="Cherokee_140" EntityType="Self.Cherokee_140" />
-          <EntitySet Name="Cities" EntityType="Self.City" />
-          <EntitySet Name="Countries" EntityType="Self.Country" />
-          <EntitySet Name="Employment_Status" EntityType="Self.Employment_Status" />
-          <EntitySet Name="EventLocations" EntityType="Self.EventLocation" />
-          <EntitySet Name="Instructors" EntityType="Self.Instructor" />
-          <EntitySet Name="Instructor_Licence" EntityType="Self.Instructor_Licence" />
-          <EntitySet Name="Instructor_Slots" EntityType="Self.Instructor_Slots" />
-          <EntitySet Name="Lesson_Plan" EntityType="Self.Lesson_Plan" />
-          <EntitySet Name="Licence_Type" EntityType="Self.Licence_Type" />
-          <EntitySet Name="Managers" EntityType="Self.Manager" />
-          <EntitySet Name="Planes" EntityType="Self.Plane" />
-          <EntitySet Name="Plane_Type" EntityType="Self.Plane_Type" />
-          <EntitySet Name="Question_Type" EntityType="Self.Question_Type" />
-          <EntitySet Name="Questions" EntityType="Self.Question" />
-          <EntitySet Name="Sections" EntityType="Self.Section" />
-          <EntitySet Name="SkyExams" EntityType="Self.SkyExam" />
-          <EntitySet Name="Students" EntityType="Self.Student" />
-          <EntitySet Name="Student_Instructor" EntityType="Self.Student_Instructor" />
-          <EntitySet Name="Student_Lesson_Plan" EntityType="Self.Student_Lesson_Plan" />
-          <EntitySet Name="Student_Licence_Type" EntityType="Self.Student_Licence_Type" />
-          <EntitySet Name="Student_Resource" EntityType="Self.Student_Resource" />
-          <EntitySet Name="Study_Resource" EntityType="Self.Study_Resource" />
-          <EntitySet Name="Sys_User" EntityType="Self.Sys_User" />
-          <EntitySet Name="Theme_Covered" EntityType="Self.Theme_Covered" />
-          <EntitySet Name="Titles" EntityType="Self.Title" />
-          <EntitySet Name="Topic_Covered" EntityType="Self.Topic_Covered" />
-          <EntitySet Name="Twin_Commanche" EntityType="Self.Twin_Commanche" />
-          <EntitySet Name="uEvents" EntityType="Self.uEvent" />
-          <EntitySet Name="User_Event" EntityType="Self.User_Event" />
-          <EntitySet Name="User_Role" EntityType="Self.User_Role" />
-          <EntitySet Name="UserPasswords" EntityType="Self.UserPassword" />
-          <EntitySet Name="Verification_Code" EntityType="Self.Verification_Code" />
-          <EntitySet Name="Zip_Code" EntityType="Self.Zip_Code" />
-          <EntitySet Name="Profile_Image" EntityType="Self.Profile_Image" />
-        </EntityContainer>
-      </Schema>
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Admin_ID" />
+          </Key>
+          <Property Name="Admin_ID" Type="Int32" Nullable="false" />
+          <Property Name="SysUser_ID" Type="Int32" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -756,354 +771,362 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Answers">
             <EntityTypeMapping TypeName="SkyExamsModel.Answer">
               <MappingFragment StoreEntitySet="Answer">
-                <ScalarProperty Name="Answer_ID" ColumnName="Answer_ID" />
                 <ScalarProperty Name="ANS" ColumnName="ANS" />
+                <ScalarProperty Name="Answer_ID" ColumnName="Answer_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Bookings">
             <EntityTypeMapping TypeName="SkyExamsModel.Booking">
               <MappingFragment StoreEntitySet="Booking">
-                <ScalarProperty Name="Booking_ID" ColumnName="Booking_ID" />
-                <ScalarProperty Name="B_Description" ColumnName="B_Description" />
-                <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
-                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
-                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
                 <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
+                <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
+                <ScalarProperty Name="B_Description" ColumnName="B_Description" />
+                <ScalarProperty Name="Booking_ID" ColumnName="Booking_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Booking_Status">
             <EntityTypeMapping TypeName="SkyExamsModel.Booking_Status">
               <MappingFragment StoreEntitySet="Booking_Status">
-                <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
                 <ScalarProperty Name="B_Status" ColumnName="B_Status" />
+                <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Cessna_172">
             <EntityTypeMapping TypeName="SkyExamsModel.Cessna_172">
               <MappingFragment StoreEntitySet="Cessna_172">
-                <ScalarProperty Name="c172_ID" ColumnName="c172_ID" />
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
                 <ScalarProperty Name="Plane_Description" ColumnName="Plane_Description" />
+                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
+                <ScalarProperty Name="c172_ID" ColumnName="c172_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Cessna_172_RG">
             <EntityTypeMapping TypeName="SkyExamsModel.Cessna_172_RG">
               <MappingFragment StoreEntitySet="Cessna_172_RG">
-                <ScalarProperty Name="c172_RG_ID" ColumnName="c172_RG_ID" />
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
                 <ScalarProperty Name="Plane_Description" ColumnName="Plane_Description" />
+                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
+                <ScalarProperty Name="c172_RG_ID" ColumnName="c172_RG_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Cherokee_140">
             <EntityTypeMapping TypeName="SkyExamsModel.Cherokee_140">
               <MappingFragment StoreEntitySet="Cherokee_140">
-                <ScalarProperty Name="Cherokee_140_ID" ColumnName="Cherokee_140_ID" />
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
                 <ScalarProperty Name="Plane_Description" ColumnName="Plane_Description" />
+                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
+                <ScalarProperty Name="Cherokee_140_ID" ColumnName="Cherokee_140_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Cities">
             <EntityTypeMapping TypeName="SkyExamsModel.City">
               <MappingFragment StoreEntitySet="City">
-                <ScalarProperty Name="City_ID" ColumnName="City_ID" />
                 <ScalarProperty Name="City_Name" ColumnName="City_Name" />
+                <ScalarProperty Name="City_ID" ColumnName="City_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Countries">
             <EntityTypeMapping TypeName="SkyExamsModel.Country">
               <MappingFragment StoreEntitySet="Country">
-                <ScalarProperty Name="Country_ID" ColumnName="Country_ID" />
                 <ScalarProperty Name="Country_Name" ColumnName="Country_Name" />
+                <ScalarProperty Name="Country_ID" ColumnName="Country_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Employment_Status">
             <EntityTypeMapping TypeName="SkyExamsModel.Employment_Status">
               <MappingFragment StoreEntitySet="Employment_Status">
-                <ScalarProperty Name="Employment_ID" ColumnName="Employment_ID" />
                 <ScalarProperty Name="EmpStatus" ColumnName="EmpStatus" />
+                <ScalarProperty Name="Employment_ID" ColumnName="Employment_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="EventLocations">
             <EntityTypeMapping TypeName="SkyExamsModel.EventLocation">
               <MappingFragment StoreEntitySet="EventLocation">
-                <ScalarProperty Name="Location_ID" ColumnName="Location_ID" />
                 <ScalarProperty Name="Event_Location" ColumnName="Event_Location" />
+                <ScalarProperty Name="Location_ID" ColumnName="Location_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Instructors">
             <EntityTypeMapping TypeName="SkyExamsModel.Instructor">
               <MappingFragment StoreEntitySet="Instructor">
-                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
-                <ScalarProperty Name="Licence_No" ColumnName="Licence_No" />
                 <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
+                <ScalarProperty Name="Licence_No" ColumnName="Licence_No" />
+                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Instructor_Licence">
             <EntityTypeMapping TypeName="SkyExamsModel.Instructor_Licence">
               <MappingFragment StoreEntitySet="Instructor_Licence">
-                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
                 <ScalarProperty Name="Licence_Type_ID" ColumnName="Licence_Type_ID" />
+                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Instructor_Slots">
             <EntityTypeMapping TypeName="SkyExamsModel.Instructor_Slots">
               <MappingFragment StoreEntitySet="Instructor_Slots">
-                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
                 <ScalarProperty Name="Booking_ID" ColumnName="Booking_ID" />
+                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Lesson_Plan">
             <EntityTypeMapping TypeName="SkyExamsModel.Lesson_Plan">
               <MappingFragment StoreEntitySet="Lesson_Plan">
-                <ScalarProperty Name="Lesson_Plan_ID" ColumnName="Lesson_Plan_ID" />
-                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
-                <ScalarProperty Name="LP_Description" ColumnName="LP_Description" />
                 <ScalarProperty Name="Topic_ID" ColumnName="Topic_ID" />
+                <ScalarProperty Name="LP_Description" ColumnName="LP_Description" />
+                <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
+                <ScalarProperty Name="Lesson_Plan_ID" ColumnName="Lesson_Plan_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Licence_Type">
             <EntityTypeMapping TypeName="SkyExamsModel.Licence_Type">
               <MappingFragment StoreEntitySet="Licence_Type">
-                <ScalarProperty Name="Licence_Type_ID" ColumnName="Licence_Type_ID" />
                 <ScalarProperty Name="TypeDescription" ColumnName="TypeDescription" />
+                <ScalarProperty Name="Licence_Type_ID" ColumnName="Licence_Type_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Managers">
             <EntityTypeMapping TypeName="SkyExamsModel.Manager">
               <MappingFragment StoreEntitySet="Manager">
-                <ScalarProperty Name="Manager_ID" ColumnName="Manager_ID" />
                 <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
+                <ScalarProperty Name="Manager_ID" ColumnName="Manager_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Planes">
             <EntityTypeMapping TypeName="SkyExamsModel.Plane">
               <MappingFragment StoreEntitySet="Plane">
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
-                <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
-                <ScalarProperty Name="Call_Sign" ColumnName="Call_Sign" />
-                <ScalarProperty Name="Hours_Flown" ColumnName="Hours_Flown" />
                 <ScalarProperty Name="Hours_Until_Service" ColumnName="Hours_Until_Service" />
+                <ScalarProperty Name="Hours_Flown" ColumnName="Hours_Flown" />
+                <ScalarProperty Name="Call_Sign" ColumnName="Call_Sign" />
+                <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
+                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Plane_Type">
             <EntityTypeMapping TypeName="SkyExamsModel.Plane_Type">
               <MappingFragment StoreEntitySet="Plane_Type">
-                <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
                 <ScalarProperty Name="Type_Description" ColumnName="Type_Description" />
+                <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Question_Type">
             <EntityTypeMapping TypeName="SkyExamsModel.Question_Type">
               <MappingFragment StoreEntitySet="Question_Type">
-                <ScalarProperty Name="Question_Type_ID" ColumnName="Question_Type_ID" />
                 <ScalarProperty Name="Ques_Type" ColumnName="Ques_Type" />
+                <ScalarProperty Name="Question_Type_ID" ColumnName="Question_Type_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="SkyExamsModel.Question">
               <MappingFragment StoreEntitySet="Questions">
-                <ScalarProperty Name="Question_ID" ColumnName="Question_ID" />
-                <ScalarProperty Name="Question1" ColumnName="Question" />
-                <ScalarProperty Name="Answer_ID" ColumnName="Answer_ID" />
-                <ScalarProperty Name="Question_Type_ID" ColumnName="Question_Type_ID" />
                 <ScalarProperty Name="Section_ID" ColumnName="Section_ID" />
+                <ScalarProperty Name="Question_Type_ID" ColumnName="Question_Type_ID" />
+                <ScalarProperty Name="Answer_ID" ColumnName="Answer_ID" />
+                <ScalarProperty Name="Question1" ColumnName="Question" />
+                <ScalarProperty Name="Question_ID" ColumnName="Question_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Sections">
             <EntityTypeMapping TypeName="SkyExamsModel.Section">
               <MappingFragment StoreEntitySet="Section">
-                <ScalarProperty Name="Section_ID" ColumnName="Section_ID" />
                 <ScalarProperty Name="Section1" ColumnName="Section" />
+                <ScalarProperty Name="Section_ID" ColumnName="Section_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SkyExams">
             <EntityTypeMapping TypeName="SkyExamsModel.SkyExam">
               <MappingFragment StoreEntitySet="SkyExams">
-                <ScalarProperty Name="SkyExams_ID" ColumnName="SkyExams_ID" />
                 <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
+                <ScalarProperty Name="SkyExams_ID" ColumnName="SkyExams_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Students">
             <EntityTypeMapping TypeName="SkyExamsModel.Student">
               <MappingFragment StoreEntitySet="Student">
-                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
-                <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
                 <ScalarProperty Name="Licence_No" ColumnName="Licence_No" />
+                <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Student_Instructor">
             <EntityTypeMapping TypeName="SkyExamsModel.Student_Instructor">
               <MappingFragment StoreEntitySet="Student_Instructor">
-                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
                 <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Student_Lesson_Plan">
             <EntityTypeMapping TypeName="SkyExamsModel.Student_Lesson_Plan">
               <MappingFragment StoreEntitySet="Student_Lesson_Plan">
-                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
                 <ScalarProperty Name="Lesson_Plan_ID" ColumnName="Lesson_Plan_ID" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Student_Licence_Type">
             <EntityTypeMapping TypeName="SkyExamsModel.Student_Licence_Type">
               <MappingFragment StoreEntitySet="Student_Licence_Type">
-                <ScalarProperty Name="Student_Licence_ID" ColumnName="Student_Licence_ID" />
                 <ScalarProperty Name="Licence_Type_ID" ColumnName="Licence_Type_ID" />
+                <ScalarProperty Name="Student_Licence_ID" ColumnName="Student_Licence_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Student_Resource">
             <EntityTypeMapping TypeName="SkyExamsModel.Student_Resource">
               <MappingFragment StoreEntitySet="Student_Resource">
-                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
                 <ScalarProperty Name="Study_Resource_ID" ColumnName="Study_Resource_ID" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Study_Resource">
             <EntityTypeMapping TypeName="SkyExamsModel.Study_Resource">
               <MappingFragment StoreEntitySet="Study_Resource">
-                <ScalarProperty Name="Study_Resource_ID" ColumnName="Study_Resource_ID" />
-                <ScalarProperty Name="Resource_Name" ColumnName="Resource_Name" />
-                <ScalarProperty Name="Resources" ColumnName="Resources" />
                 <ScalarProperty Name="Theme_ID" ColumnName="Theme_ID" />
+                <ScalarProperty Name="Resources" ColumnName="Resources" />
+                <ScalarProperty Name="Resource_Name" ColumnName="Resource_Name" />
+                <ScalarProperty Name="Study_Resource_ID" ColumnName="Study_Resource_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Sys_User">
             <EntityTypeMapping TypeName="SkyExamsModel.Sys_User">
               <MappingFragment StoreEntitySet="Sys_User">
-                <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
-                <ScalarProperty Name="User_Role_ID" ColumnName="User_Role_ID" />
-                <ScalarProperty Name="Title_ID" ColumnName="Title_ID" />
-                <ScalarProperty Name="FName" ColumnName="FName" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="Cell_Number" ColumnName="Cell_Number" />
-                <ScalarProperty Name="Email_Address" ColumnName="Email_Address" />
-                <ScalarProperty Name="Physical_Address" ColumnName="Physical_Address" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="Password_ID" ColumnName="Password_ID" />
-                <ScalarProperty Name="City_ID" ColumnName="City_ID" />
-                <ScalarProperty Name="Country_ID" ColumnName="Country_ID" />
-                <ScalarProperty Name="ZIP_ID" ColumnName="ZIP_ID" />
                 <ScalarProperty Name="Employment_ID" ColumnName="Employment_ID" />
+                <ScalarProperty Name="ZIP_ID" ColumnName="ZIP_ID" />
+                <ScalarProperty Name="Country_ID" ColumnName="Country_ID" />
+                <ScalarProperty Name="City_ID" ColumnName="City_ID" />
+                <ScalarProperty Name="Password_ID" ColumnName="Password_ID" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Physical_Address" ColumnName="Physical_Address" />
+                <ScalarProperty Name="Email_Address" ColumnName="Email_Address" />
+                <ScalarProperty Name="Cell_Number" ColumnName="Cell_Number" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="Title_ID" ColumnName="Title_ID" />
+                <ScalarProperty Name="User_Role_ID" ColumnName="User_Role_ID" />
+                <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Theme_Covered">
             <EntityTypeMapping TypeName="SkyExamsModel.Theme_Covered">
               <MappingFragment StoreEntitySet="Theme_Covered">
-                <ScalarProperty Name="Theme_ID" ColumnName="Theme_ID" />
                 <ScalarProperty Name="Theme" ColumnName="Theme" />
+                <ScalarProperty Name="Theme_ID" ColumnName="Theme_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Titles">
             <EntityTypeMapping TypeName="SkyExamsModel.Title">
               <MappingFragment StoreEntitySet="Title">
-                <ScalarProperty Name="Title_ID" ColumnName="Title_ID" />
                 <ScalarProperty Name="TitleDesc" ColumnName="TitleDesc" />
+                <ScalarProperty Name="Title_ID" ColumnName="Title_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Topic_Covered">
             <EntityTypeMapping TypeName="SkyExamsModel.Topic_Covered">
               <MappingFragment StoreEntitySet="Topic_Covered">
-                <ScalarProperty Name="Topic_ID" ColumnName="Topic_ID" />
                 <ScalarProperty Name="Topic" ColumnName="Topic" />
+                <ScalarProperty Name="Topic_ID" ColumnName="Topic_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Twin_Commanche">
             <EntityTypeMapping TypeName="SkyExamsModel.Twin_Commanche">
               <MappingFragment StoreEntitySet="Twin_Commanche">
-                <ScalarProperty Name="Twin_Commanche_ID" ColumnName="Twin_Commanche_ID" />
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
                 <ScalarProperty Name="Plane_Description" ColumnName="Plane_Description" />
+                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
+                <ScalarProperty Name="Twin_Commanche_ID" ColumnName="Twin_Commanche_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="uEvents">
             <EntityTypeMapping TypeName="SkyExamsModel.uEvent">
               <MappingFragment StoreEntitySet="uEvent">
-                <ScalarProperty Name="Event_ID" ColumnName="Event_ID" />
-                <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
                 <ScalarProperty Name="Location_ID" ColumnName="Location_ID" />
+                <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
+                <ScalarProperty Name="Event_ID" ColumnName="Event_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="User_Event">
             <EntityTypeMapping TypeName="SkyExamsModel.User_Event">
               <MappingFragment StoreEntitySet="User_Event">
-                <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
                 <ScalarProperty Name="Event_ID" ColumnName="Event_ID" />
+                <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="User_Role">
             <EntityTypeMapping TypeName="SkyExamsModel.User_Role">
               <MappingFragment StoreEntitySet="User_Role">
-                <ScalarProperty Name="User_Role_ID" ColumnName="User_Role_ID" />
                 <ScalarProperty Name="RoleDesc" ColumnName="RoleDesc" />
+                <ScalarProperty Name="User_Role_ID" ColumnName="User_Role_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserPasswords">
             <EntityTypeMapping TypeName="SkyExamsModel.UserPassword">
               <MappingFragment StoreEntitySet="UserPassword">
-                <ScalarProperty Name="Password_ID" ColumnName="Password_ID" />
-                <ScalarProperty Name="Encrypted_password" ColumnName="Encrypted_password" />
                 <ScalarProperty Name="Date_Set" ColumnName="Date_Set" />
+                <ScalarProperty Name="Encrypted_password" ColumnName="Encrypted_password" />
+                <ScalarProperty Name="Password_ID" ColumnName="Password_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Verification_Code">
             <EntityTypeMapping TypeName="SkyExamsModel.Verification_Code">
               <MappingFragment StoreEntitySet="Verification_Code">
-                <ScalarProperty Name="Verif_Code_ID" ColumnName="Verif_Code_ID" />
                 <ScalarProperty Name="Privelages" ColumnName="Privelages" />
+                <ScalarProperty Name="Verif_Code_ID" ColumnName="Verif_Code_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Zip_Code">
             <EntityTypeMapping TypeName="SkyExamsModel.Zip_Code">
               <MappingFragment StoreEntitySet="Zip_Code">
-                <ScalarProperty Name="Zip_ID" ColumnName="Zip_ID" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Zip_ID" ColumnName="Zip_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Profile_Image">
             <EntityTypeMapping TypeName="SkyExamsModel.Profile_Image">
               <MappingFragment StoreEntitySet="Profile_Image">
-                <ScalarProperty Name="Profile_Image_ID" ColumnName="Profile_Image_ID" />
                 <ScalarProperty Name="Profile_Image1" ColumnName="Profile_Image" />
+                <ScalarProperty Name="Profile_Image_ID" ColumnName="Profile_Image_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="SkyExamsModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
+                <ScalarProperty Name="Admin_ID" ColumnName="Admin_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
