@@ -249,19 +249,20 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
             <PropertyRef Name="SysUser_ID" />
           </Key>
           <Property Name="SysUser_ID" Type="int" Nullable="false" />
-          <Property Name="User_Role_ID" Type="int" Nullable="false" />
+          <Property Name="User_Role_ID" Type="int" />
           <Property Name="Title_ID" Type="int" Nullable="false" />
           <Property Name="FName" Type="varchar" MaxLength="50" />
           <Property Name="Surname" Type="varchar" MaxLength="50" />
           <Property Name="Cell_Number" Type="varchar" MaxLength="10" />
           <Property Name="Email_Address" Type="varchar" MaxLength="50" />
           <Property Name="Physical_Address" Type="varchar" MaxLength="50" />
-          <Property Name="DOB" Type="datetime" />
+          <Property Name="DOB" Type="date" />
           <Property Name="Password_ID" Type="int" Nullable="false" />
           <Property Name="City_ID" Type="int" Nullable="false" />
           <Property Name="Country_ID" Type="int" Nullable="false" />
           <Property Name="ZIP_ID" Type="int" Nullable="false" />
           <Property Name="Employment_ID" Type="int" Nullable="false" />
+          <Property Name="User_Name" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Theme_Covered">
           <Key>
@@ -660,19 +661,20 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
             <PropertyRef Name="SysUser_ID" />
           </Key>
           <Property Name="SysUser_ID" Type="Int32" Nullable="false" />
-          <Property Name="User_Role_ID" Type="Int32" Nullable="false" />
+          <Property Name="User_Role_ID" Type="Int32" />
           <Property Name="Title_ID" Type="Int32" Nullable="false" />
           <Property Name="FName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Cell_Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Email_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Physical_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DOB" Type="DateTime" Precision="3" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
           <Property Name="Password_ID" Type="Int32" Nullable="false" />
           <Property Name="City_ID" Type="Int32" Nullable="false" />
           <Property Name="Country_ID" Type="Int32" Nullable="false" />
           <Property Name="ZIP_ID" Type="Int32" Nullable="false" />
           <Property Name="Employment_ID" Type="Int32" Nullable="false" />
+          <Property Name="User_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Theme_Covered">
           <Key>
@@ -1014,6 +1016,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Sys_User">
             <EntityTypeMapping TypeName="SkyExamsModel.Sys_User">
               <MappingFragment StoreEntitySet="Sys_User">
+                <ScalarProperty Name="User_Name" ColumnName="User_Name" />
                 <ScalarProperty Name="Employment_ID" ColumnName="Employment_ID" />
                 <ScalarProperty Name="ZIP_ID" ColumnName="ZIP_ID" />
                 <ScalarProperty Name="Country_ID" ColumnName="Country_ID" />

@@ -15,7 +15,7 @@ namespace SkyExams.Models
     public partial class Sys_User
     {
         public int SysUser_ID { get; set; }
-        public int User_Role_ID { get; set; }
+        public Nullable<int> User_Role_ID { get; set; }
         public int Title_ID { get; set; }
         public string FName { get; set; }
         public string Surname { get; set; }
@@ -28,5 +28,6 @@ namespace SkyExams.Models
         public int Country_ID { get; set; }
         public int ZIP_ID { get; set; }
         public int Employment_ID { get; set; }
+        public string User_Name { get; set; }
     }
 }

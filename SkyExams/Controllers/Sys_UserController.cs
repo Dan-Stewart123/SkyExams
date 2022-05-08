@@ -34,16 +34,33 @@ namespace SkyExams.Controllers
         {
             string uName = Request["userName"];
             string pass = Request["password"];
-            //search for user based in user name here
-            //find that users password and store them on a global private student variable
-            // remember to decrypt the passwords
-            if(uName == "" && pass == "")
+            string passwordFromDb = "";
+            Sys_User loginUser = new Sys_User();
+            if (uName != "" || pass != "")
             {
+                foreach (Sys_User tempUser in db.Sys_User.ToList())
+                {
+                    if(uName == tempUser.User_Name)
+                    {
+                        loginUser = tempUser;
+                        foreach(UserPassword tempPass in db.UserPasswords.ToList())
+                        {
+                            if(loginUser.Password_ID == tempPass.Password_ID)
+                            {
+                                passwordFromDb = decodePassword(tempPass.Encrypted_password);
+                                if(pass == passwordFromDb)
+                                {
+                                    return View(loginUser);
+                                }// checks is entered password matches db password
+                            }// matches user and password ids
+                        }// searches passwords
+                    }// matches username to db username
+                }// searches users
                 return RedirectToAction("loginScreen");
             }
             else
             {
-                return View();
+                return RedirectToAction("loginScreen");
             }
             // verify username and password here, if correct then display home screen, else login screen with a pop up
         }// returns home screen
@@ -54,160 +71,135 @@ namespace SkyExams.Controllers
         }// return register screen
 
         [HttpPost]
-        public ActionResult registerScreen(string firstName)
+        public ActionResult registerScreen(string firstName, string lastName, string uName, string title, string cellNo, string email, string pAddress, string country, string city, string zip, string dob, string empStatus, string password, string confPass)
         {
-            string fName = Request["firstName"];
-            string lName = Request["lastName"];
-            string uName = Request["uName"];
-            string title = Request["title"];
-            string cellNo = Request["cellNo"];
-            string email = Request["email"];
-            string pAddress = Request["pAddress"];
-            string country = Request["country"];
-            string city = Request["city"];
-            string zip = Request["zip"];
-            //profile image
-            string tempDate = Request["dob"];
-            string empStatus = Request["empStatus"];
-            string password = Request["password"];
-            string confirmPassword = Request["confPass"];
-            if(fName == "" || lName == "" || uName == "" || title == "" || cellNo == "" || email == "" || pAddress == "" || country == "" || city == "" || zip == "" || tempDate == "" || empStatus == "" || password =="" || confirmPassword == "")
+            if(firstName == "" || lastName == "" || uName == "" || title == "" || cellNo == "" || email == "" || pAddress == "" || country == "" || city == "" || zip == "" || dob == "" || empStatus == "" || password =="" || confPass == "")
             {
                 return RedirectToAction("registerScreen");
             }// checks that fileds are not empty
-            if (password != confirmPassword)
+            if (password != confPass)
             {
                 return RedirectToAction("registerScreen");
             }// checks that passwords match
             else
             {
-                DateTime dob = DateTime.Parse(tempDate);
-                user.FName = fName;
-                user.Surname = lName;
+                DateTime DOB = DateTime.Parse(dob);
+                user.FName = firstName;
+                user.Surname = lastName;
                 user.Cell_Number = cellNo;
                 user.Email_Address = email;
                 user.Physical_Address = pAddress;
-                user.DOB = dob;
-                List<Country> cList = new List<Country>();
-                cList = db.Countries.ToList();
-                foreach(Country tempCountry in db.Countries.ToList())
-                {
-                    if (country == tempCountry.Country_Name)
-                    {
-                        user.Country_ID = tempCountry.Country_ID;
-                    }// if country exists
-                    else
-                    {
-                        Country newCountry = new Country();
-                        newCountry.Country_ID = cList.Count() + 1;
-                        newCountry.Country_Name = country;
-                        cList.Add(newCountry);
-                        user.Country_ID = newCountry.Country_ID;
-                    }// if country dosent exist
-                }// loops through all countries, if the country exists, is used that ID for the user, if not, it creates a new country and uses that ID
+                user.DOB = DOB;
+                user.User_Name = uName;
 
-                List<City> cityList = new List<City>();
-                cityList = db.Cities.ToList();
-                foreach (City tempCity in db.Cities.ToList())
+                List<Country> cList = db.Countries.ToList();
+                int countryIndex = -1;
+                countryIndex = cList.FindIndex(c => c.Country_Name == country);
+                if(countryIndex == -1)
                 {
-                    if (city == tempCity.City_Name)
-                    {
-                        user.City_ID = tempCity.City_ID;
-                    }// if City exists
-                    else
-                    {
-                        City newCity = new City();
-                        newCity.City_ID = cityList.Count() + 1;
-                        newCity.City_Name = country;
-                        cityList.Add(newCity);
-                        user.Country_ID = newCity.City_ID;
-                    }// if City dosent exist
-                }// loops through all cities, if the city exists, is used that ID for the user, if not, it creates a new city and uses that ID
+                    Country newCountry = new Country();
+                    newCountry.Country_ID = cList.Count() + 1;
+                    newCountry.Country_Name = country;
+                    cList.Add(newCountry);
+                    user.Country_ID = newCountry.Country_ID;
+                    db.Countries.Add(newCountry);
+                    db.SaveChanges();
+                }//if country dosent exist
+                else
+                {
+                    user.Country_ID = cList[countryIndex].Country_ID;
+                }// if country exists
 
-                List<Title> tList = new List<Title>();
-                tList = db.Titles.ToList();
+                List<City> cityList = db.Cities.ToList();
+                int cityIndex = -1;
+                cityIndex = cityList.FindIndex(ci => ci.City_Name == city);
+                if (cityIndex == -1)
+                {
+                    City newCity = new City();
+                    newCity.City_ID = cityList.Count() + 1;
+                    newCity.City_Name = city;
+                    cityList.Add(newCity);
+                    user.City_ID = newCity.City_ID;
+                    db.Cities.Add(newCity);
+                    db.SaveChanges();
+                }// if city dosent exist
+                else
+                {
+                    user.City_ID = cityList[cityIndex].City_ID;
+                }// if city exists
+
+                List<Title> tList = db.Titles.ToList();
                 foreach (Title tempTitle in db.Titles.ToList())
                 {
                     if (title == tempTitle.TitleDesc)
                     {
-                        user.City_ID = tempTitle.Title_ID;
+                        user.Title_ID = tempTitle.Title_ID;
                     }// if title exists
-                    else
-                    {
-                        Title newTitle = new Title();
-                        newTitle.Title_ID = tList.Count() + 1;
-                        newTitle.TitleDesc = title;
-                        tList.Add(newTitle);
-                        user.Country_ID = newTitle.Title_ID;
-                    }// if title dosent exist
                 }// loops through all titles, if the title exists, is used that ID for the user, if not, it creates a new title and uses that ID
 
-                List<Employment_Status> eList = new List<Employment_Status>();
-                eList = db.Employment_Status.ToList();
+                List<Employment_Status> eList = db.Employment_Status.ToList();
                 foreach (Employment_Status tempStatus in db.Employment_Status.ToList())
                 {
                     if (empStatus == tempStatus.EmpStatus)
                     {
                         user.Employment_ID = tempStatus.Employment_ID;
                     }// if status exists
-                    else
-                    {
-                        Employment_Status newStatus = new Employment_Status();
-                        newStatus.Employment_ID = eList.Count() + 1;
-                        newStatus.EmpStatus = empStatus;
-                        eList.Add(newStatus);
-                        user.Country_ID = newStatus.Employment_ID;
-                    }// if status dosent exist
                 }// loops through all statuses, if the status exists, is used that ID for the user, if not, it creates a new status and uses that ID
 
-                List<Zip_Code> zList = new List<Zip_Code>();
-                zList = db.Zip_Code.ToList();
-                foreach (Zip_Code tempZip in db.Zip_Code.ToList())
+                List<Zip_Code> zList = db.Zip_Code.ToList();
+                int zipIndex = -1;
+                zipIndex = zList.FindIndex(z => z.Code == zip);
+                if (zipIndex == -1)
                 {
-                    if (zip == tempZip.Code)
-                    {
-                        user.ZIP_ID = tempZip.Zip_ID;
-                    }// if zip exists
-                    else
-                    {
-                        Zip_Code newZip = new Zip_Code();
-                        newZip.Zip_ID = eList.Count() + 1;
-                        newZip.Code = zip;
-                        zList.Add(newZip);
-                        user.Country_ID = newZip.Zip_ID;
-                    }// if zip dosent exist
-                }// loops through all codes, if the code exists, is used that ID for the user, if not, it creates a new code and uses that ID
+                    Zip_Code newZip = new Zip_Code();
+                    newZip.Zip_ID = zList.Count() + 1;
+                    newZip.Code = zip;
+                    zList.Add(newZip);
+                    user.ZIP_ID = newZip.Zip_ID;
+                    db.Zip_Code.Add(newZip);
+                    db.SaveChanges();
+                }// if zip dosent exist
+                else
+                {
+                    user.ZIP_ID = zList[zipIndex].Zip_ID;
+                }// if zip exists
 
-                List<UserPassword> passList = new List<UserPassword>();
+                List<UserPassword> passList = db.UserPasswords.ToList();
                 UserPassword newPassword = new UserPassword();
                 newPassword.Password_ID = passList.Count + 1;
-                string encPassword = encodePassword(confirmPassword);
+                string encPassword = encodePassword(confPass);
                 newPassword.Encrypted_password = encPassword;
                 newPassword.Date_Set = DateTime.Now;
                 passList.Add(newPassword);
+                db.UserPasswords.Add(newPassword);
+                db.SaveChanges();
                 user.Password_ID = newPassword.Password_ID;
+                user.SysUser_ID = db.Sys_User.ToList().Count + 1;
+                db.Sys_User.Add(user);
+                db.SaveChanges();
 
                 //create email
-                var requestEmail = new MimeMessage();
-                requestEmail.From.Add(MailboxAddress.Parse("uriah.cronin5@ethereal.email"));
+                MimeMessage requestEmail = new MimeMessage();
+                requestEmail.From.Add(new MailboxAddress("New user", "u20428660@tuks.co.za"));
                 requestEmail.To.Add(MailboxAddress.Parse("u20428660@tuks.co.za"));
                 requestEmail.Subject = "New user request";
-                requestEmail.Body = new TextPart(MimeKit.Text.TextFormat.Plain) { Text = "A new user wishes to be requstered on the system" };
+                requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system" + firstName + " " + lastName };
 
                 //send email
-                var smtp = new SmtpClient();
-                smtp.Connect("smtp.ethereal.email", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                smtp.Authenticate("uriah.cronin5@ethereal.email", "SGhYKTAadrj6kcNxF5");
-                smtp.Send(requestEmail);
-                smtp.Disconnect(true);
+                SmtpClient client = new SmtpClient();
+                client.Connect("smtp.gmail.com", 465, true);
+                client.Authenticate("u20428660@tuks.co.za", "Titan0208#");
+                client.Send(requestEmail);
+                client.Disconnect(true);
+                client.Dispose();
                 return RedirectToAction("registrationConformationScreen");
             }// adds user, emails admin
             
         }// registering users
 
-        public ActionResult registrationConformationScreen(string code)
+        public ActionResult registrationConformationScreen(string uName, string code)
         {
-            if (code == "")
+            if (uName == "" || code == "")
             {
                 return View();
             }// student 
@@ -217,20 +209,32 @@ namespace SkyExams.Controllers
                 Student newStudent = new Student();
                 int studentID = db.Students.ToList().Count + 1;
                 newStudent.Student_ID = studentID;
-                newStudent.SysUser_ID = user.SysUser_ID;
                 newStudent.Licence_No = Convert.ToInt32(studentLicence);
-                // add to db
+
+                Sys_User newStudentUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
+                newStudentUser.User_Role_ID = 2;
+                db.Entry(newStudentUser).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChangesAsync();
+                newStudent.SysUser_ID = newStudentUser.SysUser_ID;
+                db.Students.Add(newStudent);
+                db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// student 
             if (code == "102")
             {
                 string instructorLicence = Request["licence"];
-                Instructor inewInstructor = new Instructor();
+                Instructor newInstructor = new Instructor();
                 int indtructorId = db.Instructors.ToList().Count + 1;
-                inewInstructor.Instructor_ID = indtructorId;
-                inewInstructor.SysUser_ID = user.SysUser_ID;
-                inewInstructor.Licence_No = Convert.ToInt32(instructorLicence);
-                // add to db
+                newInstructor.Instructor_ID = indtructorId;
+                newInstructor.Licence_No = Convert.ToInt32(instructorLicence);
+
+                Sys_User newInsUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
+                newInsUser.User_Role_ID = 2;
+                db.Entry(newInsUser).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChangesAsync();
+                newInstructor.SysUser_ID = newInsUser.SysUser_ID;
+                db.Instructors.Add(newInstructor);
+                db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// instructor
             if (code == "103")
@@ -238,7 +242,15 @@ namespace SkyExams.Controllers
                 Admin newAdmin = new Admin();
                 int adminId = db.Admins.ToList().Count + 1;
                 newAdmin.Admin_ID = adminId;
-                newAdmin.SysUser_ID = user.SysUser_ID;
+
+
+                Sys_User newAdminUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
+                newAdminUser.User_Role_ID = 2;
+                db.Entry(newAdminUser).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChangesAsync();
+                newAdmin.SysUser_ID = newAdminUser.SysUser_ID;
+                db.Admins.Add(newAdmin);
+                db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// admin
             if (code == "104")
@@ -246,7 +258,14 @@ namespace SkyExams.Controllers
                 Manager newManager = new Manager();
                 int managerId = db.Managers.ToList().Count + 1;
                 newManager.Manager_ID = managerId;
-                newManager.SysUser_ID = user.SysUser_ID;
+
+                Sys_User newManagerUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
+                newManagerUser.User_Role_ID = 2;
+                db.Entry(newManagerUser).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChangesAsync();
+                newManager.SysUser_ID = newManagerUser.SysUser_ID;
+                db.Managers.Add(newManager);
+                db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// manager 
             else
@@ -254,6 +273,222 @@ namespace SkyExams.Controllers
                 return View();
             }
         }// finalise registration with codes
+
+        public ActionResult viewAccount(int? id)
+        {
+            Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            return View(viewUser);
+        }// view account function
+
+        public ActionResult searchScreen(int? id)
+        {
+            Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            return View(viewUser);
+        }// search screen
+
+        public ActionResult searchResultsScreen(int? id, string firstName, string lastName, string list)
+        {
+            List<Sys_User> searchedUsers = new List<Sys_User>();
+            if (firstName == "" && lastName == "")
+            {
+                return RedirectToAction("searchScreen");
+            }// if fields are empty
+            else
+            {
+                if(list == "student")
+                {
+                    searchedUsers = db.Sys_User.ToList().FindAll(u => u.User_Role_ID == 1 && u.FName == firstName || u.Surname == lastName);
+                }// students
+                if (list == "instructor")
+                {
+                    searchedUsers = db.Sys_User.ToList().FindAll(u => u.User_Role_ID == 2 && u.FName == firstName || u.Surname == lastName);
+                }// instructors
+                if (list == "admin")
+                {
+                    searchedUsers = db.Sys_User.ToList().FindAll(u => u.User_Role_ID == 3 && u.FName == firstName || u.Surname == lastName);
+                }// admin
+                if (list == "manager")
+                {
+                    searchedUsers = db.Sys_User.ToList().FindAll(u => u.User_Role_ID == 4 && u.FName == firstName || u.Surname == lastName);
+                }// manager
+            }// fields arent empty
+            return View(searchedUsers);
+        }// displays search results
+
+        public ActionResult updateAccount(int? id)
+        {
+            Sys_User updateUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            return View(updateUser);
+        }// return register screen
+
+        [HttpPost]
+        public ActionResult updateAccount(string id, string firstName, string lastName, string uName, string title, string cellNo, string email, string pAddress, string country, string city, string zip, string dob, string empStatus)
+        {
+            int idUser = Convert.ToInt32(id);
+            Sys_User sys_User = db.Sys_User.ToList().Find(u => u.SysUser_ID == idUser);
+            if (firstName == "" || lastName == "" || uName == "" || title == "" || cellNo == "" || email == "" || pAddress == "" || country == "" || city == "" || zip == "" || dob == "" || empStatus == "")
+            {
+                return RedirectToAction("updateAccount");
+            }// checks that fileds are not empty
+            else
+            {
+                DateTime DOB = DateTime.Parse(dob);
+                sys_User.FName = firstName;
+                sys_User.Surname = lastName;
+                sys_User.Cell_Number = cellNo;
+                sys_User.Email_Address = email;
+                sys_User.Physical_Address = pAddress;
+                sys_User.DOB = DOB;
+                sys_User.User_Name = uName;
+
+                List<Country> cList = db.Countries.ToList();
+                int countryIndex = -1;
+                countryIndex = cList.FindIndex(c => c.Country_Name == country);
+                if (countryIndex == -1)
+                {
+                    Country newCountry = new Country();
+                    newCountry.Country_ID = cList.Count() + 1;
+                    newCountry.Country_Name = country;
+                    cList.Add(newCountry);
+                    sys_User.Country_ID = newCountry.Country_ID;
+                    db.Countries.Add(newCountry);
+                    db.SaveChanges();
+                }//if country dosent exist
+                else
+                {
+                    sys_User.Country_ID = cList[countryIndex].Country_ID;
+                }// if country exists
+
+                List<City> cityList = db.Cities.ToList();
+                int cityIndex = -1;
+                cityIndex = cityList.FindIndex(ci => ci.City_Name == city);
+                if (cityIndex == -1)
+                {
+                    City newCity = new City();
+                    newCity.City_ID = cityList.Count() + 1;
+                    newCity.City_Name = city;
+                    cityList.Add(newCity);
+                    sys_User.City_ID = newCity.City_ID;
+                    db.Cities.Add(newCity);
+                    db.SaveChanges();
+                }// if city dosent exist
+                else
+                {
+                    sys_User.City_ID = cityList[cityIndex].City_ID;
+                }// if city exists
+
+                List<Title> tList = db.Titles.ToList();
+                foreach (Title tempTitle in db.Titles.ToList())
+                {
+                    if (title == tempTitle.TitleDesc)
+                    {
+                        sys_User.Title_ID = tempTitle.Title_ID;
+                    }// if title exists
+                }// loops through all titles, if the title exists, is used that ID for the user, if not, it creates a new title and uses that ID
+
+                List<Employment_Status> eList = db.Employment_Status.ToList();
+                foreach (Employment_Status tempStatus in db.Employment_Status.ToList())
+                {
+                    if (empStatus == tempStatus.EmpStatus)
+                    {
+                        sys_User.Employment_ID = tempStatus.Employment_ID;
+                    }// if status exists
+                }// loops through all statuses, if the status exists, is used that ID for the user, if not, it creates a new status and uses that ID
+
+                List<Zip_Code> zList = db.Zip_Code.ToList();
+                int zipIndex = -1;
+                zipIndex = zList.FindIndex(z => z.Code == zip);
+                if (zipIndex == -1)
+                {
+                    Zip_Code newZip = new Zip_Code();
+                    newZip.Zip_ID = zList.Count() + 1;
+                    newZip.Code = zip;
+                    zList.Add(newZip);
+                    sys_User.ZIP_ID = newZip.Zip_ID;
+                    db.Zip_Code.Add(newZip);
+                    db.SaveChanges();
+                }// if zip dosent exist
+                else
+                {
+                    sys_User.ZIP_ID = zList[zipIndex].Zip_ID;
+                }// if zip exists
+
+
+                db.Entry(sys_User).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChangesAsync();
+
+                return RedirectToAction("loginScreen");
+            }// adds user, emails admin
+
+        }// updating users
+
+        public ActionResult resetPassword(int? id)
+        {
+            Sys_User passwordUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            return View(passwordUser);
+        }// reset password
+
+        [HttpPost]
+        public ActionResult resetPassword(int? id, string oldPass, string newPass, string confPass)
+        {
+            if(oldPass == "" || newPass == "" || confPass == "")
+            {
+                return View (db.Sys_User.ToList().Find(u => u.SysUser_ID == id));
+            }// if fields are empty
+            if(newPass != confPass)
+            {
+                return View(db.Sys_User.ToList().Find(u => u.SysUser_ID == id));
+            }// if passwords dont match
+            else
+            {
+                Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                int passID = tempUser.Password_ID;
+                UserPassword pass = db.UserPasswords.ToList().Find(p => p.Password_ID == passID);
+                string encPass = pass.Encrypted_password;
+                string decPass = decodePassword(encPass);
+                if(decPass == oldPass)
+                {
+                    string encNewPass = encodePassword(confPass);
+                    pass.Encrypted_password = encNewPass;
+                    pass.Date_Set = DateTime.Now;
+                    db.Entry(pass).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChangesAsync();
+                }// if entered password matches db password
+                return RedirectToAction("loginScreen");
+            }
+        }// reset password
+
+        public ActionResult forgotPassword()
+        {
+            return View();
+        }// forgot password
+
+        [HttpPost]
+        public ActionResult forgotPassword(string userName, string email, string newPass, string confPass)
+        {
+            if (userName == "" || email =="" || newPass == "" || confPass == "")
+            {
+                return View();
+            }// if fields are empty
+            if (newPass != confPass)
+            {
+                return View();
+            }// if passwords dont match
+            else
+            {
+                Sys_User tempUser = db.Sys_User.ToList().Find(u => u.User_Name == userName && u.Email_Address == email);
+                int passID = tempUser.Password_ID;
+                UserPassword pass = db.UserPasswords.ToList().Find(p => p.Password_ID == passID);
+                string encPass = pass.Encrypted_password;
+                string decPass = decodePassword(encPass);
+                string encNewPass = encodePassword(confPass);
+                pass.Encrypted_password = encNewPass;
+                pass.Date_Set = DateTime.Now;
+                db.Entry(pass).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChangesAsync();
+                return RedirectToAction("loginScreen");
+            }
+        }// forgot password
 
         public static string encodePassword(string password)
         {
