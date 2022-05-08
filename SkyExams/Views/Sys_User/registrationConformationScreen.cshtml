@@ -8,6 +8,10 @@
 
 @using (Html.BeginForm("registrationConformationScreen", "Sys_User", FormMethod.Post))
 {
+    <label>@Html.Label("User Name:")</label>
+    <input type="text" id="uName" name="uName">
+    <br />
+    <br />
     <label>@Html.Label("Registration Code:")</label>
     <input type="text" id="code" name="code">
     <br />

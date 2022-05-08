@@ -1,7 +1,11 @@
-﻿
+﻿@model SkyExams.Models.Sys_User
+
 @{
     ViewBag.Title = "Home";
 }
 
 <h2>Home</h2>
 
+@Html.ActionLink("View Account", "viewAccount", new { id = Model.SysUser_ID })
+<br />
+@Html.ActionLink("Search", "searchScreen", new { id = Model.SysUser_ID })

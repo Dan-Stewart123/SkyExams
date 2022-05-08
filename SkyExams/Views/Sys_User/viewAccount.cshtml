@@ -1,0 +1,99 @@
+﻿@model SkyExams.Models.Sys_User
+
+@{
+    ViewBag.Title = "Account";
+}
+
+<h2>Account Details</h2>
+
+<dl class="dl-horizontal">
+    <dt>
+        @Html.Label("Title")
+    </dt>
+
+    <dd>
+        <label id="title">@Html.DisplayFor(model => model.Title_ID)</label>
+        <label id="mr" style="display:none;">Mr</label>
+        <label id="mrs" style="display:none;">Mrs</label>
+        <label id="miss" style="display:none;">Miss</label>
+        <label id="other" style="display:none;">Other</label>
+    </dd>
+
+    <dt>
+        @Html.Label("First Name:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.FName)
+    </dd>
+
+    <dt>
+        @Html.Label("Surname:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Surname)
+    </dd>
+
+    <dt>
+        @Html.Label("Cell Number:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Cell_Number)
+    </dd>
+
+    <dt>
+        @Html.Label("Email Address:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Email_Address)
+    </dd>
+
+    <dt>
+        @Html.Label("Physical Address:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Physical_Address)
+    </dd>
+
+    <dt>
+        @Html.Label("Date of Birth:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.DOB)
+    </dd>
+
+</dl>
+<br />
+@Html.ActionLink("Update Account Details", "updateAccount", new { id = Model.SysUser_ID })
+<br />
+@Html.ActionLink("Logout", "loginScreen")
+<br />
+@Html.ActionLink("Reset Password", "resetPassword", new { id = Model.SysUser_ID })
+
+<script>
+    function displayTitle() {
+        if (document.getElementById("title").textContent === "1") {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("mr").style.display = "block";
+        }
+        if (document.getElementById("title").textContent === "2") {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("mrs").style.display = "block";
+        }
+        if (document.getElementById("title").textContent === "3") {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("miss").style.display = "block";
+        }
+        if (document.getElementById("title").textContent === "4") {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("other").style.display = "block";
+        }
+    }
+    window.onload = displayTitle;
+</script>
+

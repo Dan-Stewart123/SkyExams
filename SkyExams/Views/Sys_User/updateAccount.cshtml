@@ -1,14 +1,17 @@
-﻿
+﻿@model SkyExams.Models.Sys_User
 @{
-    ViewBag.Title = "Registration";
+    ViewBag.Title = "updateAccount";
 }
 
-<h2>Registration Request</h2>
+<h2>Update Account</h2>
 <p>Please provide all of the following information:</p>
 <br />
 <p>(All fields are required)</p>
-@using (Html.BeginForm("registerScreen", "Sys_User", FormMethod.Post))
+@using (Html.BeginForm("updateAccount", "Sys_User", FormMethod.Post))
 {
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.SysUser_ID">
+    </div>
     <label>@Html.Label("First Name:")</label>
     <input type="text" id="firstName" name="firstName">
     <br />
@@ -313,18 +316,11 @@
     </select>
     <br />
     <br />
-    <label>@Html.Label("Password:")</label>
-    <input type="password" id="password" name="password">
-    <br />
-    <br />
-    <label>@Html.Label("Confirm password:")</label>
-    <input type="password" id="confPass" name="confPass">
-    <br />
-    <br />
     <div>
         @Html.ActionLink("Cancel", "loginScreen")
     </div>
     <input type="submit" , value="Submit" />
 }
+
 
 

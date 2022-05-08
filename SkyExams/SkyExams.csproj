@@ -363,6 +363,12 @@
     <Content Include="Views\Sys_User\homeScreen.cshtml" />
     <Content Include="Views\Sys_User\registerScreen.cshtml" />
     <Content Include="Views\Sys_User\registrationConformationScreen.cshtml" />
+    <Content Include="Views\Sys_User\viewAccount.cshtml" />
+    <Content Include="Views\Sys_User\searchScreen.cshtml" />
+    <Content Include="Views\Sys_User\searchResultsScreen.cshtml" />
+    <Content Include="Views\Sys_User\updateAccount.cshtml" />
+    <Content Include="Views\Sys_User\resetPassword.cshtml" />
+    <Content Include="Views\Sys_User\forgotPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
