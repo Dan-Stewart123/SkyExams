@@ -7,8 +7,8 @@
 <h2>Account Details</h2>
 
 <dl class="dl-horizontal">
-    <dt>
-        @Html.Label("Title")
+    <dt class="col-md-4">
+        @Html.Label("Title:")
     </dt>
 
     <dd>
@@ -19,7 +19,7 @@
         <label id="other" style="display:none;">Other</label>
     </dd>
 
-    <dt>
+    <dt class="col-md-4">
         @Html.Label("First Name:")
     </dt>
 
@@ -27,7 +27,7 @@
         @Html.DisplayFor(model => model.FName)
     </dd>
 
-    <dt>
+    <dt class="col-md-4">
         @Html.Label("Surname:")
     </dt>
 
@@ -35,7 +35,7 @@
         @Html.DisplayFor(model => model.Surname)
     </dd>
 
-    <dt>
+    <dt class="col-md-4">
         @Html.Label("Cell Number:")
     </dt>
 
@@ -43,7 +43,7 @@
         @Html.DisplayFor(model => model.Cell_Number)
     </dd>
 
-    <dt>
+    <dt class="col-md-4">
         @Html.Label("Email Address:")
     </dt>
 
@@ -51,7 +51,7 @@
         @Html.DisplayFor(model => model.Email_Address)
     </dd>
 
-    <dt>
+    <dt class="col-md-4">
         @Html.Label("Physical Address:")
     </dt>
 
@@ -59,7 +59,7 @@
         @Html.DisplayFor(model => model.Physical_Address)
     </dd>
 
-    <dt>
+    <dt class="col-md-4">
         @Html.Label("Date of Birth:")
     </dt>
 

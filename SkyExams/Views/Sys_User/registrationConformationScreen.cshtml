@@ -8,11 +8,11 @@
 
 @using (Html.BeginForm("registrationConformationScreen", "Sys_User", FormMethod.Post))
 {
-    <label>@Html.Label("User Name:")</label>
+    <label class="col-md-4">@Html.Label("User Name:")</label>
     <input type="text" id="uName" name="uName">
     <br />
     <br />
-    <label>@Html.Label("Registration Code:")</label>
+    <label class="col-md-4">@Html.Label("Registration Code:")</label>
     <input type="text" id="code" name="code">
     <br />
     <br />
@@ -20,7 +20,7 @@
     <br />
     <br />
     <div id="licenceInput" style="display:none;">
-        <label>@Html.Label("Licence Number:")</label>
+        <label class="col-md-4">@Html.Label("Licence Number:")</label>
         <input type="text" id="licence" name="licence">
     </div>
     <br />
