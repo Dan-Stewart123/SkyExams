@@ -9,6 +9,9 @@
 <br />
 @using (Html.BeginForm("searchResultsScreen", "Sys_User", FormMethod.Post))
 {
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.SysUser_ID">
+    </div>
     <select id="list" name="list">
         <option value="student">Students</option>
         <option value="instructor">Instructors</option>
@@ -25,5 +28,8 @@
     <input type="text" id="lastName" name="lastName">
     <br />
     <br />
+    <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+        Cancel
+    </button>
     <input type="submit" , value="Search" />
 }

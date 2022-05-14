@@ -5,7 +5,7 @@
 
 <h2>Login</h2>
 
-@using (Html.BeginForm("homeScreen", "Sys_User", FormMethod.Post))
+@using (Html.BeginForm("loginScreen", "Sys_User", FormMethod.Post))
 {
     <label>@Html.Label("Username:")</label>
     @Html.TextBox("userName")
@@ -13,16 +13,16 @@
     <br />
     <label>@Html.Label("Password:")</label>
     <input type="password" id="password" name="password">
-    <div>
-        @Html.ActionLink("Forgot Password", "forgotPassword")
-    </div>
+    <button type="button" onclick="location.href='@Url.Action("forgotPassword", "Sys_User")'">
+        Forgot Password
+    </button>
     <br />
     <br />
     <input type="submit" , value="Login" />
     <br />
     <br />
-    <div>
-        @Html.ActionLink("Request to Register", "registerScreen")
-    </div>
+    <button type="button" onclick="location.href='@Url.Action("registerScreen", "Sys_User")'">
+        Request to Register
+    </button>
 }
 

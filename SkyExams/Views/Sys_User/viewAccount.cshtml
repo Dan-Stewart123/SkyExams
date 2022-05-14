@@ -69,11 +69,21 @@
 
 </dl>
 <br />
-@Html.ActionLink("Update Account Details", "updateAccount", new { id = Model.SysUser_ID })
+<button type="button" onclick="location.href='@Url.Action("updateAccount", "Sys_User", new { id = Model.SysUser_ID })'">
+    Update Account Details
+</button>
 <br />
-@Html.ActionLink("Logout", "loginScreen")
+<button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Logout
+</button>
 <br />
-@Html.ActionLink("Reset Password", "resetPassword", new { id = Model.SysUser_ID })
+<button type="button" onclick="location.href='@Url.Action("resetPassword", "Sys_User", new { id = Model.SysUser_ID })'">
+    Reset Password
+</button>
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Home
+</button>
 
 <script>
     function displayTitle() {

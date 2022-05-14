@@ -12,20 +12,18 @@
     <div style="display:none;">
         <input type="text" id="id" name="id" value="@Model.SysUser_ID">
     </div>
-    <label class="col-md-4">@Html.Label("First Name:")</label>
-    <input type="text" id="firstName" name="firstName">
+    <label class="col-md-3">@Html.Label("First Name:")</label>
+    <input class="col-md-3" type="text" id="firstName" name="firstName" value="@Model.FName">
+    
+    <label class="col-md-3">@Html.Label("Last Name:")</label>
+    <input class="col-md-3" type="text" id="lastName" name="lastName" value="@Model.Surname">
     <br />
     <br />
-    <label class="col-md-4">@Html.Label("Last Name:")</label>
-    <input type="text" id="lastName" name="lastName">
-    <br />
-    <br />
-    <label class="col-md-4">@Html.Label("User Name:")</label>
-    <input type="text" id="uName" name="uName">
-    <br />
-    <br />
-    <label class="col-md-4">@Html.Label("Title:")</label>
-    <select id="title" name="title">
+    <label class="col-md-3">@Html.Label("User Name:")</label>
+    <input class="col-md-3" type="text" id="uName" name="uName" value="@Model.User_Name">
+   
+    <label class="col-md-3">@Html.Label("Title:")</label>
+    <select class="col-md-3" id="title" name="title">
         <option value="Mr">Mr</option>
         <option value="Mrs">Mrs</option>
         <option value="Miss">Miss</option>
@@ -33,20 +31,18 @@
     </select>
     <br />
     <br />
-    <label class="col-md-4">@Html.Label("Cell Phone Number:")</label>
-    <input type="text" id="cellNo" name="cellNo">
+    <label class="col-md-3">@Html.Label("Cell Phone Number:")</label>
+    <input class="col-md-3" type="text" id="cellNo" name="cellNo" value="@Model.Cell_Number">
+    
+    <label class="col-md-3">@Html.Label("Email Address:")</label>
+    <input class="col-md-3" type="text" id="email" name="email" value="@Model.Email_Address">
     <br />
     <br />
-    <label class="col-md-4">@Html.Label("Email Address:")</label>
-    <input type="text" id="email" name="email">
-    <br />
-    <br />
-    <label class="col-md-4">@Html.Label("Physical Address:")</label>
-    <input type="text" id="pAddress" name="pAddress">
-    <br />
-    <br />
-    <label class="col-md-4">@Html.Label("Country:")</label>
-    <select id="country" name="country">
+    <label class="col-md-3">@Html.Label("Physical Address:")</label>
+    <input class="col-md-3" type="text" id="pAddress" name="pAddress" value="@Model.Physical_Address">
+    
+    <label class="col-md-3">@Html.Label("Country:")</label>
+    <select class="col-md-3" id="country" name="country">
         <option value="Afganistan">Afghanistan</option>
         <option value="Albania">Albania</option>
         <option value="Algeria">Algeria</option>
@@ -296,29 +292,27 @@
     </select>
     <br />
     <br />
-    <label class="col-md-4">@Html.Label("City:")</label>
-    <input type="text" id="city" name="city">
+    <label class="col-md-3">@Html.Label("City:")</label>
+    <input class="col-md-3" type="text" id="city" name="city">
+    
+    <label class="col-md-3">@Html.Label("Zip code:")</label>
+    <input class="col-md-3" type="text" id="zip" name="zip">
     <br />
     <br />
-    <label class="col-md-4">@Html.Label("Zip code:")</label>
-    <input type="text" id="zip" name="zip">
-    <br />
-    <br />
-    <label class="col-md-4">@Html.Label("Date of Birth:")</label>
-    <input type="date" id="dob" name="dob">
-    <br />
-    <br />
-    <label class="col-md-4">@Html.Label("Employment status:")</label>
-    <select id="empStatus" name="empStatus">
+    <label class="col-md-3">@Html.Label("Date of Birth:")</label>
+    <input class="col-md-3" type="date" id="dob" name="dob" value="@Model.DOB">
+    
+    <label class="col-md-3">@Html.Label("Employment status:")</label>
+    <select class="col-md-3" id="empStatus" name="empStatus">
         <option value="Employed">Employed</option>
         <option value="Unemployed">Unemployed</option>
         <option value="Student">Student</option>
     </select>
     <br />
     <br />
-    <div>
-        @Html.ActionLink("Cancel", "loginScreen")
-    </div>
+    <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+        Cancel
+    </button>
     <input type="submit" , value="Submit" />
 }
 
