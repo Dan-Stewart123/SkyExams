@@ -3,9 +3,12 @@
 @{
     ViewBag.Title = "Home";
 }
-
 <h2>Home</h2>
 
-@Html.ActionLink("View Account", "viewAccount", new { id = Model.SysUser_ID })
+<button type="button" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = Model.SysUser_ID })'">
+    View Account
+</button>
 <br />
-@Html.ActionLink("Search", "searchScreen", new { id = Model.SysUser_ID })
+<button type="button" onclick="location.href='@Url.Action("searchScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Search
+</button>

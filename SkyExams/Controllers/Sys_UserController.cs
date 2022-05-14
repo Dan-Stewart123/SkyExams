@@ -9,7 +9,6 @@ using System.Web.Mvc;
 using SkyExams.Models;
 using MimeKit;
 using MailKit;
-//using System.Net.Mail;
 using MailKit.Net.Smtp;
 
 namespace SkyExams.Controllers
@@ -30,17 +29,23 @@ namespace SkyExams.Controllers
             return View();
         }// returns Login screen
 
-        public ActionResult homeScreen()
+        [HttpPost]
+        public ActionResult loginScreen(string userName, string password)
         {
-            string uName = Request["userName"];
-            string pass = Request["password"];
             string passwordFromDb = "";
+            string authId = Guid.NewGuid().ToString();
+
+            Session["AuthID"] = authId;
+
+            var cookie = new HttpCookie("AuthID");
+            cookie.Value = authId;
+            Response.Cookies.Add(cookie);
             Sys_User loginUser = new Sys_User();
-            if (uName != "" || pass != "")
+            if (userName != "" || password != "")
             {
                 foreach (Sys_User tempUser in db.Sys_User.ToList())
                 {
-                    if(uName == tempUser.User_Name)
+                    if(userName == tempUser.User_Name)
                     {
                         loginUser = tempUser;
                         foreach(UserPassword tempPass in db.UserPasswords.ToList())
@@ -48,21 +53,42 @@ namespace SkyExams.Controllers
                             if(loginUser.Password_ID == tempPass.Password_ID)
                             {
                                 passwordFromDb = decodePassword(tempPass.Encrypted_password);
-                                if(pass == passwordFromDb)
+                                if(password == passwordFromDb)
                                 {
-                                    return View(loginUser);
+                                    return RedirectToAction ("homeScreen", new { id = loginUser.SysUser_ID});
                                 }// checks is entered password matches db password
                             }// matches user and password ids
                         }// searches passwords
                     }// matches username to db username
                 }// searches users
-                return RedirectToAction("loginScreen");
+                return View();
             }
             else
             {
-                return RedirectToAction("loginScreen");
+                return View();
             }
             // verify username and password here, if correct then display home screen, else login screen with a pop up
+        }// returns home screen
+
+        public ActionResult homeScreen(int? id)
+        {
+            ViewBag.Title = "Home";
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Sys_User loggedInUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    return View(loggedInUser);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
         }// returns home screen
 
         public ActionResult registerScreen()
@@ -183,12 +209,12 @@ namespace SkyExams.Controllers
                 requestEmail.From.Add(new MailboxAddress("New user", "u20428660@tuks.co.za"));
                 requestEmail.To.Add(MailboxAddress.Parse("u20428660@tuks.co.za"));
                 requestEmail.Subject = "New user request";
-                requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system" + firstName + " " + lastName };
+                requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system " + firstName + " " + lastName  + " email address: " + email};
 
                 //send email
                 SmtpClient client = new SmtpClient();
                 client.Connect("smtp.gmail.com", 465, true);
-                client.Authenticate("u20428660@tuks.co.za", "Titan0208#");
+                client.Authenticate("u20428660@tuks.co.za", "Titan0208$");
                 client.Send(requestEmail);
                 client.Disconnect(true);
                 client.Dispose();
@@ -276,8 +302,23 @@ namespace SkyExams.Controllers
 
         public ActionResult viewAccount(int? id)
         {
-            Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-            return View(viewUser);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    return View(viewUser);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+
         }// view account function
 
         public ActionResult searchScreen(int? id)
@@ -288,38 +329,43 @@ namespace SkyExams.Controllers
 
         public ActionResult searchResultsScreen(int? id, string firstName, string lastName, string list)
         {
-            List<Sys_User> searchedUsers = new List<Sys_User>();
+            ViewData["userID"] = "" + id;
+            List<Sys_User> sUsers = new List<Sys_User>();
             if (firstName == "" && lastName == "")
             {
-                return RedirectToAction("searchScreen");
+                return RedirectToAction("searchScreen", new { id = id });
             }// if fields are empty
             else
             {
                 if(list == "student")
                 {
-                    searchedUsers = db.Sys_User.ToList().FindAll(u => u.User_Role_ID == 1 && u.FName == firstName || u.Surname == lastName);
+                    List<Sys_User> tempStudentList = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 1);
+                    sUsers = tempStudentList.FindAll(u => u.FName == firstName || u.Surname == lastName);
                 }// students
                 if (list == "instructor")
                 {
-                    searchedUsers = db.Sys_User.ToList().FindAll(u => u.User_Role_ID == 2 && u.FName == firstName || u.Surname == lastName);
+                    List<Sys_User> tempInstructorList = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 2);
+                    sUsers = tempInstructorList.FindAll(u => u.FName == firstName || u.Surname == lastName);
                 }// instructors
                 if (list == "admin")
                 {
-                    searchedUsers = db.Sys_User.ToList().FindAll(u => u.User_Role_ID == 3 && u.FName == firstName || u.Surname == lastName);
+                    List<Sys_User> tempAdminList = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 3);
+                    sUsers = tempAdminList.FindAll(u => u.FName == firstName || u.Surname == lastName);
                 }// admin
                 if (list == "manager")
                 {
-                    searchedUsers = db.Sys_User.ToList().FindAll(u => u.User_Role_ID == 4 && u.FName == firstName || u.Surname == lastName);
+                    List<Sys_User> tempManagerList = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 4);
+                    sUsers = tempManagerList.FindAll(u => u.FName == firstName || u.Surname == lastName);
                 }// manager
             }// fields arent empty
-            return View(searchedUsers);
+            return View(sUsers);
         }// displays search results
 
         public ActionResult updateAccount(int? id)
         {
             Sys_User updateUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
             return View(updateUser);
-        }// return register screen
+        }// return update screen
 
         [HttpPost]
         public ActionResult updateAccount(string id, string firstName, string lastName, string uName, string title, string cellNo, string email, string pAddress, string country, string city, string zip, string dob, string empStatus)
@@ -332,14 +378,18 @@ namespace SkyExams.Controllers
             }// checks that fileds are not empty
             else
             {
+                Sys_User updateUser = new Sys_User();
                 DateTime DOB = DateTime.Parse(dob);
-                sys_User.FName = firstName;
-                sys_User.Surname = lastName;
-                sys_User.Cell_Number = cellNo;
-                sys_User.Email_Address = email;
-                sys_User.Physical_Address = pAddress;
-                sys_User.DOB = DOB;
-                sys_User.User_Name = uName;
+                updateUser.SysUser_ID = idUser;
+                updateUser.User_Role_ID = sys_User.User_Role_ID;
+                updateUser.Password_ID = sys_User.Password_ID;
+                updateUser.FName = firstName;
+                updateUser.Surname = lastName;
+                updateUser.Cell_Number = cellNo;
+                updateUser.Email_Address = email;
+                updateUser.Physical_Address = pAddress;
+                updateUser.DOB = DOB;
+                updateUser.User_Name = uName;
 
                 List<Country> cList = db.Countries.ToList();
                 int countryIndex = -1;
@@ -350,13 +400,13 @@ namespace SkyExams.Controllers
                     newCountry.Country_ID = cList.Count() + 1;
                     newCountry.Country_Name = country;
                     cList.Add(newCountry);
-                    sys_User.Country_ID = newCountry.Country_ID;
+                    updateUser.Country_ID = newCountry.Country_ID;
                     db.Countries.Add(newCountry);
                     db.SaveChanges();
                 }//if country dosent exist
                 else
                 {
-                    sys_User.Country_ID = cList[countryIndex].Country_ID;
+                    updateUser.Country_ID = cList[countryIndex].Country_ID;
                 }// if country exists
 
                 List<City> cityList = db.Cities.ToList();
@@ -368,13 +418,13 @@ namespace SkyExams.Controllers
                     newCity.City_ID = cityList.Count() + 1;
                     newCity.City_Name = city;
                     cityList.Add(newCity);
-                    sys_User.City_ID = newCity.City_ID;
+                    updateUser.City_ID = newCity.City_ID;
                     db.Cities.Add(newCity);
                     db.SaveChanges();
                 }// if city dosent exist
                 else
                 {
-                    sys_User.City_ID = cityList[cityIndex].City_ID;
+                    updateUser.City_ID = cityList[cityIndex].City_ID;
                 }// if city exists
 
                 List<Title> tList = db.Titles.ToList();
@@ -382,7 +432,7 @@ namespace SkyExams.Controllers
                 {
                     if (title == tempTitle.TitleDesc)
                     {
-                        sys_User.Title_ID = tempTitle.Title_ID;
+                        updateUser.Title_ID = tempTitle.Title_ID;
                     }// if title exists
                 }// loops through all titles, if the title exists, is used that ID for the user, if not, it creates a new title and uses that ID
 
@@ -391,7 +441,7 @@ namespace SkyExams.Controllers
                 {
                     if (empStatus == tempStatus.EmpStatus)
                     {
-                        sys_User.Employment_ID = tempStatus.Employment_ID;
+                        updateUser.Employment_ID = tempStatus.Employment_ID;
                     }// if status exists
                 }// loops through all statuses, if the status exists, is used that ID for the user, if not, it creates a new status and uses that ID
 
@@ -404,20 +454,22 @@ namespace SkyExams.Controllers
                     newZip.Zip_ID = zList.Count() + 1;
                     newZip.Code = zip;
                     zList.Add(newZip);
-                    sys_User.ZIP_ID = newZip.Zip_ID;
+                    updateUser.ZIP_ID = newZip.Zip_ID;
                     db.Zip_Code.Add(newZip);
                     db.SaveChanges();
                 }// if zip dosent exist
                 else
                 {
-                    sys_User.ZIP_ID = zList[zipIndex].Zip_ID;
+                    updateUser.ZIP_ID = zList[zipIndex].Zip_ID;
                 }// if zip exists
 
+                db.Sys_User.Remove(sys_User);
+                db.SaveChanges();
 
-                db.Entry(sys_User).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChangesAsync();
+                db.Sys_User.Add(updateUser);
+                db.SaveChanges();
 
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("homeScreen", new { id = idUser });
             }// adds user, emails admin
 
         }// updating users
