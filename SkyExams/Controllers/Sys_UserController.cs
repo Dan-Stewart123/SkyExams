@@ -209,7 +209,7 @@ namespace SkyExams.Controllers
                 requestEmail.From.Add(new MailboxAddress("New user", "u20428660@tuks.co.za"));
                 requestEmail.To.Add(MailboxAddress.Parse("u20428660@tuks.co.za"));
                 requestEmail.Subject = "New user request";
-                requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system " + firstName + " " + lastName  + " email address: " + email};
+                requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system: User name: " + firstName + " " + lastName  + " email address: " + email};
 
                 //send email
                 SmtpClient client = new SmtpClient();
@@ -243,7 +243,7 @@ namespace SkyExams.Controllers
                 db.SaveChangesAsync();
                 newStudent.SysUser_ID = newStudentUser.SysUser_ID;
                 db.Students.Add(newStudent);
-                db.SaveChanges();
+                db.SaveChangesAsync();
                 return RedirectToAction("loginScreen");
             }// student 
             if (code == "102")
@@ -260,7 +260,7 @@ namespace SkyExams.Controllers
                 db.SaveChangesAsync();
                 newInstructor.SysUser_ID = newInsUser.SysUser_ID;
                 db.Instructors.Add(newInstructor);
-                db.SaveChanges();
+                db.SaveChangesAsync();
                 return RedirectToAction("loginScreen");
             }// instructor
             if (code == "103")
@@ -276,7 +276,7 @@ namespace SkyExams.Controllers
                 db.SaveChangesAsync();
                 newAdmin.SysUser_ID = newAdminUser.SysUser_ID;
                 db.Admins.Add(newAdmin);
-                db.SaveChanges();
+                db.SaveChangesAsync();
                 return RedirectToAction("loginScreen");
             }// admin
             if (code == "104")
@@ -291,7 +291,7 @@ namespace SkyExams.Controllers
                 db.SaveChangesAsync();
                 newManager.SysUser_ID = newManagerUser.SysUser_ID;
                 db.Managers.Add(newManager);
-                db.SaveChanges();
+                db.SaveChangesAsync();
                 return RedirectToAction("loginScreen");
             }// manager 
             else
@@ -541,6 +541,54 @@ namespace SkyExams.Controllers
                 return RedirectToAction("loginScreen");
             }
         }// forgot password
+
+        public ActionResult deleteUser(int? loggedId, int? id)
+        {
+            ViewData["loggedId"] = "" + loggedId;
+            Sys_User delUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            return View(delUser);
+        }// delete get
+
+        public ActionResult deleteConformation(int? loggedId, int? id)
+        {
+            Sys_User sys_User = db.Sys_User.Find(id);
+            int passId = sys_User.Password_ID;
+            db.Sys_User.Remove(sys_User);
+            db.SaveChanges();
+            List<UserPassword> passList = db.UserPasswords.ToList();
+            UserPassword delPass = passList.Find(u => u.Password_ID == passId);
+            db.UserPasswords.Remove(delPass);
+            db.SaveChanges();
+            if (sys_User.User_Role_ID == 1)
+            {
+                List<Student> tempStudentList = db.Students.ToList();
+                Student delStudent = tempStudentList.Find(u => u.SysUser_ID == id);
+                db.Students.Remove(delStudent);
+                db.SaveChanges();
+            }// students
+            if (sys_User.User_Role_ID == 2)
+            {
+                List<Instructor> tempInstructorList = db.Instructors.ToList();
+                Instructor delInstructor = tempInstructorList.Find(u => u.SysUser_ID == id);
+                db.Instructors.Remove(delInstructor);
+                db.SaveChanges();
+            }// instructors
+            if (sys_User.User_Role_ID == 3)
+            {
+                List<Admin> tempAdminList = db.Admins.ToList();
+                Admin delAdmin = tempAdminList.Find(u => u.SysUser_ID == id);
+                db.Admins.Remove(delAdmin);
+                db.SaveChanges();
+            }// admin
+            if (sys_User.User_Role_ID == 4)
+            {
+                List<Manager> tempManagerList = db.Managers.ToList();
+                Manager delManager = tempManagerList.Find(u => u.SysUser_ID == id);
+                db.Managers.Remove(delManager);
+                db.SaveChanges();
+            }// manager
+            return RedirectToAction("homeScreen", new { id = loggedId });
+        }
 
         public static string encodePassword(string password)
         {
