@@ -18,31 +18,37 @@
             <th scope="col">Email Address</th>
             <th scope="col">Physical Address</th>
             <th scope="col">Date of Birth</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.FName)
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Surname)
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Cell_Number)
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Email_Address)
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Physical_Address)
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.DOB)
-                </td>
-            </tr>
+        <tr>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.FName)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Cell_Number)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Email_Address)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Physical_Address)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.DOB)
+            </td>
+            <td scope="row" id="del" style="display: none;">
+                <button type="button" onclick="location.href='@Url.Action("deleteUser", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Delete
+                </button>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
@@ -51,4 +57,13 @@
 <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
     Continue
 </button>
+<script>
+    function adminCheck() {
+        var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
+        if (userId == '2') {
+            document.getElementById("del").style.display = "block";
+        }
+    }
+    window.onload = adminCheck;
+</script>
 

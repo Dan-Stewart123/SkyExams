@@ -371,6 +371,7 @@
     <Content Include="Views\Sys_User\updateAccount.cshtml" />
     <Content Include="Views\Sys_User\resetPassword.cshtml" />
     <Content Include="Views\Sys_User\forgotPassword.cshtml" />
+    <Content Include="Views\Sys_User\deleteUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

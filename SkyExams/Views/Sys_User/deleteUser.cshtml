@@ -1,0 +1,101 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "deleteUser";
+    var uID = ViewData["loggedId"];
+}
+
+
+<h2>Delete User</h2>
+<p>Are you sure you wish to delete this user</p>
+<br />
+<br />
+<dl class="dl-horizontal">
+    <dt class="col-md-4">
+        @Html.Label("Title:")
+    </dt>
+
+    <dd>
+        <label id="title">@Html.DisplayFor(model => model.Title_ID)</label>
+        <label id="mr" style="display:none;">Mr</label>
+        <label id="mrs" style="display:none;">Mrs</label>
+        <label id="miss" style="display:none;">Miss</label>
+        <label id="other" style="display:none;">Other</label>
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("First Name:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.FName)
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Surname:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Surname)
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Cell Number:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Cell_Number)
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Email Address:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Email_Address)
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Physical Address:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Physical_Address)
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Date of Birth:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.DOB)
+    </dd>
+
+</dl>
+
+<button type="button" onclick="location.href='@Url.Action("deleteConformation", "Sys_User", new { loggedId = uID, id = Model.SysUser_ID })'">
+    Delete
+</button>
+
+
+<script>
+    function displayTitle() {
+        if (document.getElementById("title").textContent === "1") {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("mr").style.display = "block";
+        }
+        if (document.getElementById("title").textContent === "2") {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("mrs").style.display = "block";
+        }
+        if (document.getElementById("title").textContent === "3") {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("miss").style.display = "block";
+        }
+        if (document.getElementById("title").textContent === "4") {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("other").style.display = "block";
+        }
+    }
+    window.onload = displayTitle;
+</script>
+
