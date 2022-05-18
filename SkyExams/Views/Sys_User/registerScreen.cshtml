@@ -21,6 +21,7 @@
 
     <label class="col-md-3">@Html.Label("Title:")</label>
     <select class="col-md-3" id="title" name="title">
+        <option value=""></option>
         <option value="Mr">Mr</option>
         <option value="Mrs">Mrs</option>
         <option value="Miss">Miss</option>
@@ -40,6 +41,7 @@
 
     <label class="col-md-3">@Html.Label("Country:")</label>
     <select class="col-md-3" id="country" name="country">
+        <option value=""></option>
         <option value="Afganistan">Afghanistan</option>
         <option value="Albania">Albania</option>
         <option value="Algeria">Algeria</option>
@@ -301,6 +303,7 @@
 
     <label class="col-md-3">@Html.Label("Employment status:")</label>
     <select class="col-md-3" id="empStatus" name="empStatus">
+        <option value=""></option>
         <option value="Employed">Employed</option>
         <option value="Unemployed">Unemployed</option>
         <option value="Student">Student</option>
@@ -314,10 +317,29 @@
     <input class="col-md-3" type="password" id="confPass" name="confPass">
     <br />
     <br />
+    <span class="label label-warning" id="warningLabel" style="display:none;">Passwords do not match</span>
+    <br />
+    <br />
     <button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User")'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" />
+    <input type="submit" , value="Submit" id="submitButton"/>
 }
+
+<script>
+    function checkPasswords() {
+        var password = $("#password").val();
+        var confirmPassword = $("#confPass").val();
+        if (password != confirmPassword) {
+            document.getElementById("warningLabel").style.display = "block";
+            document.getElementById("submitButton").disabled = true;
+        }
+        if (password == confirmPassword) {
+            document.getElementById("warningLabel").style.display = "none";
+            document.getElementById("submitButton").disabled = false;
+        }
+    }
+    window.oninput = checkPasswords;
+</script>
 
 

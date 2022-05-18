@@ -71,7 +71,9 @@
     </dd>
 
 </dl>
-
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+    Home
+</button>
 <button type="button" onclick="location.href='@Url.Action("deleteConformation", "Sys_User", new { loggedId = uID, id = Model.SysUser_ID })'">
     Delete
 </button>
