@@ -1,0 +1,51 @@
+﻿@model IEnumerable<SkyExams.Models.Plane>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Plane_Type_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Call_Sign)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hours_Flown)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hours_Until_Service)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Plane_Type_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Call_Sign)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Hours_Flown)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Hours_Until_Service)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Plane_ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Plane_ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Plane_ID })
+        </td>
+    </tr>
+}
+
+</table>
