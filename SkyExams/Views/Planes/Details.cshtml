@@ -1,0 +1,50 @@
+﻿@model SkyExams.Models.Plane
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Plane</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Plane_Type_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plane_Type_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Call_Sign)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Call_Sign)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Hours_Flown)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hours_Flown)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Hours_Until_Service)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hours_Until_Service)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Plane_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

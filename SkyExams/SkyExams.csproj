@@ -157,6 +157,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlanesController.cs" />
     <Compile Include="Controllers\Sys_UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -372,6 +373,16 @@
     <Content Include="Views\Sys_User\resetPassword.cshtml" />
     <Content Include="Views\Sys_User\forgotPassword.cshtml" />
     <Content Include="Views\Sys_User\deleteUser.cshtml" />
+    <Content Include="Views\Planes\Create.cshtml" />
+    <Content Include="Views\Planes\Delete.cshtml" />
+    <Content Include="Views\Planes\Details.cshtml" />
+    <Content Include="Views\Planes\Edit.cshtml" />
+    <Content Include="Views\Planes\Index.cshtml" />
+    <Content Include="Views\Planes\planesScreen.cshtml" />
+    <Content Include="Views\Planes\addPlaneScreen.cshtml" />
+    <Content Include="Views\Planes\planeTypeScreen.cshtml" />
+    <Content Include="Views\Planes\deletePlane.cshtml" />
+    <Content Include="Views\Planes\updatePlane.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
