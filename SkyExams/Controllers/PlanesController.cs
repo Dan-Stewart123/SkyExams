@@ -52,7 +52,7 @@ namespace SkyExams.Controllers
                 {
                     Cessna_172 new172 = new Cessna_172();
                     List<Cessna_172> cessna172List = new List<Cessna_172>();
-                    int tempID = cessna172List.Count() + 1;
+                    int tempID = cessna172List.Count() + 2;
                     new172.c172_ID = tempID;
                     new172.Plane_ID = planeID;
                     new172.Plane_Description = description;
@@ -64,7 +64,7 @@ namespace SkyExams.Controllers
                 {
                     Cessna_172_RG newRG = new Cessna_172_RG();
                     List<Cessna_172_RG> rgList = new List<Cessna_172_RG>();
-                    int tempID = rgList.Count() + 1;
+                    int tempID = rgList.Count() + 2;
                     newRG.c172_RG_ID = tempID;
                     newRG.Plane_ID = planeID;
                     newRG.Plane_Description = description;
@@ -76,7 +76,7 @@ namespace SkyExams.Controllers
                 {
                     Cherokee_140 new140 = new Cherokee_140();
                     List<Cherokee_140> cherokeeList = new List<Cherokee_140>();
-                    int tempID = cherokeeList.Count() + 1;
+                    int tempID = cherokeeList.Count() + 2;
                     new140.Cherokee_140_ID = tempID;
                     new140.Plane_ID = planeID;
                     new140.Plane_Description = description;
@@ -88,7 +88,7 @@ namespace SkyExams.Controllers
                 {
                     Twin_Commanche newTwin = new Twin_Commanche();
                     List<Twin_Commanche> twinList = new List<Twin_Commanche>();
-                    int tempID = twinList.Count() + 1;
+                    int tempID = twinList.Count() + 2;
                     newTwin.Twin_Commanche_ID = tempID;
                     newTwin.Plane_ID = planeID;
                     newTwin.Plane_Description = description;

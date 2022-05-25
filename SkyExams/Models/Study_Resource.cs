@@ -16,7 +16,7 @@ namespace SkyExams.Models
     {
         public int Study_Resource_ID { get; set; }
         public string Resource_Name { get; set; }
-        public string Resources { get; set; }
+        public byte[] Resources { get; set; }
         public int Theme_ID { get; set; }
     }
 }
