@@ -157,6 +157,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Lesson_PlanController.cs" />
+    <Compile Include="Controllers\PlanesController.cs" />
+    <Compile Include="Controllers\Study_ResourceController.cs" />
     <Compile Include="Controllers\Sys_UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -372,6 +375,35 @@
     <Content Include="Views\Sys_User\resetPassword.cshtml" />
     <Content Include="Views\Sys_User\forgotPassword.cshtml" />
     <Content Include="Views\Sys_User\deleteUser.cshtml" />
+    <Content Include="Views\Planes\Create.cshtml" />
+    <Content Include="Views\Planes\Delete.cshtml" />
+    <Content Include="Views\Planes\Details.cshtml" />
+    <Content Include="Views\Planes\Edit.cshtml" />
+    <Content Include="Views\Planes\Index.cshtml" />
+    <Content Include="Views\Planes\planesScreen.cshtml" />
+    <Content Include="Views\Planes\addPlaneScreen.cshtml" />
+    <Content Include="Views\Planes\planeTypeScreen.cshtml" />
+    <Content Include="Views\Planes\deletePlane.cshtml" />
+    <Content Include="Views\Planes\updatePlane.cshtml" />
+    <Content Include="Views\Study_Resource\Create.cshtml" />
+    <Content Include="Views\Study_Resource\Delete.cshtml" />
+    <Content Include="Views\Study_Resource\Details.cshtml" />
+    <Content Include="Views\Study_Resource\Edit.cshtml" />
+    <Content Include="Views\Study_Resource\Index.cshtml" />
+    <Content Include="Views\Study_Resource\resourceScreen.cshtml" />
+    <Content Include="Views\Study_Resource\themeScreen.cshtml" />
+    <Content Include="Views\Study_Resource\addResource.cshtml" />
+    <Content Include="Views\Study_Resource\deleteResource.cshtml" />
+    <Content Include="Views\Lesson_Plan\Create.cshtml" />
+    <Content Include="Views\Lesson_Plan\Delete.cshtml" />
+    <Content Include="Views\Lesson_Plan\Details.cshtml" />
+    <Content Include="Views\Lesson_Plan\Edit.cshtml" />
+    <Content Include="Views\Lesson_Plan\Index.cshtml" />
+    <Content Include="Views\Lesson_Plan\planScreen.cshtml" />
+    <Content Include="Views\Lesson_Plan\topicScreen.cshtml" />
+    <Content Include="Views\Lesson_Plan\addPlan.cshtml" />
+    <Content Include="Views\Lesson_Plan\deletePlan.cshtml" />
+    <Content Include="Views\Sys_User\addStudentResource.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

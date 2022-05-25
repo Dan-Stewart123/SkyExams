@@ -16,7 +16,8 @@ namespace SkyExams.Models
     {
         public int Lesson_Plan_ID { get; set; }
         public int Instructor_ID { get; set; }
-        public string LP_Description { get; set; }
+        public string LP_Name { get; set; }
+        public byte[] LP_Description { get; set; }
         public int Topic_ID { get; set; }
     }
 }

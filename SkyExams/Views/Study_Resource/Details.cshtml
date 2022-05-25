@@ -1,0 +1,42 @@
+﻿@model SkyExams.Models.Study_Resource
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Study_Resource</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Resource_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Resource_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Resources)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Resources)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Theme_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Theme_ID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Study_Resource_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

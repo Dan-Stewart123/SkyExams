@@ -44,6 +44,9 @@
                 @Html.DisplayFor(modelItem => item.DOB)
             </td>
             <td scope="row" id="del" style="display: none;">
+                <button type="button" onclick="location.href='@Url.Action("addStudentResource", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Add resources
+                </button>
                 <button type="button" onclick="location.href='@Url.Action("deleteUser", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Delete
                 </button>
@@ -61,6 +64,12 @@
     function adminCheck() {
         var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
         if (userId == '2') {
+            document.getElementById("del").style.display = "block";
+        }
+        if (userId == '3') {
+            document.getElementById("del").style.display = "block";
+        }
+        if (userId == '4') {
             document.getElementById("del").style.display = "block";
         }
     }
