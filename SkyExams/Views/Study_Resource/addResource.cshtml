@@ -1,0 +1,29 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "addResource";
+    var tID = ViewData["themeID"];
+}
+
+<h2>Add Resource</h2>
+<p>Please enter the following information:</p>
+<br />
+<br />
+@using (Html.BeginForm("addResource", "Study_Resource", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.SysUser_ID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="themeId" name="themeId" value="@tID">
+    </div>
+    <label class="col-md-3">@Html.Label("Resource Name:")</label>
+    <input class="col-md-3" type="text" id="name" name="name">
+    <label class="col-md-3">@Html.Label("Resource (upload a PDF):")</label>
+    <input class="col-md-3" type="file" id="resource" name="resource" />
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = tID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" />
+}

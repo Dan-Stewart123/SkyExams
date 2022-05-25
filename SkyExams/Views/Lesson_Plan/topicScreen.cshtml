@@ -1,19 +1,25 @@
-﻿@model IEnumerable<SkyExams.Models.Plane>
-
+﻿@model IEnumerable<SkyExams.Models.Lesson_Plan>
 @{
-    ViewBag.Title = "planeTypeScreen";
+    ViewBag.Title = "topicScreen";
     var uID = ViewData["userID"];
+    var tID = ViewData["topicID"];
 }
 
-<h2>Planes</h2>
-
+<h2>Lesson Plans</h2>
+<div id="createButton" style="display:none;">
+    <button type="button" onclick="location.href='@Url.Action("addPlan", "Lesson_Plan", new { id = uID, topicId = tID })'">
+        Add Lesson Plan
+    </button>
+</div>
+<br />
+<br />
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">Plane Type</th>
-            <th scope="col">Call Sign</th>
-            <th scope="col">Hours Flown</th>
-            <th scope="col">Hours Until Next Service</th>
+            <th scope="col">Lesson Plan</th>
+            <th scope="col">Topic</th>
+            <th scope="col">Download Link</th>
+            <th scope="col"></th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -22,26 +28,20 @@
         {
             <tr>
                 <td scope="row">
-                    <label id="type">@Html.DisplayFor(modelItem => item.Plane_Type_ID)</label>
+                    @Html.DisplayFor(modelItem => item.LP_Name)
+                </td>
+                <td scope="row">
+                    <label id="type">@Html.DisplayFor(modelItem => item.Topic_ID)</label>
                     <label id="cessna" style="display:none;">Cessna 172</label>
                     <label id="rg" style="display:none;">Cessna 172 RG</label>
                     <label id="cherokee" style="display:none;">Cherokee 140</label>
                     <label id="twin" style="display:none;">Piper Twin Commanche</label>
                 </td>
                 <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Call_Sign)
+                    @Html.ActionLink("View/Download", "downloadPlan", new { id = item.Lesson_Plan_ID })
                 </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Hours_Flown)
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Hours_Until_Service)
-                </td>
-                <td scope="row" id="adminFunctions" style="display: none;">
-                    <button type="button" onclick="location.href='@Url.Action("updatePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
-                        Update
-                    </button>
-                    <button type="button" onclick="location.href='@Url.Action("deletePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                <td scope="row" id="deleteFunction" style="display: none;">
+                    <button type="button" onclick="location.href='@Url.Action("deletePlan", "Lesson_Plan", new { loggedId = uID, id = item.Lesson_Plan_ID })'">
                         Delete
                     </button>
                 </td>
@@ -51,20 +51,15 @@
 </table>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
+<button type="button" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = uID })'">
     Continue
 </button>
 <script>
     function adminCheck() {
-        var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
+        var userId = @uID;
         if (userId == '2') {
-            document.getElementById("adminFunctions").style.display = "block";
-        }
-        if (userId == '3') {
-            document.getElementById("adminFunctions").style.display = "block";
-        }
-        if (userId == '4') {
-            document.getElementById("adminFunctions").style.display = "block";
+            document.getElementById("createButton").style.display = "block";
+            document.getElementById("deleteFunction").style.display = "block";
         }
 
         if (document.getElementById("type").textContent === "1") {
@@ -84,8 +79,7 @@
             document.getElementById("twin").style.display = "block";
         }
     }
-
     window.onload = adminCheck;
-
 </script>
+
 

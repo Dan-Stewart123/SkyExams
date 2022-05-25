@@ -25,6 +25,7 @@ namespace SkyExams.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<Booking_Status> Booking_Status { get; set; }
@@ -65,6 +66,5 @@ namespace SkyExams.Models
         public virtual DbSet<Verification_Code> Verification_Code { get; set; }
         public virtual DbSet<Zip_Code> Zip_Code { get; set; }
         public virtual DbSet<Profile_Image> Profile_Image { get; set; }
-        public virtual DbSet<Admin> Admins { get; set; }
     }
 }

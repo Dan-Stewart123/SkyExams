@@ -474,6 +474,33 @@ namespace SkyExams.Controllers
 
         }// updating users
 
+        public ActionResult addStudentResource(int? loggedId, int? id)
+        {
+            ViewData["userID"] = "" + loggedId;
+            ViewData["studentID"] = "" + id;
+            return View(db.Study_Resource.ToList());
+        }// add student resource get
+
+        [HttpPost]
+        public ActionResult addStudentResource(int? loggedId, int? id, string resource)
+        {
+            try
+            {
+                int resourceId = Convert.ToInt32(resource);
+                Student_Resource newStudentResource = new Student_Resource();
+                int sID = Convert.ToInt32(id);
+                newStudentResource.Student_ID = sID;
+                newStudentResource.Study_Resource_ID = resourceId;
+                db.Student_Resource.Add(newStudentResource);
+                db.SaveChanges();
+                return RedirectToAction("searchScreen", new { id = loggedId });
+            }// try
+            catch(Exception ex)
+            {
+                return RedirectToAction("searchScreen", new { id = loggedId });
+            }// catch
+        }// add student resource post
+
         public ActionResult resetPassword(int? id)
         {
             Sys_User passwordUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -603,7 +630,7 @@ namespace SkyExams.Controllers
             }// try
             catch(Exception ex)
             {
-                throw new Exception("Error in base64Encode");
+                throw new Exception("Error in base64Encode" + ex);
             }// catch
         }// method to encode the password
 
