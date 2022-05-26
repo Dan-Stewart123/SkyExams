@@ -330,6 +330,7 @@ namespace SkyExams.Controllers
         public ActionResult searchResultsScreen(int? id, string firstName, string lastName, string list)
         {
             ViewData["userID"] = "" + id;
+            ViewData["role"] = list;
             List<Sys_User> sUsers = new List<Sys_User>();
             if (firstName == "" && lastName == "")
             {
@@ -501,6 +502,47 @@ namespace SkyExams.Controllers
             }// catch
         }// add student resource post
 
+        public ActionResult addStudentInstructor(int? loggedId, int? id)
+        {
+            ViewData["userID"] = "" + loggedId;
+            ViewData["studentID"] = "" + id;
+            List<Sys_User> instructors = db.Sys_User.ToList().FindAll(i => i.User_Role_ID == 2);
+            return View(instructors);
+        }// add student instructor get
+
+        [HttpPost]
+        public ActionResult addStudentInstructor(int? loggedId, int? id, string insturctor)
+        {
+            try
+            {
+                int instructorId = Convert.ToInt32(insturctor);
+                Sys_User ins = db.Sys_User.Find(instructorId);
+                int sID = Convert.ToInt32(id);
+                Sys_User stu = db.Sys_User.Find(sID);
+                Student studentForId = db.Students.ToList().Find(s => s.SysUser_ID == stu.SysUser_ID);
+                Instructor instructorForId = db.Instructors.ToList().Find(i => i.SysUser_ID == ins.SysUser_ID);
+                Student_Instructor newStudentInstructor = new Student_Instructor();
+                newStudentInstructor.Student_ID = studentForId.Student_ID;
+                newStudentInstructor.Instructor_ID = instructorForId.Instructor_ID;
+                db.Student_Instructor.Add(newStudentInstructor);
+                db.SaveChanges();
+                List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(p => p.Instructor_ID == ins.SysUser_ID);
+                foreach(Lesson_Plan temp in planList)
+                {
+                    Student_Lesson_Plan sLessonPlan = new Student_Lesson_Plan();
+                    sLessonPlan.Student_ID = stu.SysUser_ID;
+                    sLessonPlan.Lesson_Plan_ID = temp.Lesson_Plan_ID;
+                    db.Student_Lesson_Plan.Add(sLessonPlan);
+                    db.SaveChangesAsync();
+                }// for each
+                return RedirectToAction("searchScreen", new { id = loggedId });
+            }// try
+            catch (Exception ex)
+            {
+                return RedirectToAction("searchScreen", new { id = loggedId });
+            }// catch
+        }// add student instructor post
+
         public ActionResult resetPassword(int? id)
         {
             Sys_User passwordUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -592,6 +634,15 @@ namespace SkyExams.Controllers
                 Student delStudent = tempStudentList.Find(u => u.SysUser_ID == id);
                 db.Students.Remove(delStudent);
                 db.SaveChanges();
+                Student_Instructor delStudentInstructor = db.Student_Instructor.ToList().Find(s => s.Student_ID == delStudent.Student_ID);
+                db.Student_Instructor.Remove(delStudentInstructor);
+                db.SaveChanges();
+                Student_Resource delStuResource = db.Student_Resource.ToList().Find(s => s.Student_ID == id);
+                db.Student_Resource.Remove(delStuResource);
+                db.SaveChanges();
+                Student_Lesson_Plan delStuPlan = db.Student_Lesson_Plan.ToList().Find(s => s.Student_ID == id);
+                db.Student_Lesson_Plan.Remove(delStuPlan);
+                db.SaveChanges();
             }// students
             if (sys_User.User_Role_ID == 2)
             {
@@ -599,6 +650,15 @@ namespace SkyExams.Controllers
                 Instructor delInstructor = tempInstructorList.Find(u => u.SysUser_ID == id);
                 db.Instructors.Remove(delInstructor);
                 db.SaveChanges();
+                Student_Instructor delStudentInstructor = db.Student_Instructor.ToList().Find(s => s.Instructor_ID == delInstructor.Instructor_ID);
+                db.Student_Instructor.Remove(delStudentInstructor);
+                db.SaveChanges();
+                List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(i => i.Instructor_ID == id);
+                foreach(Lesson_Plan temp in planList)
+                {
+                    db.Lesson_Plan.Remove(temp);
+                    db.SaveChangesAsync();
+                }
             }// instructors
             if (sys_User.User_Role_ID == 3)
             {
