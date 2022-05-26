@@ -404,6 +404,7 @@
     <Content Include="Views\Lesson_Plan\addPlan.cshtml" />
     <Content Include="Views\Lesson_Plan\deletePlan.cshtml" />
     <Content Include="Views\Sys_User\addStudentResource.cshtml" />
+    <Content Include="Views\Sys_User\addStudentInstructor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

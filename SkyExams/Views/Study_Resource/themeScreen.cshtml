@@ -3,6 +3,7 @@
     ViewBag.Title = "themeScreen";
     var uID = ViewData["userID"];
     var tID = ViewData["themeID"];
+    var type = ViewData["planeType"];
 }
 
 <h2>Resources:</h2>
@@ -32,16 +33,12 @@
                     @Html.DisplayFor(modelItem => item.Resource_Name)
                 </td>
                 <td scope="row">
-                    <label id="type">@Html.DisplayFor(modelItem => item.Theme_ID)</label>
-                    <label id="cessna" style="display:none;">Cessna 172</label>
-                    <label id="rg" style="display:none;">Cessna 172 RG</label>
-                    <label id="cherokee" style="display:none;">Cherokee 140</label>
-                    <label id="twin" style="display:none;">Piper Twin Commanche</label>
+                    @type
                 </td>
                 <td scope="row">
                     @Html.ActionLink("View/Download", "downloadResource", new { id = item.Study_Resource_ID })
                 </td>
-                <td scope="row" id="deleteFunction" style="display: none;">
+                <td scope="row" class="deleteFunction" style="display: none;">
                     <button type="button" onclick="location.href='@Url.Action("deleteResource", "Study_Resource", new { loggedId = uID, id = item.Study_Resource_ID })'">
                         Delete
                     </button>
@@ -60,32 +57,24 @@
         var userId = @uID;
         if (userId == '2') {
             document.getElementById("createButton").style.display = "block";
-            document.getElementById("deleteFunction").style.display = "block";
+            var func = document.getElementsByClassName("deleteFunction");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
-        if (userId == '3') {
+        else if (userId == '3') {
             document.getElementById("createButton").style.display = "block";
-            document.getElementById("deleteFunction").style.display = "block";
+            var func = document.getElementsByClassName("deleteFunction");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
-        if (userId == '4') {
+        else if (userId == '4') {
             document.getElementById("createButton").style.display = "block";
-            document.getElementById("deleteFunction").style.display = "block";
-        }
-
-        if (document.getElementById("type").textContent === "1") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("cessna").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "2") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("rg").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "3") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("cherokee").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "4") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("twin").style.display = "block";
+            var func = document.getElementsByClassName("deleteFunction");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
     }
     window.onload = adminCheck;
