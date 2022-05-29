@@ -1,0 +1,35 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "searchScreen";
+}
+
+<h2>Search</h2>
+<br />
+<p>Select a user profile to search:</p>
+<br />
+@using (Html.BeginForm("searchResultsScreen", "Sys_User", FormMethod.Post))
+{
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.SysUser_ID">
+    </div>
+    <select id="list" name="list">
+        <option value="student">Students</option>
+        <option value="instructor">Instructors</option>
+        <option value="admin">Admin Staff</option>
+        <option value="manager">Managers</option>
+    </select>
+    <br />
+    <br />
+    <label>@Html.Label("First Name:")</label>
+    <input type="text" id="firstName" name="firstName">
+    <br />
+    <br />
+    <label>@Html.Label("Last Name:")</label>
+    <input type="text" id="lastName" name="lastName">
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Search" />
+}
