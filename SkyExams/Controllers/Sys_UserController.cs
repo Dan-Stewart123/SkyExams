@@ -206,15 +206,15 @@ namespace SkyExams.Controllers
 
                 //create email
                 MimeMessage requestEmail = new MimeMessage();
-                requestEmail.From.Add(new MailboxAddress("New user", "u20428660@tuks.co.za"));
-                requestEmail.To.Add(MailboxAddress.Parse("u20428660@tuks.co.za"));
+                requestEmail.From.Add(new MailboxAddress("New user", "danielmarcstewart@gmail.com"));
+                requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));
                 requestEmail.Subject = "New user request";
                 requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system: User name: " + firstName + " " + lastName  + " email address: " + email};
 
                 //send email
                 SmtpClient client = new SmtpClient();
                 client.Connect("smtp.gmail.com", 465, true);
-                client.Authenticate("u20428660@tuks.co.za", "Titan0208$");
+                client.Authenticate("danielmarcstewart@gmail.com", "Titan0208");
                 client.Send(requestEmail);
                 client.Disconnect(true);
                 client.Dispose();
