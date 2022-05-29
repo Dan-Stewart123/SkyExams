@@ -1,0 +1,63 @@
+﻿@model SkyExams.Models.Study_Resource
+@{
+    ViewBag.Title = "deleteResource";
+    var uID = ViewData["loggedId"];
+}
+
+<h2>Delete Resource</h2>
+<br />
+<p>Are you sure you wish to delete this plane</p>
+<br />
+<br />
+<dl class="dl-horizontal">
+    <dt class="col-md-4">
+        @Html.Label("Plane Type:")
+    </dt>
+
+    <dd>
+        <label id="type">@Html.DisplayFor(model => model.Theme_ID)</label>
+        <label id="cessna" style="display:none;">Cessna 172</label>
+        <label id="rg" style="display:none;">Cessna 172 RG</label>
+        <label id="cherokee" style="display:none;">Cherokee 140</label>
+        <label id="twin" style="display:none;">Piper Twin Commanche</label>
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Resource Name:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Resource_Name)
+    </dd>
+</dl>
+<button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = uID, typeId = Model.Study_Resource_ID })'">
+    Back
+</button>
+<button type="button" onclick="location.href='@Url.Action("deleteResourceConformation", "Study_Resource", new { loggedId = uID, id = Model.Study_Resource_ID })'">
+    Delete
+</button>
+
+<script>
+    function typeCheck() {
+        if (document.getElementById("type").textContent === "1") {
+            document.getElementById("type").style.display = "none";
+            document.getElementById("cessna").style.display = "block";
+        }
+        if (document.getElementById("type").textContent === "2") {
+            document.getElementById("type").style.display = "none";
+            document.getElementById("rg").style.display = "block";
+        }
+        if (document.getElementById("type").textContent === "3") {
+            document.getElementById("type").style.display = "none";
+            document.getElementById("cherokee").style.display = "block";
+        }
+        if (document.getElementById("type").textContent === "4") {
+            document.getElementById("type").style.display = "none";
+            document.getElementById("twin").style.display = "block";
+        }
+    }
+
+    window.onload = typeCheck;
+</script>
+
+

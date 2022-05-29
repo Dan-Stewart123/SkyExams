@@ -1,0 +1,80 @@
+﻿@model IEnumerable<SkyExams.Models.Plane>
+
+@{
+    ViewBag.Title = "planeTypeScreen";
+    var uID = ViewData["userID"];
+    var type = ViewData["planeType"];
+}
+
+<h2>Planes</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Plane Type</th>
+            <th scope="col">Call Sign</th>
+            <th scope="col">Hours Flown</th>
+            <th scope="col">Hours Until Next Service</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row" class="plane">
+                    @type
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Call_Sign)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Hours_Flown)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Hours_Until_Service)
+                </td>
+                <td scope="row" class="adminFunctions" style="display: none;">
+                    <button type="button" onclick="location.href='@Url.Action("updatePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                        Update
+                    </button>
+                    <button type="button" onclick="location.href='@Url.Action("deletePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
+    Continue
+</button>
+<script>
+    function adminCheck() {
+        var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
+        if (userId == '2') {
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
+        }
+        if (userId == '3') {
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
+        }
+        if (userId == '4') {
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
+        }
+    }
+
+    window.onload = adminCheck;
+
+</script>
+

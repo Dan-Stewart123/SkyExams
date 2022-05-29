@@ -1,0 +1,30 @@
+﻿@model IEnumerable<SkyExams.Models.Sys_User>
+@{
+    ViewBag.Title = "addStudentInstructor";
+    var userId = ViewData["userID"];
+    var studentId = ViewData["studentID"];
+}
+
+<h2>Assign Student an Instructor</h2>
+@using (Html.BeginForm("addStudentInstructor", "Sys_User", FormMethod.Post))
+{
+    <div style="display:none;">
+        <input type="text" id="loggedId" name="loggedId" value="@userId">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@studentId">
+    </div>
+    <label for="insturctor">Assign an instructor for the student:</label>
+    <select id="insturctor" name="insturctor">
+        @foreach (var item in Model)
+        {
+            <option value="@item.SysUser_ID">@item.FName @item.Surname</option>
+        }
+    </select>
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("searchScreen", "Sys_User", new { id = userId })'">
+        Back
+    </button>
+    <input type="submit" , value="Submit" />
+}

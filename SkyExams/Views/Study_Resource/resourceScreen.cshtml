@@ -1,0 +1,73 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "resourceScreen";
+}
+
+<h2>Resources</h2>
+<br />
+<br />
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-header"><h4>Cessna 172</h4></div>
+        <div class="card-body">
+            
+        </div>
+        <div class="card-footer">
+            <button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = 1 })'">
+                View Resources
+            </button>
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-header"><h4>Cessna 172 RG</h4></div>
+        <div class="card-body">
+            
+        </div>
+        <div class="card-footer">
+            <button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = 2 })'">
+                View Resources
+            </button>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-header"><h4>Cherokee 140</h4></div>
+        <div class="card-body">
+            
+        </div>
+        <div class="card-footer">
+            <button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = 3 })'">
+                View Resources
+            </button>
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-header"><h4>Piper Twin Commanche</h4></div>
+        <div class="card-body">
+            
+        </div>
+        <div class="card-footer">
+            <button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = 4 })'">
+                View Resources
+            </button>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Back
+</button>
