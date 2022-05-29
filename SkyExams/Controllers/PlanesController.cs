@@ -109,21 +109,25 @@ namespace SkyExams.Controllers
             List<Plane> planeList = new List<Plane>();
             if(typeId == 1)
             {
+                ViewData["planeType"] = "Cessna 172";
                 planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == 1);
                 return View(planeList);
             }// cessna 172
             if (typeId == 2)
             {
+                ViewData["planeType"] = "Cessna 172 RG";
                 planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == 2);
                 return View(planeList);
             }// cessna 172 RG
             if (typeId == 3)
             {
+                ViewData["planeType"] = "Cherokee 140";
                 planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == 3);
                 return View(planeList);
             }// cherokee 140
             if (typeId == 4)
             {
+                ViewData["planeType"] = "Piper Twin Comanche";
                 planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == 4);
                 return View(planeList);
             }// twin commanche

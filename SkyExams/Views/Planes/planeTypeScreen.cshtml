@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "planeTypeScreen";
     var uID = ViewData["userID"];
+    var type = ViewData["planeType"];
 }
 
 <h2>Planes</h2>
@@ -21,12 +22,8 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td scope="row">
-                    <label id="type">@Html.DisplayFor(modelItem => item.Plane_Type_ID)</label>
-                    <label id="cessna" style="display:none;">Cessna 172</label>
-                    <label id="rg" style="display:none;">Cessna 172 RG</label>
-                    <label id="cherokee" style="display:none;">Cherokee 140</label>
-                    <label id="twin" style="display:none;">Piper Twin Commanche</label>
+                <td scope="row" class="plane">
+                    @type
                 </td>
                 <td scope="row">
                     @Html.DisplayFor(modelItem => item.Call_Sign)
@@ -37,7 +34,7 @@
                 <td scope="row">
                     @Html.DisplayFor(modelItem => item.Hours_Until_Service)
                 </td>
-                <td scope="row" id="adminFunctions" style="display: none;">
+                <td scope="row" class="adminFunctions" style="display: none;">
                     <button type="button" onclick="location.href='@Url.Action("updatePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
                         Update
                     </button>
@@ -58,30 +55,22 @@
     function adminCheck() {
         var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
         if (userId == '2') {
-            document.getElementById("adminFunctions").style.display = "block";
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
         if (userId == '3') {
-            document.getElementById("adminFunctions").style.display = "block";
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
         if (userId == '4') {
-            document.getElementById("adminFunctions").style.display = "block";
-        }
-
-        if (document.getElementById("type").textContent === "1") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("cessna").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "2") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("rg").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "3") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("cherokee").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "4") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("twin").style.display = "block";
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
     }
 

@@ -1,12 +1,12 @@
-﻿@model IEnumerable<SkyExams.Models.Study_Resource>
+﻿@model IEnumerable<SkyExams.Models.Sys_User>
 @{
-    ViewBag.Title = "addStudentResource";
+    ViewBag.Title = "addStudentInstructor";
     var userId = ViewData["userID"];
     var studentId = ViewData["studentID"];
 }
 
-<h2>Add resources for the student</h2>
-@using (Html.BeginForm("addStudentResource", "Sys_User", FormMethod.Post))
+<h2>Assign Student an Instructor</h2>
+@using (Html.BeginForm("addStudentInstructor", "Sys_User", FormMethod.Post))
 {
     <div style="display:none;">
         <input type="text" id="loggedId" name="loggedId" value="@userId">
@@ -14,11 +14,11 @@
     <div style="display:none;">
         <input type="text" id="id" name="id" value="@studentId">
     </div>
-    <label for="resource">Select a Resource for the student:</label>
-    <select id="resource" name="resource">
+    <label for="insturctor">Assign an instructor for the student:</label>
+    <select id="insturctor" name="insturctor">
         @foreach (var item in Model)
         {
-            <option value="@item.Study_Resource_ID">@item.Resource_Name</option>
+            <option value="@item.SysUser_ID">@item.FName @item.Surname</option>
         }
     </select>
     <br />
@@ -28,4 +28,3 @@
     </button>
     <input type="submit" , value="Submit" />
 }
-

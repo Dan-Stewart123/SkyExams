@@ -305,12 +305,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\140.JPEG" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Cessna172.JPEG" />
     <Content Include="Content\fts_logo.jpeg" />
+    <Content Include="Content\rg.JPEG" />
     <Content Include="Content\SkyExamsEdited-removebg-preview %281%29.png" />
+    <Content Include="Content\twin.JPEG" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -404,6 +408,7 @@
     <Content Include="Views\Lesson_Plan\addPlan.cshtml" />
     <Content Include="Views\Lesson_Plan\deletePlan.cshtml" />
     <Content Include="Views\Sys_User\addStudentResource.cshtml" />
+    <Content Include="Views\Sys_User\addStudentInstructor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
