@@ -1,0 +1,36 @@
+﻿@model SkyExams.Models.Plane
+@{
+    ViewBag.Title = "updatePlane";
+    var uID = ViewData["loggedId"];
+}
+
+<h2>Update Plane</h2>
+<p>Please complete the following fields</p>
+
+@using (Html.BeginForm("updatePlane", "Planes", FormMethod.Post))
+{
+    <div style="display:none;">
+        <input type="text" id="userId" name="userId" value="@uID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.Plane_ID">
+    </div>
+    <label class="col-md-3">@Html.Label("Description:")</label>
+    <input class="col-md-3" type="text" id="description" name="description">
+    <label class="col-md-3">@Html.Label("Call Sign:")</label>
+    <input class="col-md-3" type="text" id="sign" name="sign" value="@Model.Call_Sign">
+    <br />
+    <br />
+    <label class="col-md-3">@Html.Label("Hours Flown:")</label>
+    <input class="col-md-3" type="number" id="hoursFlown" name="hoursFlown" value="@Model.Hours_Flown">
+    <label class="col-md-3">@Html.Label("Hours Until Service:")</label>
+    <input class="col-md-3" type="number" id="serviceHours" name="serviceHours" value="@Model.Hours_Until_Service">
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" />
+}
+
+

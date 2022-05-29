@@ -1,0 +1,96 @@
+﻿@model IEnumerable<SkyExams.Models.Sys_User>
+@{
+    ViewBag.Title = "searchResultsScreen";
+    var uID = ViewData["userID"];
+    var role = ViewData["role"];
+}
+
+<h2>Search Results</h2>
+<div style="display:none;">
+    <input type="text" id="id" name="id" value="@uID">
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Cell number</th>
+            <th scope="col">Email Address</th>
+            <th scope="col">Physical Address</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.FName)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Cell_Number)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Email_Address)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Physical_Address)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.DOB)
+            </td>
+            <td scope="row" id="del" style="display: none;">
+                <button type="button" onclick="location.href='@Url.Action("deleteUser", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Delete
+                </button>
+            </td>
+            <td scope="row" id="studentFunctions" style="display: none;">
+                <button type="button" onclick="location.href='@Url.Action("addStudentResource", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Add resources
+                </button>
+                <button type="button" onclick="location.href='@Url.Action("addStudentInstructor", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Assign Student an Instructor
+                </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+    Continue
+</button>
+<script>
+    function adminCheck() {
+        var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
+        var userRole = @Html.Raw(Json.Encode(ViewData["role"]));
+        if (userId == '2') {
+            document.getElementById("del").style.display = "block";
+            if (userRole == 'student') {
+                document.getElementById("studentFunctions").style.display = "block";
+            }
+        }
+        if (userId == '3') {
+            document.getElementById("del").style.display = "block";
+            if (userRole == 'student') {
+                document.getElementById("studentFunctions").style.display = "block";
+            }
+        }
+        if (userId == '4') {
+            document.getElementById("del").style.display = "block";
+            if (userRole == 'student') {
+                document.getElementById("studentFunctions").style.display = "block";
+            }
+        }
+
+    }
+    window.onload = adminCheck;
+</script>
+
