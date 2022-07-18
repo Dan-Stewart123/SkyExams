@@ -16,8 +16,7 @@ namespace SkyExams.Models
     {
         public int Question_ID { get; set; }
         public string Question1 { get; set; }
-        public Nullable<int> Answer_ID { get; set; }
-        public int Question_Rating_ID { get; set; }
         public int Section_ID { get; set; }
+        public int Question_Rating_ID { get; set; }
     }
 }
