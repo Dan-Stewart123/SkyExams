@@ -44,7 +44,7 @@ namespace SkyExams.Controllers
                         List<Study_Resource> tempResources = db.Study_Resource.ToList();
                         foreach(Study_Resource teResource in tempResources)
                         {
-                            if(teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Theme_ID == 1)
+                            if(teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Rating_ID == 1)
                             {
                                 resourceList.Add(teResource);
                             }
@@ -62,7 +62,7 @@ namespace SkyExams.Controllers
                         List<Study_Resource> tempResources = db.Study_Resource.ToList();
                         foreach (Study_Resource teResource in tempResources)
                         {
-                            if (teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Theme_ID == 2)
+                            if (teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Rating_ID == 2)
                             {
                                 resourceList.Add(teResource);
                             }
@@ -80,7 +80,7 @@ namespace SkyExams.Controllers
                         List<Study_Resource> tempResources = db.Study_Resource.ToList();
                         foreach (Study_Resource teResource in tempResources)
                         {
-                            if (teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Theme_ID == 3)
+                            if (teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Rating_ID == 3)
                             {
                                 resourceList.Add(teResource);
                             }
@@ -98,7 +98,7 @@ namespace SkyExams.Controllers
                         List<Study_Resource> tempResources = db.Study_Resource.ToList();
                         foreach (Study_Resource teResource in tempResources)
                         {
-                            if (teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Theme_ID == 4)
+                            if (teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Rating_ID == 4)
                             {
                                 resourceList.Add(teResource);
                             }
@@ -117,28 +117,28 @@ namespace SkyExams.Controllers
                 {
                     ViewData["themeID"] = "" + 1;
                     ViewData["planeType"] = "Cessna 172";
-                    resourceList = db.Study_Resource.ToList().FindAll(p => p.Theme_ID == 1);
+                    resourceList = db.Study_Resource.ToList().FindAll(p => p.Rating_ID == 1);
                     return View(resourceList);
                 }// cessna 172
                 if (typeId == 2)
                 {
                     ViewData["themeID"] = "" + 2;
                     ViewData["planeType"] = "Cessna 172 RG";
-                    resourceList = db.Study_Resource.ToList().FindAll(p => p.Theme_ID == 2);
+                    resourceList = db.Study_Resource.ToList().FindAll(p => p.Rating_ID == 2);
                     return View(resourceList);
                 }// cessna 172 RG
                 if (typeId == 3)
                 {
                     ViewData["themeID"] = "" + 3;
                     ViewData["planeType"] = "Cherokee 140";
-                    resourceList = db.Study_Resource.ToList().FindAll(p => p.Theme_ID == 3);
+                    resourceList = db.Study_Resource.ToList().FindAll(p => p.Rating_ID == 3);
                     return View(resourceList);
                 }// cherokee 140
                 if (typeId == 4)
                 {
                     ViewData["themeID"] = "" + 4;
                     ViewData["planeType"] = "Piper Twin Comanche";
-                    resourceList = db.Study_Resource.ToList().FindAll(p => p.Theme_ID == 4);
+                    resourceList = db.Study_Resource.ToList().FindAll(p => p.Rating_ID == 4);
                     return View(resourceList);
                 }// twin commanche
                 else
@@ -178,7 +178,7 @@ namespace SkyExams.Controllers
                 newResource.Study_Resource_ID = resourceId;
                 newResource.Resource_Name = name;
                 int theme = Convert.ToInt32(themeId);
-                newResource.Theme_ID = theme;
+                newResource.Rating_ID = theme;
 
                 Stream str = resource.InputStream;
                 BinaryReader br = new BinaryReader(str);
@@ -202,9 +202,10 @@ namespace SkyExams.Controllers
         public ActionResult deleteResourceConformation(int? loggedId, int? id)
         {
             Study_Resource delResource = db.Study_Resource.Find(id);
+            Student_Resource delStuResource = db.Student_Resource.ToList().Find(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
             db.Study_Resource.Remove(delResource);
             db.SaveChanges();
-            Student_Resource delStuResource = db.Student_Resource.ToList().Find(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
+            
             db.Student_Resource.Remove(delStuResource);
             db.SaveChanges();
             return RedirectToAction("resourceScreen", new { id = loggedId });

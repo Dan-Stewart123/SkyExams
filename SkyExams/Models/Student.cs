@@ -17,5 +17,6 @@ namespace SkyExams.Models
         public int Student_ID { get; set; }
         public int SysUser_ID { get; set; }
         public int Licence_No { get; set; }
+        public Nullable<int> Hours_Flown { get; set; }
     }
 }
