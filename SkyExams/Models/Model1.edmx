@@ -18,8 +18,8 @@
           </Key>
           <Property Name="Answer_ID" Type="int" Nullable="false" />
           <Property Name="ANS" Type="varchar" MaxLength="255" />
-          <Property Name="Question_ID" Type="int" />
-          <Property Name="Correct_Answer" Type="bit" />
+          <Property Name="Question_ID" Type="int" Nullable="false" />
+          <Property Name="Correct_Answer" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Booking">
           <Key>
@@ -461,8 +461,8 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           </Key>
           <Property Name="Answer_ID" Type="Int32" Nullable="false" />
           <Property Name="ANS" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Question_ID" Type="Int32" />
-          <Property Name="Correct_Answer" Type="Boolean" />
+          <Property Name="Question_ID" Type="Int32" Nullable="false" />
+          <Property Name="Correct_Answer" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Booking">
           <Key>

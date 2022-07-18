@@ -16,7 +16,7 @@ namespace SkyExams.Models
     {
         public int Answer_ID { get; set; }
         public string ANS { get; set; }
-        public Nullable<int> Question_ID { get; set; }
-        public Nullable<bool> Correct_Answer { get; set; }
+        public int Question_ID { get; set; }
+        public bool Correct_Answer { get; set; }
     }
 }
