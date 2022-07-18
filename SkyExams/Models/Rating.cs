@@ -12,9 +12,9 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Topic_Covered
+    public partial class Rating
     {
-        public int Topic_ID { get; set; }
-        public string Topic { get; set; }
+        public int Rating_ID { get; set; }
+        public string Rating_Description { get; set; }
     }
 }

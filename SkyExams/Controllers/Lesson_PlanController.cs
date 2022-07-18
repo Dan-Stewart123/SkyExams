@@ -45,7 +45,7 @@ namespace SkyExams.Controllers
                         List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
                         foreach (Lesson_Plan temPlan in tempPlans)
                         {
-                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Topic_ID == 1)
+                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == 1)
                             {
                                 planList.Add(temPlan);
                             }
@@ -63,7 +63,7 @@ namespace SkyExams.Controllers
                         List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
                         foreach (Lesson_Plan temPlan in tempPlans)
                         {
-                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Topic_ID == 2)
+                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == 2)
                             {
                                 planList.Add(temPlan);
                             }
@@ -81,7 +81,7 @@ namespace SkyExams.Controllers
                         List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
                         foreach (Lesson_Plan temPlan in tempPlans)
                         {
-                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Topic_ID == 3)
+                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == 3)
                             {
                                 planList.Add(temPlan);
                             }
@@ -99,7 +99,7 @@ namespace SkyExams.Controllers
                         List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
                         foreach (Lesson_Plan temPlan in tempPlans)
                         {
-                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Topic_ID == 4)
+                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == 4)
                             {
                                 planList.Add(temPlan);
                             }
@@ -118,28 +118,28 @@ namespace SkyExams.Controllers
                 {
                     ViewData["topicID"] = "" + 1;
                     ViewData["planeType"] = "Cessna 172";
-                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Topic_ID == 1);
+                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == 1);
                     return View(planList);
                 }// cessna 172
                 if (topicId == 2)
                 {
                     ViewData["topicID"] = "" + 2;
                     ViewData["planeType"] = "Cessna 172 RG";
-                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Topic_ID == 2);
+                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == 2);
                     return View(planList);
                 }// cessna 172 RG
                 if (topicId == 3)
                 {
                     ViewData["topicID"] = "" + 3;
                     ViewData["planeType"] = "Cherokee 140";
-                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Topic_ID == 3);
+                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == 3);
                     return View(planList);
                 }// cherokee 140
                 if (topicId == 4)
                 {
                     ViewData["topicID"] = "" + 4;
                     ViewData["planeType"] = "Piper Twin Comanche";
-                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Topic_ID == 4);
+                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == 4);
                     return View(planList);
                 }// twin commanche
                 else
@@ -174,12 +174,12 @@ namespace SkyExams.Controllers
             }// if fields are empty
             else
             {
-                int resourceId = planList.Count + 3;
+                int resourceId = planList.Count + 2;
                 Lesson_Plan newPlan = new Lesson_Plan();
                 newPlan.Lesson_Plan_ID = resourceId;
                 newPlan.LP_Name = name;
                 int theme = Convert.ToInt32(topicId);
-                newPlan.Topic_ID = theme;
+                newPlan.Rating_ID = theme;
                 int instructorId = Convert.ToInt32(id);
                 newPlan.Instructor_ID = instructorId;
 

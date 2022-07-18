@@ -15,6 +15,6 @@ namespace SkyExams.Models
     public partial class Instructor_Licence
     {
         public int Instructor_ID { get; set; }
-        public int Licence_Type_ID { get; set; }
+        public int Rating_ID { get; set; }
     }
 }
