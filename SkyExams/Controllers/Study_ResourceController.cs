@@ -202,10 +202,9 @@ namespace SkyExams.Controllers
         public ActionResult deleteResourceConformation(int? loggedId, int? id)
         {
             Study_Resource delResource = db.Study_Resource.Find(id);
-            Student_Resource delStuResource = db.Student_Resource.ToList().Find(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
             db.Study_Resource.Remove(delResource);
             db.SaveChanges();
-            
+            Student_Resource delStuResource = db.Student_Resource.ToList().Find(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
             db.Student_Resource.Remove(delStuResource);
             db.SaveChanges();
             return RedirectToAction("resourceScreen", new { id = loggedId });

@@ -174,7 +174,7 @@ namespace SkyExams.Controllers
             }// if fields are empty
             else
             {
-                int resourceId = planList.Count + 2;
+                int resourceId = planList.Count + 3;
                 Lesson_Plan newPlan = new Lesson_Plan();
                 newPlan.Lesson_Plan_ID = resourceId;
                 newPlan.LP_Name = name;
