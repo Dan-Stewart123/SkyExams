@@ -229,6 +229,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Student_ID" Type="int" Nullable="false" />
           <Property Name="Exam_ID" Type="int" Nullable="false" />
           <Property Name="Exam_Mark" Type="int" />
+          <Property Name="Completed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Student_Instructor">
           <Key>
@@ -663,6 +664,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Student_ID" Type="Int32" Nullable="false" />
           <Property Name="Exam_ID" Type="Int32" Nullable="false" />
           <Property Name="Exam_Mark" Type="Int32" />
+          <Property Name="Completed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Student_Instructor">
           <Key>
@@ -1031,6 +1033,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Student_Exam">
             <EntityTypeMapping TypeName="SkyExamsModel.Student_Exam">
               <MappingFragment StoreEntitySet="Student_Exam">
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
                 <ScalarProperty Name="Exam_Mark" ColumnName="Exam_Mark" />
                 <ScalarProperty Name="Exam_ID" ColumnName="Exam_ID" />
                 <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
