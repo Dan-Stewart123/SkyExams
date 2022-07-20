@@ -17,5 +17,6 @@ namespace SkyExams.Models
         public int Student_ID { get; set; }
         public int Exam_ID { get; set; }
         public Nullable<int> Exam_Mark { get; set; }
+        public bool Completed { get; set; }
     }
 }
