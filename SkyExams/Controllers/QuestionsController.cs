@@ -261,12 +261,12 @@ namespace SkyExams.Controllers
                 List<Answer> tempAns = db.Answers.ToList().FindAll(a => a.Question_ID == q.Question_ID);
                 Random rng2 = new Random();
                 int n2 = tempQ.Count;
-                while (n > 1)
+                while (n2 > 1)
                 {
-                    n--;
-                    int k = rng.Next(n2 + 1);
-                    Answer value = tempAns[k];
-                    tempAns[k] = tempAns[n2];
+                    n2--;
+                    int k2 = rng.Next(n2 + 1);
+                    Answer value = tempAns[k2];
+                    tempAns[k2] = tempAns[n2];
                     tempAns[n2] = value;
                 }// shuffle while
                 temp.Answers = tempAns;
