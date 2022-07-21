@@ -54,6 +54,9 @@
                 <button type="button" onclick="location.href='@Url.Action("addStudentResource", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Add resources
                 </button>
+                <button type="button" onclick="location.href='@Url.Action("addStudentExam", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Add Student to an Exam
+                </button>
                 <button type="button" onclick="location.href='@Url.Action("addStudentInstructor", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Assign Student an Instructor
                 </button>
