@@ -502,6 +502,35 @@ namespace SkyExams.Controllers
             }// catch
         }// add student resource post
 
+        [HttpGet]
+        public ActionResult addStudentExam(int? loggedId, int? id)
+        {
+            ViewData["userID"] = "" + loggedId;
+            ViewData["studentID"] = "" + id;
+            return View(db.Plane_Type.ToList());
+        }// add student exam get
+
+        [HttpPost]
+        public ActionResult addStudentExam(int? loggedId, int? id, int exam)
+        {
+            try
+            {
+                Student_Exam newStudentExam = new Student_Exam();
+                int stuId = db.Students.ToList().Find(s => s.SysUser_ID == id).Student_ID;
+                newStudentExam.Student_ID = stuId;
+                newStudentExam.Exam_ID = exam;
+                newStudentExam.Exam_Mark = 0;
+                newStudentExam.Completed = false;
+                db.Student_Exam.Add(newStudentExam);
+                db.SaveChanges();
+                return RedirectToAction("searchScreen", new { id = loggedId });
+            }// try
+            catch (Exception ex)
+            {
+                return RedirectToAction("searchScreen", new { id = loggedId });
+            }// catch
+        }// add student exam post
+
         public ActionResult addStudentInstructor(int? loggedId, int? id)
         {
             ViewData["userID"] = "" + loggedId;
