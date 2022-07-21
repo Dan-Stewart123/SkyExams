@@ -8,6 +8,11 @@
 }
 
 <h2>Write Exam</h2>
+<button type="button" onclick="location.href='@Url.Action("saveExam", "Questions", new { id = uID })'">
+    Save Exam
+</button>
+<br />
+<p>You can save your exam and come back to it at a later time.</p>
 <div class="Quiz" id="Quiz">
 
     <h4 style="margin-top: 4%;"> <span class="label label-info">Questions :</span> </h4>
@@ -53,11 +58,11 @@
             <p>Please print your exam script and bring it to your consultation</p>
             <br />
             <br />
-            <p>Book your consultation by clicking the button bellow</p>
+            <p id="bookLabel">Book your consultation by clicking the button bellow</p>
             <br />
             <br />
             <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
-                Home
+                Book Consultation
             </button>
         </div>
     }
@@ -138,9 +143,17 @@
 
 
                 specialElementHandlers = {
-                    // element with id of "bypass" - jQuery style selector
-                    '#bypassme': function (element, renderer) {
-                        // true = "handled elsewhere, bypass text extraction"
+                    
+                    '#bookLabel': function (element, renderer) {
+                        
+                        return true
+                    },
+                    '#SubmitQuiz': function (element, renderer) {
+
+                        return true
+                    },
+                    '#countQuections': function (element, renderer) {
+
                         return true
                     }
                 };
@@ -152,17 +165,15 @@
                 };
 
                 pdf.fromHTML(
-                    source, // HTML string or DOM elem ref.
-                    margins.left, // x coord
-                    margins.top, { // y coord
-                    'width': margins.width, // max width of content on PDF
+                    source, 
+                    margins.left, 
+                    margins.top, { 
+                    'width': margins.width, 
                     'elementHandlers': specialElementHandlers
                 },
                 
 
                     function (dispose) {
-                        // dispose: object with X, Y of the last line add to the PDF 
-                        //          this allow the insertion of new lines after html
                         pdf.save('examScript.pdf');
                     }, margins
                 );
