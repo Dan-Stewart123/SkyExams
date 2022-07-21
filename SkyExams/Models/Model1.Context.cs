@@ -36,28 +36,29 @@ namespace SkyExams.Models
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Employment_Status> Employment_Status { get; set; }
         public virtual DbSet<EventLocation> EventLocations { get; set; }
+        public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<Instructor> Instructors { get; set; }
         public virtual DbSet<Instructor_Licence> Instructor_Licence { get; set; }
         public virtual DbSet<Instructor_Slots> Instructor_Slots { get; set; }
         public virtual DbSet<Lesson_Plan> Lesson_Plan { get; set; }
-        public virtual DbSet<Licence_Type> Licence_Type { get; set; }
         public virtual DbSet<Manager> Managers { get; set; }
         public virtual DbSet<Plane> Planes { get; set; }
+        public virtual DbSet<Plane_Service> Plane_Service { get; set; }
         public virtual DbSet<Plane_Type> Plane_Type { get; set; }
-        public virtual DbSet<Question_Type> Question_Type { get; set; }
+        public virtual DbSet<Question_Rating> Question_Rating { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<SkyExam> SkyExams { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<Student_Exam> Student_Exam { get; set; }
         public virtual DbSet<Student_Instructor> Student_Instructor { get; set; }
         public virtual DbSet<Student_Lesson_Plan> Student_Lesson_Plan { get; set; }
         public virtual DbSet<Student_Licence_Type> Student_Licence_Type { get; set; }
         public virtual DbSet<Student_Resource> Student_Resource { get; set; }
         public virtual DbSet<Study_Resource> Study_Resource { get; set; }
         public virtual DbSet<Sys_User> Sys_User { get; set; }
-        public virtual DbSet<Theme_Covered> Theme_Covered { get; set; }
         public virtual DbSet<Title> Titles { get; set; }
-        public virtual DbSet<Topic_Covered> Topic_Covered { get; set; }
         public virtual DbSet<Twin_Commanche> Twin_Commanche { get; set; }
         public virtual DbSet<uEvent> uEvents { get; set; }
         public virtual DbSet<User_Event> User_Event { get; set; }

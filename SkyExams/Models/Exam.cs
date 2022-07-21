@@ -12,9 +12,9 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Theme_Covered
+    public partial class Exam
     {
-        public int Theme_ID { get; set; }
-        public string Theme { get; set; }
+        public int Exam_ID { get; set; }
+        public Nullable<int> Plane_Type_ID { get; set; }
     }
 }

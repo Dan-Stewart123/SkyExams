@@ -12,9 +12,9 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Licence_Type
+    public partial class Rating
     {
-        public int Licence_Type_ID { get; set; }
-        public string TypeDescription { get; set; }
+        public int Rating_ID { get; set; }
+        public string Rating_Description { get; set; }
     }
 }

@@ -18,6 +18,8 @@
           </Key>
           <Property Name="Answer_ID" Type="int" Nullable="false" />
           <Property Name="ANS" Type="varchar" MaxLength="255" />
+          <Property Name="Question_ID" Type="int" Nullable="false" />
+          <Property Name="Correct_Answer" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Booking">
           <Key>
@@ -89,6 +91,13 @@
           <Property Name="Location_ID" Type="int" Nullable="false" />
           <Property Name="Event_Location" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Exam">
+          <Key>
+            <PropertyRef Name="Exam_ID" />
+          </Key>
+          <Property Name="Exam_ID" Type="int" Nullable="false" />
+          <Property Name="Plane_Type_ID" Type="int" />
+        </EntityType>
         <EntityType Name="Instructor">
           <Key>
             <PropertyRef Name="Instructor_ID" />
@@ -101,10 +110,10 @@
         <EntityType Name="Instructor_Licence">
           <Key>
             <PropertyRef Name="Instructor_ID" />
-            <PropertyRef Name="Licence_Type_ID" />
+            <PropertyRef Name="Rating_ID" />
           </Key>
           <Property Name="Instructor_ID" Type="int" Nullable="false" />
-          <Property Name="Licence_Type_ID" Type="int" Nullable="false" />
+          <Property Name="Rating_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Instructor_Slots">
           <Key>
@@ -122,14 +131,7 @@
           <Property Name="Instructor_ID" Type="int" Nullable="false" />
           <Property Name="LP_Name" Type="varchar" MaxLength="255" />
           <Property Name="LP_Description" Type="varbinary(max)" />
-          <Property Name="Topic_ID" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Licence_Type">
-          <Key>
-            <PropertyRef Name="Licence_Type_ID" />
-          </Key>
-          <Property Name="Licence_Type_ID" Type="int" Nullable="false" />
-          <Property Name="TypeDescription" Type="varchar" MaxLength="255" />
+          <Property Name="Rating_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Manager">
           <Key>
@@ -147,6 +149,15 @@
           <Property Name="Call_Sign" Type="varchar" MaxLength="6" />
           <Property Name="Hours_Flown" Type="int" />
           <Property Name="Hours_Until_Service" Type="int" />
+          <Property Name="In_Service" Type="bit" />
+        </EntityType>
+        <EntityType Name="Plane_Service">
+          <Key>
+            <PropertyRef Name="Plane_ID" />
+          </Key>
+          <Property Name="Plane_ID" Type="int" Nullable="false" />
+          <Property Name="Last_Service_Date" Type="datetime" />
+          <Property Name="Service_Details" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Plane_Type">
           <Key>
@@ -164,12 +175,12 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Profile_Image_ID" Type="int" Nullable="false" />
           <Property Name="Profile_Image" Type="varbinary(max)" />
         </EntityType>
-        <EntityType Name="Question_Type">
+        <EntityType Name="Question_Rating">
           <Key>
-            <PropertyRef Name="Question_Type_ID" />
+            <PropertyRef Name="Question_Rating_ID" />
           </Key>
-          <Property Name="Question_Type_ID" Type="int" Nullable="false" />
-          <Property Name="Ques_Type" Type="varchar" MaxLength="25" />
+          <Property Name="Question_Rating_ID" Type="int" Nullable="false" />
+          <Property Name="Ques_Rating" Type="varchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="Questions">
           <Key>
@@ -177,9 +188,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           </Key>
           <Property Name="Question_ID" Type="int" Nullable="false" />
           <Property Name="Question" Type="varchar" MaxLength="255" />
-          <Property Name="Answer_ID" Type="int" />
-          <Property Name="Question_Type_ID" Type="int" Nullable="false" />
           <Property Name="Section_ID" Type="int" Nullable="false" />
+          <Property Name="Question_Rating_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="Rating_ID" />
+          </Key>
+          <Property Name="Rating_ID" Type="int" Nullable="false" />
+          <Property Name="Rating_Description" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Section">
           <Key>
@@ -203,6 +220,16 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Student_ID" Type="int" Nullable="false" />
           <Property Name="SysUser_ID" Type="int" Nullable="false" />
           <Property Name="Licence_No" Type="int" Nullable="false" />
+          <Property Name="Hours_Flown" Type="int" />
+        </EntityType>
+        <EntityType Name="Student_Exam">
+          <Key>
+            <PropertyRef Name="Student_ID" />
+          </Key>
+          <Property Name="Student_ID" Type="int" Nullable="false" />
+          <Property Name="Exam_ID" Type="int" Nullable="false" />
+          <Property Name="Exam_Mark" Type="int" />
+          <Property Name="Completed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Student_Instructor">
           <Key>
@@ -223,10 +250,10 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
         <EntityType Name="Student_Licence_Type">
           <Key>
             <PropertyRef Name="Student_Licence_ID" />
-            <PropertyRef Name="Licence_Type_ID" />
+            <PropertyRef Name="Rating_ID" />
           </Key>
           <Property Name="Student_Licence_ID" Type="int" Nullable="false" />
-          <Property Name="Licence_Type_ID" Type="int" Nullable="false" />
+          <Property Name="Rating_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Student_Resource">
           <Key>
@@ -243,7 +270,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Study_Resource_ID" Type="int" Nullable="false" />
           <Property Name="Resource_Name" Type="varchar" MaxLength="25" />
           <Property Name="Resources" Type="varbinary(max)" />
-          <Property Name="Theme_ID" Type="int" Nullable="false" />
+          <Property Name="Rating_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Sys_User">
           <Key>
@@ -265,26 +292,12 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Employment_ID" Type="int" Nullable="false" />
           <Property Name="User_Name" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="Theme_Covered">
-          <Key>
-            <PropertyRef Name="Theme_ID" />
-          </Key>
-          <Property Name="Theme_ID" Type="int" Nullable="false" />
-          <Property Name="Theme" Type="varchar" MaxLength="50" />
-        </EntityType>
         <EntityType Name="Title">
           <Key>
             <PropertyRef Name="Title_ID" />
           </Key>
           <Property Name="Title_ID" Type="int" Nullable="false" />
           <Property Name="TitleDesc" Type="varchar" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="Topic_Covered">
-          <Key>
-            <PropertyRef Name="Topic_ID" />
-          </Key>
-          <Property Name="Topic_ID" Type="int" Nullable="false" />
-          <Property Name="Topic" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Twin_Commanche">
           <Key>
@@ -351,28 +364,29 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employment_Status" EntityType="Self.Employment_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EventLocation" EntityType="Self.EventLocation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Exam" EntityType="Self.Exam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instructor" EntityType="Self.Instructor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instructor_Licence" EntityType="Self.Instructor_Licence" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instructor_Slots" EntityType="Self.Instructor_Slots" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Lesson_Plan" EntityType="Self.Lesson_Plan" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Licence_Type" EntityType="Self.Licence_Type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Manager" EntityType="Self.Manager" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plane" EntityType="Self.Plane" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Plane_Service" EntityType="Self.Plane_Service" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plane_Type" EntityType="Self.Plane_Type" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Question_Type" EntityType="Self.Question_Type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Question_Rating" EntityType="Self.Question_Rating" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SkyExams" EntityType="Self.SkyExams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student_Exam" EntityType="Self.Student_Exam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student_Instructor" EntityType="Self.Student_Instructor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student_Lesson_Plan" EntityType="Self.Student_Lesson_Plan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student_Licence_Type" EntityType="Self.Student_Licence_Type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student_Resource" EntityType="Self.Student_Resource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Study_Resource" EntityType="Self.Study_Resource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sys_User" EntityType="Self.Sys_User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Theme_Covered" EntityType="Self.Theme_Covered" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Title" EntityType="Self.Title" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Topic_Covered" EntityType="Self.Topic_Covered" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Twin_Commanche" EntityType="Self.Twin_Commanche" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="uEvent" EntityType="Self.uEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Event" EntityType="Self.User_Event" Schema="dbo" store:Type="Tables" />
@@ -403,28 +417,29 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Countries" EntityType="SkyExamsModel.Country" />
           <EntitySet Name="Employment_Status" EntityType="SkyExamsModel.Employment_Status" />
           <EntitySet Name="EventLocations" EntityType="SkyExamsModel.EventLocation" />
+          <EntitySet Name="Exams" EntityType="SkyExamsModel.Exam" />
           <EntitySet Name="Instructors" EntityType="SkyExamsModel.Instructor" />
           <EntitySet Name="Instructor_Licence" EntityType="SkyExamsModel.Instructor_Licence" />
           <EntitySet Name="Instructor_Slots" EntityType="SkyExamsModel.Instructor_Slots" />
           <EntitySet Name="Lesson_Plan" EntityType="SkyExamsModel.Lesson_Plan" />
-          <EntitySet Name="Licence_Type" EntityType="SkyExamsModel.Licence_Type" />
           <EntitySet Name="Managers" EntityType="SkyExamsModel.Manager" />
           <EntitySet Name="Planes" EntityType="SkyExamsModel.Plane" />
+          <EntitySet Name="Plane_Service" EntityType="SkyExamsModel.Plane_Service" />
           <EntitySet Name="Plane_Type" EntityType="SkyExamsModel.Plane_Type" />
-          <EntitySet Name="Question_Type" EntityType="SkyExamsModel.Question_Type" />
+          <EntitySet Name="Question_Rating" EntityType="SkyExamsModel.Question_Rating" />
           <EntitySet Name="Questions" EntityType="SkyExamsModel.Question" />
+          <EntitySet Name="Ratings" EntityType="SkyExamsModel.Rating" />
           <EntitySet Name="Sections" EntityType="SkyExamsModel.Section" />
           <EntitySet Name="SkyExams" EntityType="SkyExamsModel.SkyExam" />
           <EntitySet Name="Students" EntityType="SkyExamsModel.Student" />
+          <EntitySet Name="Student_Exam" EntityType="SkyExamsModel.Student_Exam" />
           <EntitySet Name="Student_Instructor" EntityType="SkyExamsModel.Student_Instructor" />
           <EntitySet Name="Student_Lesson_Plan" EntityType="SkyExamsModel.Student_Lesson_Plan" />
           <EntitySet Name="Student_Licence_Type" EntityType="SkyExamsModel.Student_Licence_Type" />
           <EntitySet Name="Student_Resource" EntityType="SkyExamsModel.Student_Resource" />
           <EntitySet Name="Study_Resource" EntityType="SkyExamsModel.Study_Resource" />
           <EntitySet Name="Sys_User" EntityType="SkyExamsModel.Sys_User" />
-          <EntitySet Name="Theme_Covered" EntityType="SkyExamsModel.Theme_Covered" />
           <EntitySet Name="Titles" EntityType="SkyExamsModel.Title" />
-          <EntitySet Name="Topic_Covered" EntityType="SkyExamsModel.Topic_Covered" />
           <EntitySet Name="Twin_Commanche" EntityType="SkyExamsModel.Twin_Commanche" />
           <EntitySet Name="uEvents" EntityType="SkyExamsModel.uEvent" />
           <EntitySet Name="User_Event" EntityType="SkyExamsModel.User_Event" />
@@ -447,6 +462,8 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           </Key>
           <Property Name="Answer_ID" Type="Int32" Nullable="false" />
           <Property Name="ANS" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Question_ID" Type="Int32" Nullable="false" />
+          <Property Name="Correct_Answer" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Booking">
           <Key>
@@ -518,6 +535,13 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Location_ID" Type="Int32" Nullable="false" />
           <Property Name="Event_Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Exam">
+          <Key>
+            <PropertyRef Name="Exam_ID" />
+          </Key>
+          <Property Name="Exam_ID" Type="Int32" Nullable="false" />
+          <Property Name="Plane_Type_ID" Type="Int32" />
+        </EntityType>
         <EntityType Name="Instructor">
           <Key>
             <PropertyRef Name="Instructor_ID" />
@@ -530,10 +554,10 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
         <EntityType Name="Instructor_Licence">
           <Key>
             <PropertyRef Name="Instructor_ID" />
-            <PropertyRef Name="Licence_Type_ID" />
+            <PropertyRef Name="Rating_ID" />
           </Key>
           <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
-          <Property Name="Licence_Type_ID" Type="Int32" Nullable="false" />
+          <Property Name="Rating_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Instructor_Slots">
           <Key>
@@ -551,14 +575,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
           <Property Name="LP_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="LP_Description" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="Topic_ID" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Licence_Type">
-          <Key>
-            <PropertyRef Name="Licence_Type_ID" />
-          </Key>
-          <Property Name="Licence_Type_ID" Type="Int32" Nullable="false" />
-          <Property Name="TypeDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Rating_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Manager">
           <Key>
@@ -576,6 +593,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Call_Sign" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Name="Hours_Flown" Type="Int32" />
           <Property Name="Hours_Until_Service" Type="Int32" />
+          <Property Name="In_Service" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Plane_Service">
+          <Key>
+            <PropertyRef Name="Plane_ID" />
+          </Key>
+          <Property Name="Plane_ID" Type="Int32" Nullable="false" />
+          <Property Name="Last_Service_Date" Type="DateTime" Precision="3" />
+          <Property Name="Service_Details" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Plane_Type">
           <Key>
@@ -584,12 +610,12 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Plane_Type_ID" Type="Int32" Nullable="false" />
           <Property Name="Type_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Question_Type">
+        <EntityType Name="Question_Rating">
           <Key>
-            <PropertyRef Name="Question_Type_ID" />
+            <PropertyRef Name="Question_Rating_ID" />
           </Key>
-          <Property Name="Question_Type_ID" Type="Int32" Nullable="false" />
-          <Property Name="Ques_Type" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Question_Rating_ID" Type="Int32" Nullable="false" />
+          <Property Name="Ques_Rating" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -597,9 +623,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           </Key>
           <Property Name="Question_ID" Type="Int32" Nullable="false" />
           <Property Name="Question1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Answer_ID" Type="Int32" />
-          <Property Name="Question_Type_ID" Type="Int32" Nullable="false" />
           <Property Name="Section_ID" Type="Int32" Nullable="false" />
+          <Property Name="Question_Rating_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="Rating_ID" />
+          </Key>
+          <Property Name="Rating_ID" Type="Int32" Nullable="false" />
+          <Property Name="Rating_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Section">
           <Key>
@@ -623,6 +655,16 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Student_ID" Type="Int32" Nullable="false" />
           <Property Name="SysUser_ID" Type="Int32" Nullable="false" />
           <Property Name="Licence_No" Type="Int32" Nullable="false" />
+          <Property Name="Hours_Flown" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Student_Exam">
+          <Key>
+            <PropertyRef Name="Student_ID" />
+          </Key>
+          <Property Name="Student_ID" Type="Int32" Nullable="false" />
+          <Property Name="Exam_ID" Type="Int32" Nullable="false" />
+          <Property Name="Exam_Mark" Type="Int32" />
+          <Property Name="Completed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Student_Instructor">
           <Key>
@@ -643,10 +685,10 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
         <EntityType Name="Student_Licence_Type">
           <Key>
             <PropertyRef Name="Student_Licence_ID" />
-            <PropertyRef Name="Licence_Type_ID" />
+            <PropertyRef Name="Rating_ID" />
           </Key>
           <Property Name="Student_Licence_ID" Type="Int32" Nullable="false" />
-          <Property Name="Licence_Type_ID" Type="Int32" Nullable="false" />
+          <Property Name="Rating_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Student_Resource">
           <Key>
@@ -663,7 +705,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Study_Resource_ID" Type="Int32" Nullable="false" />
           <Property Name="Resource_Name" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="Resources" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="Theme_ID" Type="Int32" Nullable="false" />
+          <Property Name="Rating_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Sys_User">
           <Key>
@@ -685,26 +727,12 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Employment_ID" Type="Int32" Nullable="false" />
           <Property Name="User_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Theme_Covered">
-          <Key>
-            <PropertyRef Name="Theme_ID" />
-          </Key>
-          <Property Name="Theme_ID" Type="Int32" Nullable="false" />
-          <Property Name="Theme" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="Title">
           <Key>
             <PropertyRef Name="Title_ID" />
           </Key>
           <Property Name="Title_ID" Type="Int32" Nullable="false" />
           <Property Name="TitleDesc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Topic_Covered">
-          <Key>
-            <PropertyRef Name="Topic_ID" />
-          </Key>
-          <Property Name="Topic_ID" Type="Int32" Nullable="false" />
-          <Property Name="Topic" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Twin_Commanche">
           <Key>
@@ -783,6 +811,8 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Answers">
             <EntityTypeMapping TypeName="SkyExamsModel.Answer">
               <MappingFragment StoreEntitySet="Answer">
+                <ScalarProperty Name="Correct_Answer" ColumnName="Correct_Answer" />
+                <ScalarProperty Name="Question_ID" ColumnName="Question_ID" />
                 <ScalarProperty Name="ANS" ColumnName="ANS" />
                 <ScalarProperty Name="Answer_ID" ColumnName="Answer_ID" />
               </MappingFragment>
@@ -867,6 +897,14 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Exams">
+            <EntityTypeMapping TypeName="SkyExamsModel.Exam">
+              <MappingFragment StoreEntitySet="Exam">
+                <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
+                <ScalarProperty Name="Exam_ID" ColumnName="Exam_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Instructors">
             <EntityTypeMapping TypeName="SkyExamsModel.Instructor">
               <MappingFragment StoreEntitySet="Instructor">
@@ -879,7 +917,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Instructor_Licence">
             <EntityTypeMapping TypeName="SkyExamsModel.Instructor_Licence">
               <MappingFragment StoreEntitySet="Instructor_Licence">
-                <ScalarProperty Name="Licence_Type_ID" ColumnName="Licence_Type_ID" />
+                <ScalarProperty Name="Rating_ID" ColumnName="Rating_ID" />
                 <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -895,19 +933,11 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Lesson_Plan">
             <EntityTypeMapping TypeName="SkyExamsModel.Lesson_Plan">
               <MappingFragment StoreEntitySet="Lesson_Plan">
-                <ScalarProperty Name="Topic_ID" ColumnName="Topic_ID" />
+                <ScalarProperty Name="Rating_ID" ColumnName="Rating_ID" />
                 <ScalarProperty Name="LP_Description" ColumnName="LP_Description" />
                 <ScalarProperty Name="LP_Name" ColumnName="LP_Name" />
                 <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
                 <ScalarProperty Name="Lesson_Plan_ID" ColumnName="Lesson_Plan_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Licence_Type">
-            <EntityTypeMapping TypeName="SkyExamsModel.Licence_Type">
-              <MappingFragment StoreEntitySet="Licence_Type">
-                <ScalarProperty Name="TypeDescription" ColumnName="TypeDescription" />
-                <ScalarProperty Name="Licence_Type_ID" ColumnName="Licence_Type_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -922,10 +952,20 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Planes">
             <EntityTypeMapping TypeName="SkyExamsModel.Plane">
               <MappingFragment StoreEntitySet="Plane">
+                <ScalarProperty Name="In_Service" ColumnName="In_Service" />
                 <ScalarProperty Name="Hours_Until_Service" ColumnName="Hours_Until_Service" />
                 <ScalarProperty Name="Hours_Flown" ColumnName="Hours_Flown" />
                 <ScalarProperty Name="Call_Sign" ColumnName="Call_Sign" />
                 <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
+                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Plane_Service">
+            <EntityTypeMapping TypeName="SkyExamsModel.Plane_Service">
+              <MappingFragment StoreEntitySet="Plane_Service">
+                <ScalarProperty Name="Service_Details" ColumnName="Service_Details" />
+                <ScalarProperty Name="Last_Service_Date" ColumnName="Last_Service_Date" />
                 <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -938,22 +978,29 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Question_Type">
-            <EntityTypeMapping TypeName="SkyExamsModel.Question_Type">
-              <MappingFragment StoreEntitySet="Question_Type">
-                <ScalarProperty Name="Ques_Type" ColumnName="Ques_Type" />
-                <ScalarProperty Name="Question_Type_ID" ColumnName="Question_Type_ID" />
+          <EntitySetMapping Name="Question_Rating">
+            <EntityTypeMapping TypeName="SkyExamsModel.Question_Rating">
+              <MappingFragment StoreEntitySet="Question_Rating">
+                <ScalarProperty Name="Ques_Rating" ColumnName="Ques_Rating" />
+                <ScalarProperty Name="Question_Rating_ID" ColumnName="Question_Rating_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="SkyExamsModel.Question">
               <MappingFragment StoreEntitySet="Questions">
+                <ScalarProperty Name="Question_Rating_ID" ColumnName="Question_Rating_ID" />
                 <ScalarProperty Name="Section_ID" ColumnName="Section_ID" />
-                <ScalarProperty Name="Question_Type_ID" ColumnName="Question_Type_ID" />
-                <ScalarProperty Name="Answer_ID" ColumnName="Answer_ID" />
                 <ScalarProperty Name="Question1" ColumnName="Question" />
                 <ScalarProperty Name="Question_ID" ColumnName="Question_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ratings">
+            <EntityTypeMapping TypeName="SkyExamsModel.Rating">
+              <MappingFragment StoreEntitySet="Rating">
+                <ScalarProperty Name="Rating_Description" ColumnName="Rating_Description" />
+                <ScalarProperty Name="Rating_ID" ColumnName="Rating_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -976,8 +1023,19 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Students">
             <EntityTypeMapping TypeName="SkyExamsModel.Student">
               <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="Hours_Flown" ColumnName="Hours_Flown" />
                 <ScalarProperty Name="Licence_No" ColumnName="Licence_No" />
                 <ScalarProperty Name="SysUser_ID" ColumnName="SysUser_ID" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Student_Exam">
+            <EntityTypeMapping TypeName="SkyExamsModel.Student_Exam">
+              <MappingFragment StoreEntitySet="Student_Exam">
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
+                <ScalarProperty Name="Exam_Mark" ColumnName="Exam_Mark" />
+                <ScalarProperty Name="Exam_ID" ColumnName="Exam_ID" />
                 <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1001,7 +1059,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Student_Licence_Type">
             <EntityTypeMapping TypeName="SkyExamsModel.Student_Licence_Type">
               <MappingFragment StoreEntitySet="Student_Licence_Type">
-                <ScalarProperty Name="Licence_Type_ID" ColumnName="Licence_Type_ID" />
+                <ScalarProperty Name="Rating_ID" ColumnName="Rating_ID" />
                 <ScalarProperty Name="Student_Licence_ID" ColumnName="Student_Licence_ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1017,7 +1075,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Study_Resource">
             <EntityTypeMapping TypeName="SkyExamsModel.Study_Resource">
               <MappingFragment StoreEntitySet="Study_Resource">
-                <ScalarProperty Name="Theme_ID" ColumnName="Theme_ID" />
+                <ScalarProperty Name="Rating_ID" ColumnName="Rating_ID" />
                 <ScalarProperty Name="Resources" ColumnName="Resources" />
                 <ScalarProperty Name="Resource_Name" ColumnName="Resource_Name" />
                 <ScalarProperty Name="Study_Resource_ID" ColumnName="Study_Resource_ID" />
@@ -1045,27 +1103,11 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Theme_Covered">
-            <EntityTypeMapping TypeName="SkyExamsModel.Theme_Covered">
-              <MappingFragment StoreEntitySet="Theme_Covered">
-                <ScalarProperty Name="Theme" ColumnName="Theme" />
-                <ScalarProperty Name="Theme_ID" ColumnName="Theme_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Titles">
             <EntityTypeMapping TypeName="SkyExamsModel.Title">
               <MappingFragment StoreEntitySet="Title">
                 <ScalarProperty Name="TitleDesc" ColumnName="TitleDesc" />
                 <ScalarProperty Name="Title_ID" ColumnName="Title_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Topic_Covered">
-            <EntityTypeMapping TypeName="SkyExamsModel.Topic_Covered">
-              <MappingFragment StoreEntitySet="Topic_Covered">
-                <ScalarProperty Name="Topic" ColumnName="Topic" />
-                <ScalarProperty Name="Topic_ID" ColumnName="Topic_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
