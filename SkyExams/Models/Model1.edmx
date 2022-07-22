@@ -198,6 +198,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Rating_ID" Type="int" Nullable="false" />
           <Property Name="Rating_Description" Type="varchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="Save_Exam">
+          <Key>
+            <PropertyRef Name="Save_Exam_ID" />
+          </Key>
+          <Property Name="Save_Exam_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="AnswerID" Type="int" Nullable="false" />
+          <Property Name="Student_Exam_ID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Section">
           <Key>
             <PropertyRef Name="Section_ID" />
@@ -229,6 +238,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Student_ID" Type="int" Nullable="false" />
           <Property Name="Exam_ID" Type="int" Nullable="false" />
           <Property Name="Exam_Mark" Type="int" />
+          <Property Name="Started" Type="bit" />
           <Property Name="Completed" Type="bit" Nullable="false" />
           <Property Name="Stu_Exam" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
@@ -377,6 +387,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Question_Rating" EntityType="Self.Question_Rating" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Save_Exam" EntityType="Self.Save_Exam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SkyExams" EntityType="Self.SkyExams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
@@ -430,6 +441,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Question_Rating" EntityType="SkyExamsModel.Question_Rating" />
           <EntitySet Name="Questions" EntityType="SkyExamsModel.Question" />
           <EntitySet Name="Ratings" EntityType="SkyExamsModel.Rating" />
+          <EntitySet Name="Save_Exam" EntityType="SkyExamsModel.Save_Exam" />
           <EntitySet Name="Sections" EntityType="SkyExamsModel.Section" />
           <EntitySet Name="SkyExams" EntityType="SkyExamsModel.SkyExam" />
           <EntitySet Name="Students" EntityType="SkyExamsModel.Student" />
@@ -634,6 +646,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Rating_ID" Type="Int32" Nullable="false" />
           <Property Name="Rating_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Save_Exam">
+          <Key>
+            <PropertyRef Name="Save_Exam_ID" />
+          </Key>
+          <Property Name="Save_Exam_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="AnswerID" Type="Int32" Nullable="false" />
+          <Property Name="Student_Exam_ID" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Section">
           <Key>
             <PropertyRef Name="Section_ID" />
@@ -665,6 +686,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Student_ID" Type="Int32" Nullable="false" />
           <Property Name="Exam_ID" Type="Int32" Nullable="false" />
           <Property Name="Exam_Mark" Type="Int32" />
+          <Property Name="Started" Type="Boolean" />
           <Property Name="Completed" Type="Boolean" Nullable="false" />
           <Property Name="Stu_Exam" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
@@ -1006,6 +1028,16 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Save_Exam">
+            <EntityTypeMapping TypeName="SkyExamsModel.Save_Exam">
+              <MappingFragment StoreEntitySet="Save_Exam">
+                <ScalarProperty Name="Student_Exam_ID" ColumnName="Student_Exam_ID" />
+                <ScalarProperty Name="AnswerID" ColumnName="AnswerID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="Save_Exam_ID" ColumnName="Save_Exam_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Sections">
             <EntityTypeMapping TypeName="SkyExamsModel.Section">
               <MappingFragment StoreEntitySet="Section">
@@ -1037,6 +1069,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               <MappingFragment StoreEntitySet="Student_Exam">
                 <ScalarProperty Name="Stu_Exam" ColumnName="Stu_Exam" />
                 <ScalarProperty Name="Completed" ColumnName="Completed" />
+                <ScalarProperty Name="Started" ColumnName="Started" />
                 <ScalarProperty Name="Exam_Mark" ColumnName="Exam_Mark" />
                 <ScalarProperty Name="Exam_ID" ColumnName="Exam_ID" />
                 <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />

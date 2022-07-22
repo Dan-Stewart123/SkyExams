@@ -239,40 +239,120 @@ namespace SkyExams.Controllers
         [HttpGet]
         public ActionResult writeExam(int? id, int? ratingId)
         {
-            ViewData["userId"] = "" + id;
-            ViewData["ratingId"] = "" + ratingId;
-            List <QuestionVM> questions = new List<QuestionVM>();
-            List<Question> tempQ = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
-            Random rng = new Random();
-            int n = tempQ.Count;
-            while (n > 1)
+            Student_Exam stuExam = db.Student_Exam.ToList().Find(s => s.Student_ID == id && s.Exam_ID == ratingId);
+            if(stuExam.Started == true && stuExam.Completed == false)
             {
-                n--;
-                int k = rng.Next(n + 1);
-                Question value = tempQ[k];
-                tempQ[k] = tempQ[n];
-                tempQ[n] = value;
-            }// shuffle while
-            foreach(var q in tempQ)
-            {
-                QuestionVM temp = new QuestionVM();
-                temp.QuestionID = q.Question_ID;
-                temp.QuestionText = q.Question1;
-                List<Answer> tempAns = db.Answers.ToList().FindAll(a => a.Question_ID == q.Question_ID);
-                Random rng2 = new Random();
-                int n2 = tempQ.Count;
-                while (n2 > 1)
+                ViewData["userId"] = "" + id;
+                ViewData["ratingId"] = "" + ratingId;
+                List<QuestionVM> questions = new List<QuestionVM>();
+                List<Question> tempQ = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
+
+                List<Save_Exam> savedQuestions = db.Save_Exam.ToList().FindAll(s => s.Student_Exam_ID == stuExam.Stu_Exam);
+
+                foreach(var s in savedQuestions)
                 {
-                    n2--;
-                    int k2 = rng.Next(n2 + 1);
-                    Answer value = tempAns[k2];
-                    tempAns[k2] = tempAns[n2];
-                    tempAns[n2] = value;
+                    QuestionVM tempQuestion = new QuestionVM();
+                    tempQuestion.QuestionID = s.QuestionID;
+                    tempQuestion.QuestionText = db.Questions.ToList().Find(q => q.Question_ID == s.QuestionID).Question1;
+                    tempQuestion.Answers = db.Answers.ToList().FindAll(a => a.Answer_ID == s.AnswerID);
+                    questions.Add(tempQuestion);
+                }// for each
+
+                if(savedQuestions.Count != tempQ.Count)
+                {
+                    Random rng = new Random();
+                    int n = tempQ.Count;
+                    while (n > 1)
+                    {
+                        n--;
+                        int k = rng.Next(n + 1);
+                        Question value = tempQ[k];
+                        tempQ[k] = tempQ[n];
+                        tempQ[n] = value;
+                    }// shuffle while
+                    foreach (var q in tempQ)
+                    {
+                        QuestionVM temp = new QuestionVM();
+                        temp.QuestionID = q.Question_ID;
+                        temp.QuestionText = q.Question1;
+                        List<Answer> tempAns = db.Answers.ToList().FindAll(a => a.Question_ID == q.Question_ID);
+                        Random rng2 = new Random();
+                        int n2 = tempQ.Count;
+                        while (n2 > 1)
+                        {
+                            n2--;
+                            int k2 = rng.Next(n2 + 1);
+                            Answer value = tempAns[k2];
+                            tempAns[k2] = tempAns[n2];
+                            tempAns[n2] = value;
+                        }// shuffle while
+                        temp.Answers = tempAns;
+
+                        foreach (var s in savedQuestions)
+                        {
+                            if (s.QuestionID != q.Question_ID)
+                            {
+                                questions.Add(temp);
+                            }// if statement
+                        }// for each
+
+
+                    }// for each
+                }// if statement
+
+                return View(questions);
+            }// if student has started the exam
+            else
+            {
+                Student_Exam newStuExam = new Student_Exam();
+                newStuExam.Student_ID = stuExam.Student_ID;
+                newStuExam.Exam_ID = stuExam.Exam_ID;
+                newStuExam.Exam_Mark = 0;
+                newStuExam.Started = true;
+                newStuExam.Completed = false;
+
+                db.Student_Exam.Remove(stuExam);
+                db.SaveChanges();
+
+                db.Student_Exam.Add(newStuExam);
+                db.SaveChanges();
+
+                ViewData["userId"] = "" + id;
+                ViewData["ratingId"] = "" + ratingId;
+                List<QuestionVM> questions = new List<QuestionVM>();
+                List<Question> tempQ = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
+                Random rng = new Random();
+                int n = tempQ.Count;
+                while (n > 1)
+                {
+                    n--;
+                    int k = rng.Next(n + 1);
+                    Question value = tempQ[k];
+                    tempQ[k] = tempQ[n];
+                    tempQ[n] = value;
                 }// shuffle while
-                temp.Answers = tempAns;
-                questions.Add(temp);
-            }// for each
-            return View(questions);
+                foreach (var q in tempQ)
+                {
+                    QuestionVM temp = new QuestionVM();
+                    temp.QuestionID = q.Question_ID;
+                    temp.QuestionText = q.Question1;
+                    List<Answer> tempAns = db.Answers.ToList().FindAll(a => a.Question_ID == q.Question_ID);
+                    Random rng2 = new Random();
+                    int n2 = tempQ.Count;
+                    while (n2 > 1)
+                    {
+                        n2--;
+                        int k2 = rng.Next(n2 + 1);
+                        Answer value = tempAns[k2];
+                        tempAns[k2] = tempAns[n2];
+                        tempAns[n2] = value;
+                    }// shuffle while
+                    temp.Answers = tempAns;
+                    questions.Add(temp);
+                }// for each
+                return View(questions);
+            }// if student hasent started the exam
+            
         }// write exam get
 
         [HttpPost]
@@ -287,8 +367,9 @@ namespace SkyExams.Controllers
                 AnswerVM result = db.Answers.Where(a => a.Question_ID == answser.QuestionID).Select(a => new AnswerVM
                 {
                     QuestionID = a.Question_ID,
+                    AnswerID = a.Answer_ID,
                     AnswerQ = a.ANS,
-                    isCorrect = (answser.AnswerQ.ToLower().Equals(a.ANS.ToLower()))
+                    isCorrect = (answser.AnswerID == a.Answer_ID)
 
                 }).FirstOrDefault();
                 if(result.isCorrect == true)
@@ -305,11 +386,19 @@ namespace SkyExams.Controllers
             int stuID = db.Students.ToList().Find(s => s.SysUser_ID == id).Student_ID;
 
             Student_Exam tempStuExam = db.Student_Exam.ToList().Find(e => e.Student_ID == stuID && e.Exam_ID == ratingId);
+            List<Save_Exam> savedQuestions = db.Save_Exam.ToList().FindAll(s => s.Student_Exam_ID == tempStuExam.Stu_Exam);
             Student_Exam newStuExam = new Student_Exam();
             newStuExam.Student_ID = tempStuExam.Student_ID;
             newStuExam.Exam_ID = tempStuExam.Exam_ID;
+            newStuExam.Started = true;
             newStuExam.Completed = true;
             newStuExam.Exam_Mark = finalGrade;
+
+            foreach(var s in savedQuestions)
+            {
+                db.Save_Exam.Remove(s);
+                db.SaveChanges();
+            }// for each
 
             db.Student_Exam.Remove(tempStuExam);
             db.SaveChanges();
@@ -318,7 +407,47 @@ namespace SkyExams.Controllers
             db.Student_Exam.Add(newStuExam);
             db.SaveChanges();
 
+
+
             return Json(new { result = finalResultQuiz }, JsonRequestBehavior.AllowGet);
+        }// write exam post
+
+        [HttpPost]
+        public ActionResult saveExam(int? id, int? ratingId, List<AnswerVM> examSave)
+        {
+            List<Save_Exam> sExam = db.Save_Exam.ToList();
+            int count = 0;
+            Student_Exam stuExam = db.Student_Exam.ToList().Find(s => s.Student_ID == id && s.Exam_ID == ratingId);
+            foreach(AnswerVM ans in examSave)
+            {
+                
+                try
+                {
+                    Save_Exam tempSave = new Save_Exam();
+                    tempSave.Save_Exam_ID = sExam[count].Save_Exam_ID + 1;
+                    tempSave.QuestionID = ans.QuestionID;
+                    tempSave.AnswerID = ans.AnswerID;
+                    tempSave.Student_Exam_ID = stuExam.Stu_Exam;
+                    if (ans.AnswerID != sExam[count].AnswerID && sExam[count].Student_Exam_ID != stuExam.Stu_Exam)
+                    {
+                        db.Save_Exam.Add(tempSave);
+                        db.SaveChanges();
+                    }
+                }// try
+                catch
+                {
+                    Save_Exam tempSave = new Save_Exam();
+                    tempSave.Save_Exam_ID = sExam.Count + 3;
+                    tempSave.QuestionID = ans.QuestionID;
+                    tempSave.AnswerID = ans.AnswerID;
+                    tempSave.Student_Exam_ID = stuExam.Stu_Exam;
+                    db.Save_Exam.Add(tempSave);
+                    db.SaveChanges();
+                }// catch
+                count++;
+            }// for each
+
+            return RedirectToAction("exams", new { id = id });
         }
 
         // GET: Questions/Details/5

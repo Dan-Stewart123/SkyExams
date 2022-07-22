@@ -520,6 +520,7 @@ namespace SkyExams.Controllers
                 newStudentExam.Student_ID = stuId;
                 newStudentExam.Exam_ID = exam;
                 newStudentExam.Exam_Mark = 0;
+                newStudentExam.Started = false;
                 newStudentExam.Completed = false;
                 db.Student_Exam.Add(newStudentExam);
                 db.SaveChanges();
