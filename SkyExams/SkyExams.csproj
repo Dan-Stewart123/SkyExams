@@ -252,6 +252,9 @@
     <Compile Include="Models\Rating.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Save_Exam.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Section.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

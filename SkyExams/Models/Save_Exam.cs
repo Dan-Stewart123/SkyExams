@@ -12,13 +12,11 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Student_Exam
+    public partial class Save_Exam
     {
-        public int Student_ID { get; set; }
-        public int Exam_ID { get; set; }
-        public Nullable<int> Exam_Mark { get; set; }
-        public Nullable<bool> Started { get; set; }
-        public bool Completed { get; set; }
-        public int Stu_Exam { get; set; }
+        public int Save_Exam_ID { get; set; }
+        public int QuestionID { get; set; }
+        public int AnswerID { get; set; }
+        public int Student_Exam_ID { get; set; }
     }
 }
