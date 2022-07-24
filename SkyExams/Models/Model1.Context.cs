@@ -48,6 +48,7 @@ namespace SkyExams.Models
         public virtual DbSet<Question_Rating> Question_Rating { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
+        public virtual DbSet<Save_Exam> Save_Exam { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<SkyExam> SkyExams { get; set; }
         public virtual DbSet<Student> Students { get; set; }

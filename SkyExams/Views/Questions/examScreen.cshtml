@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "examScreen";
+    var uID = ViewData["userId"];
+    var rID = ViewData["ratingId"];
+}
+
+<h2>Exam:</h2>
+<br />
+<p>Good Luck!</p>
+<br />
+<button type="button" onclick="location.href='@Url.Action("writeExam", "Questions", new { id = uID, ratingId = rID })'">
+    Begin Exam
+</button>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = uID })'">
+    Back
+</button>
+
