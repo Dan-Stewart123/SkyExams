@@ -12,9 +12,10 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Licence_Type
+    public partial class Plane_Service
     {
-        public int Licence_Type_ID { get; set; }
-        public string TypeDescription { get; set; }
+        public int Plane_ID { get; set; }
+        public Nullable<System.DateTime> Last_Service_Date { get; set; }
+        public string Service_Details { get; set; }
     }
 }

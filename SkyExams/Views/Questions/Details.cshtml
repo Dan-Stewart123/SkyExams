@@ -1,0 +1,42 @@
+﻿@model SkyExams.Models.Question
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Question</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Question1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Question1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Section_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Section_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Question_Rating_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Question_Rating_ID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Question_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

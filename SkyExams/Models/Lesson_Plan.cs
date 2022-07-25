@@ -18,6 +18,6 @@ namespace SkyExams.Models
         public int Instructor_ID { get; set; }
         public string LP_Name { get; set; }
         public byte[] LP_Description { get; set; }
-        public int Topic_ID { get; set; }
+        public int Rating_ID { get; set; }
     }
 }

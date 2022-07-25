@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SkyExams.Models.Question>
+
+@{
+    ViewBag.Title = "questionsScreen";
+    var uID = ViewData["userId"];
+    var rID = ViewData["ratingId"];
+    var ex = ViewData["Exam"];
+}
+
+<h2>Questions:</h2>
+<button type="button" onclick="location.href='@Url.Action("createQuestion", "Questions", new { id = uID, ratingId = rID })'">
+    Create Question and Answer
+</button>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Question</th>
+            <th scope="col">Exam</th>
+            <th scope="col">Amswers</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Question1)
+            </td>
+            <td scope="row">
+                @ex
+            </td>
+            <td scope="row">
+                <button type="button" onclick="location.href='@Url.Action("answersScreen", "Questions", new { id = uID, questionId = item.Question_ID })'">
+                    Answers
+                </button>
+            </td>
+            <td scope="row">
+                <button type="button" onclick="location.href='@Url.Action("updateQuestion", "Questions", new { id = uID, questionId = item.Question_ID })'">
+                    Update
+                </button>
+            </td>
+            <td scope="row">
+                <button type="button" onclick="location.href='@Url.Action("deleteQuestion", "Questions", new { id = uID, questionId = item.Question_ID })'">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = uID })'">
+    Continue
+</button>
+
