@@ -25,19 +25,11 @@
           <Key>
             <PropertyRef Name="Booking_ID" />
           </Key>
-          <Property Name="Booking_ID" Type="int" Nullable="false" />
-          <Property Name="B_Description" Type="varchar" MaxLength="255" />
-          <Property Name="Date_Time" Type="datetime" />
+          <Property Name="Booking_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Student_ID" Type="int" Nullable="false" />
           <Property Name="Instructor_ID" Type="int" Nullable="false" />
-          <Property Name="Status_ID" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Booking_Status">
-          <Key>
-            <PropertyRef Name="Status_ID" />
-          </Key>
-          <Property Name="Status_ID" Type="int" Nullable="false" />
-          <Property Name="B_Status" Type="varchar" MaxLength="10" />
+          <Property Name="Slot_ID" Type="int" Nullable="false" />
+          <Property Name="Date_Time" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Cessna_172">
           <Key>
@@ -117,11 +109,12 @@
         </EntityType>
         <EntityType Name="Instructor_Slots">
           <Key>
-            <PropertyRef Name="Instructor_ID" />
-            <PropertyRef Name="Booking_ID" />
+            <PropertyRef Name="Slot_ID" />
           </Key>
           <Property Name="Instructor_ID" Type="int" Nullable="false" />
-          <Property Name="Booking_ID" Type="int" Nullable="false" />
+          <Property Name="Slot_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date_Time" Type="datetime" />
+          <Property Name="Booked" Type="bit" />
         </EntityType>
         <EntityType Name="Lesson_Plan">
           <Key>
@@ -367,7 +360,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Booking_Status" EntityType="Self.Booking_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cessna_172" EntityType="Self.Cessna_172" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cessna_172_RG" EntityType="Self.Cessna_172_RG" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cherokee_140" EntityType="Self.Cherokee_140" Schema="dbo" store:Type="Tables" />
@@ -421,7 +413,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Admins" EntityType="SkyExamsModel.Admin" />
           <EntitySet Name="Answers" EntityType="SkyExamsModel.Answer" />
           <EntitySet Name="Bookings" EntityType="SkyExamsModel.Booking" />
-          <EntitySet Name="Booking_Status" EntityType="SkyExamsModel.Booking_Status" />
           <EntitySet Name="Cessna_172" EntityType="SkyExamsModel.Cessna_172" />
           <EntitySet Name="Cessna_172_RG" EntityType="SkyExamsModel.Cessna_172_RG" />
           <EntitySet Name="Cherokee_140" EntityType="SkyExamsModel.Cherokee_140" />
@@ -482,19 +473,11 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="Booking_ID" />
           </Key>
-          <Property Name="Booking_ID" Type="Int32" Nullable="false" />
-          <Property Name="B_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Date_Time" Type="DateTime" Precision="3" />
+          <Property Name="Booking_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Student_ID" Type="Int32" Nullable="false" />
           <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
-          <Property Name="Status_ID" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Booking_Status">
-          <Key>
-            <PropertyRef Name="Status_ID" />
-          </Key>
-          <Property Name="Status_ID" Type="Int32" Nullable="false" />
-          <Property Name="B_Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Slot_ID" Type="Int32" Nullable="false" />
+          <Property Name="Date_Time" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="Cessna_172">
           <Key>
@@ -574,11 +557,12 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
         </EntityType>
         <EntityType Name="Instructor_Slots">
           <Key>
-            <PropertyRef Name="Instructor_ID" />
-            <PropertyRef Name="Booking_ID" />
+            <PropertyRef Name="Slot_ID" />
           </Key>
           <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
-          <Property Name="Booking_ID" Type="Int32" Nullable="false" />
+          <Property Name="Slot_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date_Time" Type="DateTime" Precision="3" />
+          <Property Name="Booked" Type="Boolean" />
         </EntityType>
         <EntityType Name="Lesson_Plan">
           <Key>
@@ -845,20 +829,11 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Bookings">
             <EntityTypeMapping TypeName="SkyExamsModel.Booking">
               <MappingFragment StoreEntitySet="Booking">
-                <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+                <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
+                <ScalarProperty Name="Slot_ID" ColumnName="Slot_ID" />
                 <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
                 <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
-                <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
-                <ScalarProperty Name="B_Description" ColumnName="B_Description" />
                 <ScalarProperty Name="Booking_ID" ColumnName="Booking_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Booking_Status">
-            <EntityTypeMapping TypeName="SkyExamsModel.Booking_Status">
-              <MappingFragment StoreEntitySet="Booking_Status">
-                <ScalarProperty Name="B_Status" ColumnName="B_Status" />
-                <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -949,7 +924,9 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Instructor_Slots">
             <EntityTypeMapping TypeName="SkyExamsModel.Instructor_Slots">
               <MappingFragment StoreEntitySet="Instructor_Slots">
-                <ScalarProperty Name="Booking_ID" ColumnName="Booking_ID" />
+                <ScalarProperty Name="Booked" ColumnName="Booked" />
+                <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
+                <ScalarProperty Name="Slot_ID" ColumnName="Slot_ID" />
                 <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -277,7 +277,7 @@ namespace SkyExams.Controllers
                         temp.QuestionText = q.Question1;
                         List<Answer> tempAns = db.Answers.ToList().FindAll(a => a.Question_ID == q.Question_ID);
                         Random rng2 = new Random();
-                        int n2 = tempQ.Count;
+                        int n2 = tempAns.Count - 1;
                         while (n2 > 1)
                         {
                             n2--;
@@ -338,7 +338,7 @@ namespace SkyExams.Controllers
                     temp.QuestionText = q.Question1;
                     List<Answer> tempAns = db.Answers.ToList().FindAll(a => a.Question_ID == q.Question_ID);
                     Random rng2 = new Random();
-                    int n2 = tempQ.Count;
+                    int n2 = tempAns.Count - 1;
                     while (n2 > 1)
                     {
                         n2--;
@@ -418,34 +418,52 @@ namespace SkyExams.Controllers
             List<Save_Exam> sExam = db.Save_Exam.ToList();
             int count = 0;
             Student_Exam stuExam = db.Student_Exam.ToList().Find(s => s.Student_ID == id && s.Exam_ID == ratingId);
-            foreach(AnswerVM ans in examSave)
+            if(examSave != null)
             {
-                
-                try
+                foreach (AnswerVM ans in examSave)
                 {
-                    Save_Exam tempSave = new Save_Exam();
-                    tempSave.Save_Exam_ID = sExam[count].Save_Exam_ID + 1;
-                    tempSave.QuestionID = ans.QuestionID;
-                    tempSave.AnswerID = ans.AnswerID;
-                    tempSave.Student_Exam_ID = stuExam.Stu_Exam;
-                    if (ans.AnswerID != sExam[count].AnswerID && sExam[count].Student_Exam_ID != stuExam.Stu_Exam)
+
+                    try
                     {
+                        Save_Exam tempSave = new Save_Exam();
+                        tempSave.Save_Exam_ID = sExam[count].Save_Exam_ID + 1;
+                        tempSave.QuestionID = ans.QuestionID;
+                        tempSave.AnswerID = ans.AnswerID;
+                        tempSave.Student_Exam_ID = stuExam.Stu_Exam;
+                        if (ans.AnswerID != sExam[count].AnswerID && sExam[count].Student_Exam_ID != stuExam.Stu_Exam)
+                        {
+                            db.Save_Exam.Add(tempSave);
+                            db.SaveChanges();
+                        }
+                    }// try
+                    catch
+                    {
+                        Save_Exam tempSave = new Save_Exam();
+                        tempSave.Save_Exam_ID = sExam.Count + 3;
+                        tempSave.QuestionID = ans.QuestionID;
+                        tempSave.AnswerID = ans.AnswerID;
+                        tempSave.Student_Exam_ID = stuExam.Stu_Exam;
                         db.Save_Exam.Add(tempSave);
                         db.SaveChanges();
-                    }
-                }// try
-                catch
-                {
-                    Save_Exam tempSave = new Save_Exam();
-                    tempSave.Save_Exam_ID = sExam.Count + 3;
-                    tempSave.QuestionID = ans.QuestionID;
-                    tempSave.AnswerID = ans.AnswerID;
-                    tempSave.Student_Exam_ID = stuExam.Stu_Exam;
-                    db.Save_Exam.Add(tempSave);
-                    db.SaveChanges();
-                }// catch
-                count++;
-            }// for each
+                    }// catch
+                    count++;
+                }// for each
+            }// if statement
+            else
+            {
+                Student_Exam newSExam = new Student_Exam();
+                newSExam.Student_ID = stuExam.Student_ID;
+                newSExam.Exam_ID = stuExam.Exam_ID;
+                newSExam.Exam_Mark = 0;
+                newSExam.Started = false;
+                newSExam.Completed = false;
+
+                db.Student_Exam.Remove(stuExam);
+                db.SaveChanges();
+
+                db.Student_Exam.Add(newSExam);
+                db.SaveChanges();
+            }// else statement
 
             return RedirectToAction("exams", new { id = id });
         }
