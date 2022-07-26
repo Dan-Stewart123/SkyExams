@@ -432,7 +432,6 @@
     <Content Include="Views\Questions\examScreen.cshtml" />
     <Content Include="Views\Questions\writeExam.cshtml" />
     <Content Include="Views\Sys_User\addStudentExam.cshtml" />
-    <Content Include="Views\Sys_User\updateRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
