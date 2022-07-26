@@ -1,0 +1,29 @@
+﻿@model SkyExams.Models.Sys_User
+
+@{
+    ViewBag.Title = "updateRole";
+}
+
+<h2>updateRole</h2>
+<br />
+<br />
+@using (Html.BeginForm("updateRole", "Questions", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <dd>
+        <label id="title">@Html.DisplayFor(model => model.Title_ID)</label>
+        <label id="mr" style="display:none;">Mr</label>
+        <label id="mrs" style="display:none;">Mrs</label>
+        <label id="miss" style="display:none;">Miss</label>
+        <label id="other" style="display:none;">Other</label>
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("First Name:")
+    </dt>
+
+    <<label class="col-md-3">@Html.Label("First Name:")</label>
+    <input class="col-md-3" type="text" id="firstName" name="firstName" value="@Model.FName">
+
+
+}
+

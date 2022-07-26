@@ -707,6 +707,11 @@ namespace SkyExams.Controllers
             return RedirectToAction("homeScreen", new { id = loggedId });
         }
 
+        [HttpGet]
+        public ActionResult updateRole()
+        {
+
+        }
         public static string encodePassword(string password)
         {
             try
