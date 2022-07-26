@@ -156,6 +156,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BookingsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Lesson_PlanController.cs" />
     <Compile Include="Controllers\PlanesController.cs" />
@@ -172,9 +173,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Booking.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Booking_Status.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Cessna_172.cs">
@@ -432,6 +430,19 @@
     <Content Include="Views\Questions\examScreen.cshtml" />
     <Content Include="Views\Questions\writeExam.cshtml" />
     <Content Include="Views\Sys_User\addStudentExam.cshtml" />
+    <Content Include="Views\Bookings\Create.cshtml" />
+    <Content Include="Views\Bookings\Delete.cshtml" />
+    <Content Include="Views\Bookings\Details.cshtml" />
+    <Content Include="Views\Bookings\Edit.cshtml" />
+    <Content Include="Views\Bookings\Index.cshtml" />
+    <Content Include="Views\Bookings\slotsScreen.cshtml" />
+    <Content Include="Views\Bookings\createSlot.cshtml" />
+    <Content Include="Views\Bookings\deleteSlot.cshtml" />
+    <Content Include="Views\Bookings\updateSlot.cshtml" />
+    <Content Include="Views\Bookings\bookingsScreen.cshtml" />
+    <Content Include="Views\Bookings\viewSlots.cshtml" />
+    <Content Include="Views\Bookings\deleteBooking.cshtml" />
+    <Content Include="Views\Bookings\updateBooking.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

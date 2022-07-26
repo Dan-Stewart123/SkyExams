@@ -28,7 +28,6 @@ namespace SkyExams.Models
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
-        public virtual DbSet<Booking_Status> Booking_Status { get; set; }
         public virtual DbSet<Cessna_172> Cessna_172 { get; set; }
         public virtual DbSet<Cessna_172_RG> Cessna_172_RG { get; set; }
         public virtual DbSet<Cherokee_140> Cherokee_140 { get; set; }
