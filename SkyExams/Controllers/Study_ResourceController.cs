@@ -38,7 +38,8 @@ namespace SkyExams.Controllers
                 {
                     ViewData["themeID"] = "" + 1;
                     ViewData["planeType"] = "Cessna 172";
-                    List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == user.SysUser_ID);
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                    List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
                     foreach(Student_Resource temp in stuResource)
                     {
                         List<Study_Resource> tempResources = db.Study_Resource.ToList();
@@ -56,7 +57,8 @@ namespace SkyExams.Controllers
                 {
                     ViewData["themeID"] = "" + 2;
                     ViewData["planeType"] = "Cessna 172 RG";
-                    List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == user.SysUser_ID);
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                    List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
                     foreach (Student_Resource temp in stuResource)
                     {
                         List<Study_Resource> tempResources = db.Study_Resource.ToList();
@@ -74,7 +76,8 @@ namespace SkyExams.Controllers
                 {
                     ViewData["themeID"] = "" + 3;
                     ViewData["planeType"] = "Cherokee 140";
-                    List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == user.SysUser_ID);
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                    List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
                     foreach (Student_Resource temp in stuResource)
                     {
                         List<Study_Resource> tempResources = db.Study_Resource.ToList();
@@ -92,7 +95,8 @@ namespace SkyExams.Controllers
                 {
                     ViewData["themeID"] = "" + 4;
                     ViewData["planeType"] = "Piper Twin Comanche";
-                    List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == user.SysUser_ID);
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                    List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
                     foreach (Student_Resource temp in stuResource)
                     {
                         List<Study_Resource> tempResources = db.Study_Resource.ToList();
