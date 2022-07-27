@@ -78,7 +78,7 @@ namespace SkyExams.Controllers
             db.Instructor_Slots.Remove(delSlot);
             db.SaveChanges();
             Booking delBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
-            if(delBooking != null)
+            if (delBooking != null)
             {
                 db.Bookings.Remove(delBooking);
                 db.SaveChangesAsync();
@@ -101,28 +101,30 @@ namespace SkyExams.Controllers
             Instructor_Slots updateSlot = new Instructor_Slots();
             updateSlot.Instructor_ID = tempSlot.Instructor_ID;
             updateSlot.Date_Time = slotTime;
-
-            Booking tempBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
-            if (tempBooking != null)
-            {
-                Booking updateBooking = new Booking();
-                updateBooking.Student_ID = tempBooking.Student_ID;
-                updateBooking.Instructor_ID = tempBooking.Instructor_ID;
-                updateBooking.Slot_ID = updateSlot.Slot_ID + 1;
-                updateBooking.Date_Time = Convert.ToDateTime(updateSlot.Date_Time);
-
-                db.Bookings.Remove(tempBooking);
-                db.SaveChangesAsync();
-
-                db.Bookings.Add(updateBooking);
-                db.SaveChanges();
-            }//if statement
+            updateSlot.Booked = false;
 
             db.Instructor_Slots.Remove(tempSlot);
             db.SaveChanges();
 
             db.Instructor_Slots.Add(updateSlot);
             db.SaveChanges();
+
+            Booking tempBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
+            Booking updateBooking = new Booking();
+            if (tempSlot.Booked == true)
+            {
+                updateBooking.Student_ID = tempBooking.Student_ID;
+                updateBooking.Instructor_ID = tempBooking.Instructor_ID;
+                updateBooking.Slot_ID = updateSlot.Slot_ID;
+                updateBooking.Date_Time = Convert.ToDateTime(updateSlot.Date_Time);
+                updateSlot.Booked = true;
+
+                db.Bookings.Remove(tempBooking);
+                db.SaveChanges();
+
+                db.Bookings.Add(updateBooking);
+                db.SaveChanges();
+            }// if statement
 
             return RedirectToAction("slotsScreen", new { id = id });
         }// update slot post
@@ -152,7 +154,7 @@ namespace SkyExams.Controllers
             Booking newBooking = new Booking();
             newBooking.Student_ID = sForId.Student_ID;
             newBooking.Instructor_ID = bookSlot.Instructor_ID;
-            newBooking.Slot_ID = bookSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
+            //newBooking.Slot_ID = bookSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
             newBooking.Date_Time = Convert.ToDateTime(bookSlot.Date_Time);
 
             Instructor_Slots updateSlot = new Instructor_Slots();
@@ -165,6 +167,7 @@ namespace SkyExams.Controllers
             db.Instructor_Slots.Add(updateSlot);
             db.SaveChanges();
 
+            newBooking.Slot_ID = updateSlot.Slot_ID;
             db.Bookings.Add(newBooking);
             db.SaveChanges();
 
@@ -220,7 +223,7 @@ namespace SkyExams.Controllers
 
             updateBooking.Student_ID = tempBooking.Student_ID;
             updateBooking.Instructor_ID = tempBooking.Instructor_ID;
-            updateBooking.Slot_ID = tempSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
+            //updateBooking.Slot_ID = tempSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
             updateBooking.Date_Time = Convert.ToDateTime(updateSlot.Date_Time);
 
             tempSlot.Booked = false;
@@ -243,6 +246,7 @@ namespace SkyExams.Controllers
             db.Bookings.Remove(tempBooking);
             db.SaveChanges();
 
+            updateBooking.Slot_ID = nSlotUpdate.Slot_ID;
             db.Bookings.Add(updateBooking);
             db.SaveChanges();
 
