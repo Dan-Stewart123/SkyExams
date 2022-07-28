@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SkyExams.Models.Booking>
+@{
+    ViewBag.Title = "bookingsScreen";
+    var uID = ViewData["uID"];
+}
+
+<h2>Bookings</h2>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("viewSlots", "Bookings", new { id = uID })'">
+    Book Consultation
+</button>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Date and Time</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Date_Time)
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("updateBooking", "Bookings", new { id = uID, bookingId = item.Booking_ID })'">
+                        Update
+                    </button>
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("deleteBooking", "Bookings", new { id = uID, bookingId = item.Booking_ID })'">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+    Back
+</button>

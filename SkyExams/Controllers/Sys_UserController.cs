@@ -72,7 +72,7 @@ namespace SkyExams.Controllers
 
         public ActionResult homeScreen(int? id)
         {
-            ViewBag.Title = "Home";
+            //ViewBag.Title = "Home";
             try
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
@@ -489,7 +489,7 @@ namespace SkyExams.Controllers
             {
                 int resourceId = Convert.ToInt32(resource);
                 Student_Resource newStudentResource = new Student_Resource();
-                int sID = Convert.ToInt32(id);
+                int sID = db.Students.ToList().Find(s => s.SysUser_ID == id).Student_ID;
                 newStudentResource.Student_ID = sID;
                 newStudentResource.Study_Resource_ID = resourceId;
                 db.Student_Resource.Add(newStudentResource);
@@ -556,11 +556,11 @@ namespace SkyExams.Controllers
                 newStudentInstructor.Instructor_ID = instructorForId.Instructor_ID;
                 db.Student_Instructor.Add(newStudentInstructor);
                 db.SaveChanges();
-                List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(p => p.Instructor_ID == ins.SysUser_ID);
+                List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(p => p.Instructor_ID == instructorForId.Instructor_ID);
                 foreach(Lesson_Plan temp in planList)
                 {
                     Student_Lesson_Plan sLessonPlan = new Student_Lesson_Plan();
-                    sLessonPlan.Student_ID = stu.SysUser_ID;
+                    sLessonPlan.Student_ID = studentForId.Student_ID;
                     sLessonPlan.Lesson_Plan_ID = temp.Lesson_Plan_ID;
                     db.Student_Lesson_Plan.Add(sLessonPlan);
                     db.SaveChangesAsync();

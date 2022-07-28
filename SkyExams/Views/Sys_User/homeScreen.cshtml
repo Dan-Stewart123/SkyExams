@@ -23,3 +23,10 @@
 <button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = Model.SysUser_ID })'">
     Exams
 </button>
+<button type="button" id="consult" onclick="location.href='@Url.Action("studentCheck", "Bookings", new { id = Model.SysUser_ID })'">
+    Exam Consultations
+</button>
+<button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Logout
+</button>
+

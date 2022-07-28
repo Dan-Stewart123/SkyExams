@@ -39,7 +39,8 @@ namespace SkyExams.Controllers
                 {
                     ViewData["topicId"] = "" + 1;
                     ViewData["planeType"] = "Cessna 172";
-                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == user.SysUser_ID);
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
                     foreach (Student_Lesson_Plan temp in stuPlan)
                     {
                         List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
@@ -57,7 +58,8 @@ namespace SkyExams.Controllers
                 {
                     ViewData["topicId"] = "" + 2;
                     ViewData["planeType"] = "Cessna 172 RG";
-                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == user.SysUser_ID);
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
                     foreach (Student_Lesson_Plan temp in stuPlan)
                     {
                         List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
@@ -75,7 +77,8 @@ namespace SkyExams.Controllers
                 {
                     ViewData["topicId"] = "" + 3;
                     ViewData["planeType"] = "Cherokee 140";
-                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == user.SysUser_ID);
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
                     foreach (Student_Lesson_Plan temp in stuPlan)
                     {
                         List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
@@ -93,7 +96,8 @@ namespace SkyExams.Controllers
                 {
                     ViewData["topicId"] = "" + 4;
                     ViewData["planeType"] = "Piper Twin Comanche";
-                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == user.SysUser_ID);
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
                     foreach (Student_Lesson_Plan temp in stuPlan)
                     {
                         List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
@@ -180,7 +184,7 @@ namespace SkyExams.Controllers
                 newPlan.LP_Name = name;
                 int theme = Convert.ToInt32(topicId);
                 newPlan.Rating_ID = theme;
-                int instructorId = Convert.ToInt32(id);
+                int instructorId = db.Instructors.ToList().Find(i => i.SysUser_ID == id).Instructor_ID;
                 newPlan.Instructor_ID = instructorId;
 
                 Stream str = plan.InputStream;
@@ -197,7 +201,7 @@ namespace SkyExams.Controllers
                     Student tempStudent = db.Students.ToList().Find(s => s.Student_ID == temp.Student_ID);
                     Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == tempStudent.SysUser_ID);
                     Student_Lesson_Plan newStuPlan = new Student_Lesson_Plan();
-                    newStuPlan.Student_ID = tempUser.SysUser_ID;
+                    newStuPlan.Student_ID = tempStudent.Student_ID;
                     newStuPlan.Lesson_Plan_ID = newPlan.Lesson_Plan_ID;
                     db.Student_Lesson_Plan.Add(newStuPlan);
                     db.SaveChangesAsync();
