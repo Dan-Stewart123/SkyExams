@@ -23,8 +23,21 @@ namespace SkyExams.Controllers
 
         public ActionResult exams(int? id)
         {
-            return View(db.Sys_User.ToList().Find(u => u.SysUser_ID == id));
+            ViewData["userID"] = "" + id;
+            Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            ViewData["userRole"] = "" + forRole.User_Role_ID;
+            List<Plane_Type> planeTypes = db.Plane_Type.ToList();
+
+            return View(planeTypes);
         }// exam
+
+        public FileContentResult getImg(int id)
+        {
+            byte[] byteArray = db.Plane_Type.Find(id).Plane_Image;
+            return byteArray != null
+                ? new FileContentResult(byteArray, "image/jpeg")
+                : null;
+        }
 
         public ActionResult examScreen(int? id, int? ratingId)
         {
@@ -60,22 +73,7 @@ namespace SkyExams.Controllers
         {
             ViewData["userId"] = "" + id;
             ViewData["ratingId"] = "" + ratingId;
-            if(ratingId == 1)
-            {
-                ViewData["Exam"] = "Cessna 172";
-            }
-            if (ratingId == 2)
-            {
-                ViewData["Exam"] = "Cessna 172 RG";
-            }
-            if (ratingId == 3)
-            {
-                ViewData["Exam"] = "Chrokee 140";
-            }
-            if (ratingId == 4)
-            {
-                ViewData["Exam"] = "Twin Commanche";
-            }
+            ViewData["Exam"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == ratingId).Type_Description;
             List<Question> questionList = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
             return View(questionList);
         }// questions screen
@@ -244,6 +242,8 @@ namespace SkyExams.Controllers
             {
                 ViewData["userId"] = "" + id;
                 ViewData["ratingId"] = "" + ratingId;
+                Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                ViewData["userName"] = tempUser.FName + " " + tempUser.Surname;
                 List<QuestionVM> questions = new List<QuestionVM>();
                 List<Question> tempQ = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
 
@@ -319,6 +319,8 @@ namespace SkyExams.Controllers
 
                 ViewData["userId"] = "" + id;
                 ViewData["ratingId"] = "" + ratingId;
+                Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                ViewData["userName"] = tempUser.FName + " " + tempUser.Surname;
                 List<QuestionVM> questions = new List<QuestionVM>();
                 List<Question> tempQ = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
                 Random rng = new Random();

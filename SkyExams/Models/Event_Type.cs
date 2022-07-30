@@ -12,10 +12,9 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Twin_Commanche
+    public partial class Event_Type
     {
-        public int Twin_Commanche_ID { get; set; }
-        public int Plane_ID { get; set; }
-        public string Plane_Description { get; set; }
+        public int Event_Type_ID { get; set; }
+        public string Event_Type_Description { get; set; }
     }
 }

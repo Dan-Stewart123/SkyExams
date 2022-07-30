@@ -1,0 +1,28 @@
+﻿@model SkyExams.Models.Plane
+@{
+    ViewBag.Title = "captureServiceDetails";
+    var uID = ViewData["loggedId"];
+}
+
+
+<h2>Capture Service Details</h2>
+<p>Please complete the following fields</p>
+
+@using (Html.BeginForm("captureServiceDetails", "Planes", FormMethod.Post))
+{
+    <div style="display:none;">
+        <input type="text" id="loggedId" name="loggedId" value="@uID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.Plane_ID">
+    </div>
+    <label class="col-md-3">@Html.Label("Service Details:")</label>
+    <input class="col-md-3" type="text" id="details" name="details">
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" />
+}
+
