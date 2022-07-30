@@ -28,18 +28,18 @@ namespace SkyExams.Models
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
-        public virtual DbSet<Cessna_172> Cessna_172 { get; set; }
-        public virtual DbSet<Cessna_172_RG> Cessna_172_RG { get; set; }
-        public virtual DbSet<Cherokee_140> Cherokee_140 { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Employment_Status> Employment_Status { get; set; }
+        public virtual DbSet<Event_Type> Event_Type { get; set; }
         public virtual DbSet<EventLocation> EventLocations { get; set; }
         public virtual DbSet<Exam> Exams { get; set; }
+        public virtual DbSet<Exam_Average> Exam_Average { get; set; }
         public virtual DbSet<Instructor> Instructors { get; set; }
         public virtual DbSet<Instructor_Licence> Instructor_Licence { get; set; }
         public virtual DbSet<Instructor_Slots> Instructor_Slots { get; set; }
         public virtual DbSet<Lesson_Plan> Lesson_Plan { get; set; }
+        public virtual DbSet<Load_Sheet> Load_Sheet { get; set; }
         public virtual DbSet<Manager> Managers { get; set; }
         public virtual DbSet<Plane> Planes { get; set; }
         public virtual DbSet<Plane_Service> Plane_Service { get; set; }
@@ -59,7 +59,6 @@ namespace SkyExams.Models
         public virtual DbSet<Study_Resource> Study_Resource { get; set; }
         public virtual DbSet<Sys_User> Sys_User { get; set; }
         public virtual DbSet<Title> Titles { get; set; }
-        public virtual DbSet<Twin_Commanche> Twin_Commanche { get; set; }
         public virtual DbSet<uEvent> uEvents { get; set; }
         public virtual DbSet<User_Event> User_Event { get; set; }
         public virtual DbSet<User_Role> User_Role { get; set; }

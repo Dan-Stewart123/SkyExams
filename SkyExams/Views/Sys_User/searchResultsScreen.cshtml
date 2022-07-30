@@ -3,6 +3,7 @@
     ViewBag.Title = "searchResultsScreen";
     var uID = ViewData["userID"];
     var role = ViewData["role"];
+    var userRole = ViewData["userRole"];
 }
 
 <h2>Search Results</h2>
@@ -72,7 +73,7 @@
 </button>
 <script>
     function adminCheck() {
-        var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
+        var userId = @Html.Raw(Json.Encode(ViewData["userRole"]));
         var userRole = @Html.Raw(Json.Encode(ViewData["role"]));
         if (userId == '2') {
             document.getElementById("del").style.display = "block";
