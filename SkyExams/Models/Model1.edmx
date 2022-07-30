@@ -31,30 +31,6 @@
           <Property Name="Slot_ID" Type="int" Nullable="false" />
           <Property Name="Date_Time" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="Cessna_172">
-          <Key>
-            <PropertyRef Name="c172_ID" />
-          </Key>
-          <Property Name="c172_ID" Type="int" Nullable="false" />
-          <Property Name="Plane_ID" Type="int" Nullable="false" />
-          <Property Name="Plane_Description" Type="varchar" MaxLength="255" />
-        </EntityType>
-        <EntityType Name="Cessna_172_RG">
-          <Key>
-            <PropertyRef Name="c172_RG_ID" />
-          </Key>
-          <Property Name="c172_RG_ID" Type="int" Nullable="false" />
-          <Property Name="Plane_ID" Type="int" Nullable="false" />
-          <Property Name="Plane_Description" Type="varchar" MaxLength="255" />
-        </EntityType>
-        <EntityType Name="Cherokee_140">
-          <Key>
-            <PropertyRef Name="Cherokee_140_ID" />
-          </Key>
-          <Property Name="Cherokee_140_ID" Type="int" Nullable="false" />
-          <Property Name="Plane_ID" Type="int" Nullable="false" />
-          <Property Name="Plane_Description" Type="varchar" MaxLength="255" />
-        </EntityType>
         <EntityType Name="City">
           <Key>
             <PropertyRef Name="City_ID" />
@@ -76,6 +52,13 @@
           <Property Name="Employment_ID" Type="int" Nullable="false" />
           <Property Name="EmpStatus" Type="varchar" MaxLength="15" />
         </EntityType>
+        <EntityType Name="Event_Type">
+          <Key>
+            <PropertyRef Name="Event_Type_ID" />
+          </Key>
+          <Property Name="Event_Type_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Event_Type_Description" Type="varchar(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="EventLocation">
           <Key>
             <PropertyRef Name="Location_ID" />
@@ -89,6 +72,14 @@
           </Key>
           <Property Name="Exam_ID" Type="int" Nullable="false" />
           <Property Name="Plane_Type_ID" Type="int" />
+        </EntityType>
+        <EntityType Name="Exam_Average">
+          <Key>
+            <PropertyRef Name="exam_Average_ID" />
+          </Key>
+          <Property Name="exam_Average_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Exam_ID" Type="int" Nullable="false" />
+          <Property Name="Average" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Instructor">
           <Key>
@@ -126,6 +117,14 @@
           <Property Name="LP_Description" Type="varbinary(max)" />
           <Property Name="Rating_ID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Load_Sheet">
+          <Key>
+            <PropertyRef Name="load_Sheet_ID" />
+          </Key>
+          <Property Name="load_Sheet_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Exam_ID" Type="int" Nullable="false" />
+          <Property Name="load_Sheet" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="Manager">
           <Key>
             <PropertyRef Name="Manager_ID" />
@@ -137,12 +136,13 @@
           <Key>
             <PropertyRef Name="Plane_ID" />
           </Key>
-          <Property Name="Plane_ID" Type="int" Nullable="false" />
+          <Property Name="Plane_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Plane_Type_ID" Type="int" Nullable="false" />
           <Property Name="Call_Sign" Type="varchar" MaxLength="6" />
           <Property Name="Hours_Flown" Type="int" />
           <Property Name="Hours_Until_Service" Type="int" />
           <Property Name="In_Service" Type="bit" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Plane_Service">
           <Key>
@@ -156,8 +156,9 @@
           <Key>
             <PropertyRef Name="Plane_Type_ID" />
           </Key>
-          <Property Name="Plane_Type_ID" Type="int" Nullable="false" />
+          <Property Name="Plane_Type_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Type_Description" Type="varchar" MaxLength="255" />
+          <Property Name="Plane_Image" Type="varbinary(max)" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -303,14 +304,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Title_ID" Type="int" Nullable="false" />
           <Property Name="TitleDesc" Type="varchar" MaxLength="10" />
         </EntityType>
-        <EntityType Name="Twin_Commanche">
-          <Key>
-            <PropertyRef Name="Twin_Commanche_ID" />
-          </Key>
-          <Property Name="Twin_Commanche_ID" Type="int" Nullable="false" />
-          <Property Name="Plane_ID" Type="int" Nullable="false" />
-          <Property Name="Plane_Description" Type="varchar" MaxLength="255" />
-        </EntityType>
         <EntityType Name="uEvent">
           <Key>
             <PropertyRef Name="Event_ID" />
@@ -318,6 +311,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Event_ID" Type="int" Nullable="false" />
           <Property Name="Date_Time" Type="datetime" />
           <Property Name="Location_ID" Type="int" Nullable="false" />
+          <Property Name="Event_Type_ID" Type="int" />
         </EntityType>
         <EntityType Name="User_Event">
           <Key>
@@ -360,18 +354,18 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Cessna_172" EntityType="Self.Cessna_172" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Cessna_172_RG" EntityType="Self.Cessna_172_RG" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Cherokee_140" EntityType="Self.Cherokee_140" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employment_Status" EntityType="Self.Employment_Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Event_Type" EntityType="Self.Event_Type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EventLocation" EntityType="Self.EventLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Exam" EntityType="Self.Exam" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Exam_Average" EntityType="Self.Exam_Average" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instructor" EntityType="Self.Instructor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instructor_Licence" EntityType="Self.Instructor_Licence" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instructor_Slots" EntityType="Self.Instructor_Slots" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Lesson_Plan" EntityType="Self.Lesson_Plan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Load_Sheet" EntityType="Self.Load_Sheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Manager" EntityType="Self.Manager" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plane" EntityType="Self.Plane" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plane_Service" EntityType="Self.Plane_Service" Schema="dbo" store:Type="Tables" />
@@ -391,7 +385,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Study_Resource" EntityType="Self.Study_Resource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sys_User" EntityType="Self.Sys_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Title" EntityType="Self.Title" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Twin_Commanche" EntityType="Self.Twin_Commanche" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="uEvent" EntityType="Self.uEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Event" EntityType="Self.User_Event" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Role" EntityType="Self.User_Role" Schema="dbo" store:Type="Tables" />
@@ -413,18 +406,18 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Admins" EntityType="SkyExamsModel.Admin" />
           <EntitySet Name="Answers" EntityType="SkyExamsModel.Answer" />
           <EntitySet Name="Bookings" EntityType="SkyExamsModel.Booking" />
-          <EntitySet Name="Cessna_172" EntityType="SkyExamsModel.Cessna_172" />
-          <EntitySet Name="Cessna_172_RG" EntityType="SkyExamsModel.Cessna_172_RG" />
-          <EntitySet Name="Cherokee_140" EntityType="SkyExamsModel.Cherokee_140" />
           <EntitySet Name="Cities" EntityType="SkyExamsModel.City" />
           <EntitySet Name="Countries" EntityType="SkyExamsModel.Country" />
           <EntitySet Name="Employment_Status" EntityType="SkyExamsModel.Employment_Status" />
+          <EntitySet Name="Event_Type" EntityType="SkyExamsModel.Event_Type" />
           <EntitySet Name="EventLocations" EntityType="SkyExamsModel.EventLocation" />
           <EntitySet Name="Exams" EntityType="SkyExamsModel.Exam" />
+          <EntitySet Name="Exam_Average" EntityType="SkyExamsModel.Exam_Average" />
           <EntitySet Name="Instructors" EntityType="SkyExamsModel.Instructor" />
           <EntitySet Name="Instructor_Licence" EntityType="SkyExamsModel.Instructor_Licence" />
           <EntitySet Name="Instructor_Slots" EntityType="SkyExamsModel.Instructor_Slots" />
           <EntitySet Name="Lesson_Plan" EntityType="SkyExamsModel.Lesson_Plan" />
+          <EntitySet Name="Load_Sheet" EntityType="SkyExamsModel.Load_Sheet" />
           <EntitySet Name="Managers" EntityType="SkyExamsModel.Manager" />
           <EntitySet Name="Planes" EntityType="SkyExamsModel.Plane" />
           <EntitySet Name="Plane_Service" EntityType="SkyExamsModel.Plane_Service" />
@@ -444,7 +437,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Study_Resource" EntityType="SkyExamsModel.Study_Resource" />
           <EntitySet Name="Sys_User" EntityType="SkyExamsModel.Sys_User" />
           <EntitySet Name="Titles" EntityType="SkyExamsModel.Title" />
-          <EntitySet Name="Twin_Commanche" EntityType="SkyExamsModel.Twin_Commanche" />
           <EntitySet Name="uEvents" EntityType="SkyExamsModel.uEvent" />
           <EntitySet Name="User_Event" EntityType="SkyExamsModel.User_Event" />
           <EntitySet Name="User_Role" EntityType="SkyExamsModel.User_Role" />
@@ -479,30 +471,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Slot_ID" Type="Int32" Nullable="false" />
           <Property Name="Date_Time" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityType Name="Cessna_172">
-          <Key>
-            <PropertyRef Name="c172_ID" />
-          </Key>
-          <Property Name="c172_ID" Type="Int32" Nullable="false" />
-          <Property Name="Plane_ID" Type="Int32" Nullable="false" />
-          <Property Name="Plane_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Cessna_172_RG">
-          <Key>
-            <PropertyRef Name="c172_RG_ID" />
-          </Key>
-          <Property Name="c172_RG_ID" Type="Int32" Nullable="false" />
-          <Property Name="Plane_ID" Type="Int32" Nullable="false" />
-          <Property Name="Plane_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Cherokee_140">
-          <Key>
-            <PropertyRef Name="Cherokee_140_ID" />
-          </Key>
-          <Property Name="Cherokee_140_ID" Type="Int32" Nullable="false" />
-          <Property Name="Plane_ID" Type="Int32" Nullable="false" />
-          <Property Name="Plane_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="City">
           <Key>
             <PropertyRef Name="City_ID" />
@@ -524,6 +492,13 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Employment_ID" Type="Int32" Nullable="false" />
           <Property Name="EmpStatus" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Event_Type">
+          <Key>
+            <PropertyRef Name="Event_Type_ID" />
+          </Key>
+          <Property Name="Event_Type_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Event_Type_Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="EventLocation">
           <Key>
             <PropertyRef Name="Location_ID" />
@@ -537,6 +512,14 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           </Key>
           <Property Name="Exam_ID" Type="Int32" Nullable="false" />
           <Property Name="Plane_Type_ID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Exam_Average">
+          <Key>
+            <PropertyRef Name="exam_Average_ID" />
+          </Key>
+          <Property Name="exam_Average_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Exam_ID" Type="Int32" Nullable="false" />
+          <Property Name="Average" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Instructor">
           <Key>
@@ -574,6 +557,14 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="LP_Description" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="Rating_ID" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="Load_Sheet">
+          <Key>
+            <PropertyRef Name="load_Sheet_ID" />
+          </Key>
+          <Property Name="load_Sheet_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Exam_ID" Type="Int32" Nullable="false" />
+          <Property Name="load_Sheet1" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+        </EntityType>
         <EntityType Name="Manager">
           <Key>
             <PropertyRef Name="Manager_ID" />
@@ -585,12 +576,13 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="Plane_ID" />
           </Key>
-          <Property Name="Plane_ID" Type="Int32" Nullable="false" />
+          <Property Name="Plane_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Plane_Type_ID" Type="Int32" Nullable="false" />
           <Property Name="Call_Sign" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Name="Hours_Flown" Type="Int32" />
           <Property Name="Hours_Until_Service" Type="Int32" />
           <Property Name="In_Service" Type="Boolean" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Plane_Service">
           <Key>
@@ -604,8 +596,9 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="Plane_Type_ID" />
           </Key>
-          <Property Name="Plane_Type_ID" Type="Int32" Nullable="false" />
+          <Property Name="Plane_Type_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Type_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Plane_Image" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Question_Rating">
           <Key>
@@ -742,14 +735,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Title_ID" Type="Int32" Nullable="false" />
           <Property Name="TitleDesc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Twin_Commanche">
-          <Key>
-            <PropertyRef Name="Twin_Commanche_ID" />
-          </Key>
-          <Property Name="Twin_Commanche_ID" Type="Int32" Nullable="false" />
-          <Property Name="Plane_ID" Type="Int32" Nullable="false" />
-          <Property Name="Plane_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="uEvent">
           <Key>
             <PropertyRef Name="Event_ID" />
@@ -757,6 +742,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Event_ID" Type="Int32" Nullable="false" />
           <Property Name="Date_Time" Type="DateTime" Precision="3" />
           <Property Name="Location_ID" Type="Int32" Nullable="false" />
+          <Property Name="Event_Type_ID" Type="Int32" />
         </EntityType>
         <EntityType Name="User_Event">
           <Key>
@@ -837,33 +823,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Cessna_172">
-            <EntityTypeMapping TypeName="SkyExamsModel.Cessna_172">
-              <MappingFragment StoreEntitySet="Cessna_172">
-                <ScalarProperty Name="Plane_Description" ColumnName="Plane_Description" />
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
-                <ScalarProperty Name="c172_ID" ColumnName="c172_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Cessna_172_RG">
-            <EntityTypeMapping TypeName="SkyExamsModel.Cessna_172_RG">
-              <MappingFragment StoreEntitySet="Cessna_172_RG">
-                <ScalarProperty Name="Plane_Description" ColumnName="Plane_Description" />
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
-                <ScalarProperty Name="c172_RG_ID" ColumnName="c172_RG_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Cherokee_140">
-            <EntityTypeMapping TypeName="SkyExamsModel.Cherokee_140">
-              <MappingFragment StoreEntitySet="Cherokee_140">
-                <ScalarProperty Name="Plane_Description" ColumnName="Plane_Description" />
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
-                <ScalarProperty Name="Cherokee_140_ID" ColumnName="Cherokee_140_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Cities">
             <EntityTypeMapping TypeName="SkyExamsModel.City">
               <MappingFragment StoreEntitySet="City">
@@ -888,6 +847,14 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Event_Type">
+            <EntityTypeMapping TypeName="SkyExamsModel.Event_Type">
+              <MappingFragment StoreEntitySet="Event_Type">
+                <ScalarProperty Name="Event_Type_Description" ColumnName="Event_Type_Description" />
+                <ScalarProperty Name="Event_Type_ID" ColumnName="Event_Type_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="EventLocations">
             <EntityTypeMapping TypeName="SkyExamsModel.EventLocation">
               <MappingFragment StoreEntitySet="EventLocation">
@@ -901,6 +868,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               <MappingFragment StoreEntitySet="Exam">
                 <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
                 <ScalarProperty Name="Exam_ID" ColumnName="Exam_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Exam_Average">
+            <EntityTypeMapping TypeName="SkyExamsModel.Exam_Average">
+              <MappingFragment StoreEntitySet="Exam_Average">
+                <ScalarProperty Name="Average" ColumnName="Average" />
+                <ScalarProperty Name="Exam_ID" ColumnName="Exam_ID" />
+                <ScalarProperty Name="exam_Average_ID" ColumnName="exam_Average_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -942,6 +918,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Load_Sheet">
+            <EntityTypeMapping TypeName="SkyExamsModel.Load_Sheet">
+              <MappingFragment StoreEntitySet="Load_Sheet">
+                <ScalarProperty Name="load_Sheet1" ColumnName="load_Sheet" />
+                <ScalarProperty Name="Exam_ID" ColumnName="Exam_ID" />
+                <ScalarProperty Name="load_Sheet_ID" ColumnName="load_Sheet_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Managers">
             <EntityTypeMapping TypeName="SkyExamsModel.Manager">
               <MappingFragment StoreEntitySet="Manager">
@@ -953,6 +938,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Planes">
             <EntityTypeMapping TypeName="SkyExamsModel.Plane">
               <MappingFragment StoreEntitySet="Plane">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="In_Service" ColumnName="In_Service" />
                 <ScalarProperty Name="Hours_Until_Service" ColumnName="Hours_Until_Service" />
                 <ScalarProperty Name="Hours_Flown" ColumnName="Hours_Flown" />
@@ -974,6 +960,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Plane_Type">
             <EntityTypeMapping TypeName="SkyExamsModel.Plane_Type">
               <MappingFragment StoreEntitySet="Plane_Type">
+                <ScalarProperty Name="Plane_Image" ColumnName="Plane_Image" />
                 <ScalarProperty Name="Type_Description" ColumnName="Type_Description" />
                 <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
               </MappingFragment>
@@ -1124,18 +1111,10 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Twin_Commanche">
-            <EntityTypeMapping TypeName="SkyExamsModel.Twin_Commanche">
-              <MappingFragment StoreEntitySet="Twin_Commanche">
-                <ScalarProperty Name="Plane_Description" ColumnName="Plane_Description" />
-                <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
-                <ScalarProperty Name="Twin_Commanche_ID" ColumnName="Twin_Commanche_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="uEvents">
             <EntityTypeMapping TypeName="SkyExamsModel.uEvent">
               <MappingFragment StoreEntitySet="uEvent">
+                <ScalarProperty Name="Event_Type_ID" ColumnName="Event_Type_ID" />
                 <ScalarProperty Name="Location_ID" ColumnName="Location_ID" />
                 <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
                 <ScalarProperty Name="Event_ID" ColumnName="Event_ID" />

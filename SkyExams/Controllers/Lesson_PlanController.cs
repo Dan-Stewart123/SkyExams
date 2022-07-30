@@ -23,101 +23,55 @@ namespace SkyExams.Controllers
 
         public ActionResult planScreen(int? id)
         {
-            Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-            return View(user);
+            ViewData["userID"] = "" + id;
+            Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            ViewData["userRole"] = "" + forRole.User_Role_ID;
+            List<Plane_Type> planeTypes = db.Plane_Type.ToList();
+
+            return View(planeTypes);
         }// returns lesson plan screen
+
+        public FileContentResult getImg(int id)
+        {
+            byte[] byteArray = db.Plane_Type.Find(id).Plane_Image;
+            return byteArray != null
+                ? new FileContentResult(byteArray, "image/jpeg")
+                : null;
+        }
 
         public ActionResult topicScreen(int? id, int? topicId)
         {
             ViewData["userID"] = "" + id;
             Sys_User user = db.Sys_User.Find(id);
+            ViewData["userRole"] = "" + user.User_Role_ID;
             int userRole = Convert.ToInt32(user.User_Role_ID);
             List<Lesson_Plan> planList = new List<Lesson_Plan>();
             if(userRole == 1)
             {
-                if (topicId == 1)
+                ViewData["topicId"] = "" + topicId;
+                ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == topicId).Type_Description;
+                Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
+                foreach (Student_Lesson_Plan temp in stuPlan)
                 {
-                    ViewData["topicId"] = "" + 1;
-                    ViewData["planeType"] = "Cessna 172";
-                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
-                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
-                    foreach (Student_Lesson_Plan temp in stuPlan)
+                    List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
+                    foreach (Lesson_Plan temPlan in tempPlans)
                     {
-                        List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
-                        foreach (Lesson_Plan temPlan in tempPlans)
+                        if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == topicId)
                         {
-                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == 1)
-                            {
-                                planList.Add(temPlan);
-                            }
-                        }// inner for each
-                    }// for each
-                    return View(planList);
-                }// cessna 172
-                if (topicId == 2)
-                {
-                    ViewData["topicId"] = "" + 2;
-                    ViewData["planeType"] = "Cessna 172 RG";
-                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
-                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
-                    foreach (Student_Lesson_Plan temp in stuPlan)
-                    {
-                        List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
-                        foreach (Lesson_Plan temPlan in tempPlans)
-                        {
-                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == 2)
-                            {
-                                planList.Add(temPlan);
-                            }
-                        }// inner for each
-                    }// for each
-                    return View(planList);
-                }// cessna 172 RG
-                if (topicId == 3)
-                {
-                    ViewData["topicId"] = "" + 3;
-                    ViewData["planeType"] = "Cherokee 140";
-                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
-                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
-                    foreach (Student_Lesson_Plan temp in stuPlan)
-                    {
-                        List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
-                        foreach (Lesson_Plan temPlan in tempPlans)
-                        {
-                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == 3)
-                            {
-                                planList.Add(temPlan);
-                            }
-                        }// inner for each
-                    }// for each
-                    return View(planList);
-                }// cherokee 140
-                if (topicId == 4)
-                {
-                    ViewData["topicId"] = "" + 4;
-                    ViewData["planeType"] = "Piper Twin Comanche";
-                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
-                    List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
-                    foreach (Student_Lesson_Plan temp in stuPlan)
-                    {
-                        List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
-                        foreach (Lesson_Plan temPlan in tempPlans)
-                        {
-                            if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == 4)
-                            {
-                                planList.Add(temPlan);
-                            }
-                        }// inner for each
-                    }// for each
-                    return View(planList);
-                }// cessna 172
-                else
-                {
-                    return View(planList);
-                }
+                            planList.Add(temPlan);
+                        }
+                    }// inner for each
+                }// for each
+                return View(planList);
+                
             }// if user is a student
             else
             {
+                ViewData["topicID"] = "" + 1;
+                ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == topicId).Type_Description;
+                planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == topicId);
+                return View(planList);
                 if (topicId == 1)
                 {
                     ViewData["topicID"] = "" + 1;

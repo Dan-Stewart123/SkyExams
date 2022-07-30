@@ -12,10 +12,10 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Cherokee_140
+    public partial class Exam_Average
     {
-        public int Cherokee_140_ID { get; set; }
-        public int Plane_ID { get; set; }
-        public string Plane_Description { get; set; }
+        public int exam_Average_ID { get; set; }
+        public int Exam_ID { get; set; }
+        public int Average { get; set; }
     }
 }

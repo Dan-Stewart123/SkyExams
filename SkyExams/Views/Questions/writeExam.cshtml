@@ -4,6 +4,7 @@
     ViewBag.Title = "writeExam";
     var uID = ViewData["userId"];
     var rID = ViewData["ratingId"];
+    var name = ViewData["userName"];
     int count = 1, countR = 0;
 }
 
@@ -20,8 +21,15 @@
     </button>
 </div>
 <div class="Quiz" id="Quiz">
+    <div id="examMark">
 
+
+    </div>
+    <br />
     <h4 style="margin-top: 4%;"> <span class="label label-info">Questions :</span> </h4>
+    <br />
+    <h4 style="margin-top: 4%;">@name</h4>
+    <br />
 
     @if (Model != null && Model.Any())
     {
@@ -46,7 +54,7 @@
                         if (question.Answers.Count == 1)
                         {
                             <script>
-                                
+
                                 document.getElementsByTagName('radioButton').checked = true;
                             </script>
                         }
@@ -61,10 +69,6 @@
 
             </div> <!-- END BlockQ --> count++;
         }
-        <div id="examMark">
-
-
-        </div>
         <span id="countQuections" style="display:none;">@count</span>
         <p id="checkLabel">Please ensure that all your answers are checked before you submit</p>
         <br />
@@ -138,7 +142,7 @@
                                 totAnswers = totAnswers + 1;
                             }
                             grade = (correctsAnswers / totAnswers) * 100;
-                            $('#examMark').html('<div class="alert alert-success" role="alert">Your mark is ' + grade + '%</div>');
+                            $('#examMark').html('<div class="alert alert-success" role="alert">Your mark is ' + correctsAnswers + "/" + totAnswers + " " + grade + '%</div>');
 
                         }
                         else

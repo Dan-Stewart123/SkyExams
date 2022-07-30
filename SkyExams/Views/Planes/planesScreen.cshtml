@@ -1,97 +1,102 @@
-﻿@model SkyExams.Models.Sys_User
+﻿@model IEnumerable<SkyExams.Models.Plane_Type>
 @{
     ViewBag.Title = "planesScreen";
+    var uID = ViewData["userID"];
+    var rID = ViewData["userRole"];
 }
 
 <h2>Planes</h2>
 <br />
 <br />
 <div id="createButton" style="display:none;">
-    <button type="button" onclick="location.href='@Url.Action("addPlaneScreen", "Planes", new { id = Model.SysUser_ID })'">
+    <button type="button" onclick="location.href='@Url.Action("addPlaneScreen", "Planes", new { id = uID })'">
         Add Plane
+    </button>
+    <button type="button" onclick="location.href='@Url.Action("addPlaneTypeScreen", "Planes", new { id = uID })'">
+        Add Plane Type
     </button>
 </div>
 <br />
 <br />
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header"><h4>Cessna 172</h4></div>
-        <div class="card-body">
-            <img src="~/Content/Cessna172.jpeg" width="280px" height="150px" title="title" alt="additional title" />
-        </div>
-        <div class="card-footer">
-            <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = Model.SysUser_ID, typeId = 1 })'">
-                View Planes
-            </button>
-        </div>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header"><h4>Cessna 172 RG</h4></div>
-        <div class="card-body">
-            <img src="~/Content/rg.jpeg" width="280px" height="150px" title="title" alt="additional title" />
-        </div>
-        <div class="card-footer">
-            <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = Model.SysUser_ID, typeId = 2 })'">
-                View Planes
-            </button>
-        </div>
-    </div>
-</div>
-<br />
-<br />
-<br />
-<br />
-<br />
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header"><h4>Cherokee 140</h4></div>
-        <div class="card-body">
-            <img src="~/Content/140.jpeg" width="280px" height="150px" title="title" alt="additional title" />
-        </div>
-        <div class="card-footer">
-            <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = Model.SysUser_ID, typeId = 3 })'">
-                View Planes
-            </button>
+@foreach (var modelItem in Model)
+{
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h4>@modelItem.Type_Description</h4></div>
+            <div class="card-body">
+                <img src="@Url.Action("getImg", "Planes", new { id = modelItem.Plane_Type_ID })" width="280px" height="150px" title="title" alt="additional title" />
+            </div>
+            <div class="card-footer">
+                <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = modelItem.Plane_Type_ID })'">
+                    View Planes
+                </button>
+                <div id="adminFunctions" class="adminFunctions" style="display:none;">
+                    <button type="button" onclick="location.href='@Url.Action("updatePlaneType", "Planes", new { loggedId = uID, id = modelItem.Plane_Type_ID })'">
+                        Update Plane Type
+                    </button>
+                    <button type="button" onclick="location.href='@Url.Action("deletePlaneType", "Planes", new { loggedId = uID, id = modelItem.Plane_Type_ID })'">
+                        Delete Plane Type
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header"><h4>Piper Twin Commanche</h4></div>
-        <div class="card-body">
-            <img src="~/Content/twin.jpeg" width="280px" height="150px" title="title" alt="additional title" />
-        </div>
-        <div class="card-footer">
-            <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = Model.SysUser_ID, typeId = 4 })'">
-                View Planes
-            </button>
-        </div>
-    </div>
-</div>
+    <br />
+    <br />
+    <br />
+    <br />
+}
 <br />
 <br />
 <br />
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
     Back
 </button>
 
 <script>
     function adminCheck() {
-        var userId = @Model.User_Role_ID;
+        var userId = @rID;
         if (userId == '2') {
             document.getElementById("createButton").style.display = "block";
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
         if (userId == '3') {
             document.getElementById("createButton").style.display = "block";
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
         if (userId == '4') {
             document.getElementById("createButton").style.display = "block";
+            var func = document.getElementsByClassName("adminFunctions");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
         }
     }
+
     window.onload = adminCheck;
 </script>
 
