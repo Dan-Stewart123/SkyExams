@@ -709,6 +709,97 @@ namespace SkyExams.Controllers
             return RedirectToAction("homeScreen", new { id = loggedId });
         }
 
+        [HttpGet]
+        public ActionResult UpdateUserRole(int? loggedId, int? id)
+        {
+            ViewData["loggedId"] = "" + loggedId;
+            Sys_User updateRole = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+            return View(updateRole);
+        }//update user role get
+
+        [HttpPost]
+        public ActionResult UpdateUserRole(int? loggedId, int? id, int role)
+        {
+            int roleID = Convert.ToInt32(id);
+            Sys_User sys_User = db.Sys_User.ToList().Find(u => u.SysUser_ID == roleID);
+            int uRole = Convert.ToInt32(sys_User.User_Role_ID);
+            Sys_User updateRole = new Sys_User();
+            updateRole = sys_User;
+            updateRole.User_Role_ID = role;
+            List<User_Role> roleList = db.User_Role.ToList();
+
+            if (uRole == 1)
+            {
+                Student tempStudent = db.Students.ToList().Find(u => u.SysUser_ID == sys_User.SysUser_ID);
+                db.Students.Remove(tempStudent);
+                db.SaveChanges();
+            }
+            if (uRole == 2)
+            {
+                Instructor tempStudent = db.Instructors.ToList().Find(u => u.SysUser_ID == sys_User.SysUser_ID);
+                db.Instructors.Remove(tempStudent);
+                db.SaveChanges();
+            }
+            if (uRole == 3)
+            {
+                Admin tempStudent = db.Admins.ToList().Find(u => u.SysUser_ID == sys_User.SysUser_ID);
+                db.Admins.Remove(tempStudent);
+                db.SaveChanges();
+            }
+            if (uRole == 4)
+            {
+                Manager tempStudent = db.Managers.ToList().Find(u => u.SysUser_ID == sys_User.SysUser_ID);
+                db.Managers.Remove(tempStudent);
+                db.SaveChanges();
+            }
+
+            if (role == 1)
+            {
+                string studentLicence = Request["licence"];
+                Student newStudent = new Student();
+                newStudent.SysUser_ID = updateRole.SysUser_ID;
+                int studentID = db.Students.ToList().Count + 2;
+                newStudent.Student_ID = studentID;
+                newStudent.Licence_No = Convert.ToInt32(studentLicence);
+                db.Students.Add(newStudent);
+                db.SaveChanges();
+            }
+            if (role == 2)
+            {
+                string instructorLicence = Request["licence"];
+                Instructor newInstructor = new Instructor();
+                newInstructor.SysUser_ID = updateRole.SysUser_ID;
+                int instructorID = db.Instructors.ToList().Count + 2;
+                newInstructor.Instructor_ID = instructorID;
+                newInstructor.Licence_No = Convert.ToInt32(instructorLicence);
+                db.Instructors.Add(newInstructor);
+                db.SaveChanges();
+            }
+            if (role == 3)
+            {
+                Admin newAdmin = new Admin();
+                newAdmin.SysUser_ID = updateRole.SysUser_ID;
+                int adminID = db.Admins.ToList().Count + 2;
+                newAdmin.Admin_ID = adminID;
+                db.Admins.Add(newAdmin);
+                db.SaveChanges();
+            }
+            if (role == 4)
+            {
+                Manager newManager = new Manager();
+                newManager.SysUser_ID = updateRole.SysUser_ID;
+                int managerID = db.Managers.ToList().Count + 2;
+                newManager.Manager_ID = managerID;
+                db.Managers.Add(newManager);
+                db.SaveChanges();
+            }
+
+
+
+            //code
+            return RedirectToAction("searchScreen", new { id = loggedId });
+        }//update user role post
+
         public static string encodePassword(string password)
         {
             try
