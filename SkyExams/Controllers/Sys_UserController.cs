@@ -331,6 +331,8 @@ namespace SkyExams.Controllers
         {
             ViewData["userID"] = "" + id;
             ViewData["role"] = list;
+            Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            ViewData["userRole"] = "" + forRole.User_Role_ID;
             List<Sys_User> sUsers = new List<Sys_User>();
             if (firstName == "" && lastName == "")
             {

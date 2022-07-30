@@ -20,5 +20,6 @@ namespace SkyExams.Models
         public Nullable<int> Hours_Flown { get; set; }
         public Nullable<int> Hours_Until_Service { get; set; }
         public Nullable<bool> In_Service { get; set; }
+        public string Description { get; set; }
     }
 }

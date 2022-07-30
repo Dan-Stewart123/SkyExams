@@ -4,6 +4,7 @@
     var uID = ViewData["userID"];
     var tID = ViewData["topicID"];
     var type = ViewData["planeType"];
+    var userRole = ViewData["userRole"];
 }
 
 <h2>Lesson Plans</h2>
@@ -53,7 +54,7 @@
 </button>
 <script>
     function adminCheck() {
-        var userId = @uID;
+        var userId = @userRole;
         if (userId == '2') {
             document.getElementById("createButton").style.display = "block";
             var func = document.getElementsByClassName("deleteFunction");

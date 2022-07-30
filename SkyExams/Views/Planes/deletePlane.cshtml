@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "deletePlane";
     var uID = ViewData["loggedId"];
+    var type = ViewData["planeType"];
 }
 
 <h2>Delete Plane</h2>
@@ -15,11 +16,7 @@
     </dt>
 
     <dd>
-        <label id="type">@Html.DisplayFor(model => model.Plane_Type_ID)</label>
-        <label id="cessna" style="display:none;">Cessna 172</label>
-        <label id="rg" style="display:none;">Cessna 172 RG</label>
-        <label id="cherokee" style="display:none;">Cherokee 140</label>
-        <label id="twin" style="display:none;">Piper Twin Commanche</label>
+        @type
     </dd>
 
     <dt class="col-md-4">
@@ -54,26 +51,3 @@
 <button type="button" onclick="location.href='@Url.Action("deletePlaneConformation", "Planes", new { loggedId = uID, id = Model.Plane_ID })'">
     Delete
 </button>
-
-<script>
-    function typeCheck() {
-        if (document.getElementById("type").textContent === "1") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("cessna").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "2") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("rg").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "3") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("cherokee").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "4") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("twin").style.display = "block";
-        }
-    }
-
-    window.onload = typeCheck;
-</script>
