@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2870cc68c3084839b684104dbf499325" Name="Diagram1">
+        <EntityTypeShape EntityType="SkyExamsModel.Admin" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Answer" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Booking" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Cessna_172" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Cessna_172_RG" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Cherokee_140" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.City" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Country" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Employment_Status" Width="1.5" PointX="2.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.EventLocation" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Exam" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Instructor" Width="1.5" PointX="6.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Instructor_Licence" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Instructor_Slots" Width="1.5" PointX="8.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Lesson_Plan" Width="1.5" PointX="8.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Manager" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Plane" Width="1.5" PointX="2.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Plane_Service" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Plane_Type" Width="1.5" PointX="6.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Question_Rating" Width="1.5" PointX="8.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Question" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Rating" Width="1.5" PointX="10.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Save_Exam" Width="1.5" PointX="10.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Section" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.SkyExam" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Student" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Student_Exam" Width="1.5" PointX="2.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Student_Instructor" Width="1.5" PointX="12.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Student_Lesson_Plan" Width="1.5" PointX="4.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Student_Licence_Type" Width="1.5" PointX="12.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Student_Resource" Width="1.5" PointX="6.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Study_Resource" Width="1.5" PointX="8.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Sys_User" Width="1.5" PointX="12.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Title" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Twin_Commanche" Width="1.5" PointX="14.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.uEvent" Width="1.5" PointX="14.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.User_Event" Width="1.5" PointX="14.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.User_Role" Width="1.5" PointX="10.75" PointY="14.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.UserPassword" Width="1.5" PointX="14.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Verification_Code" Width="1.5" PointX="0.75" PointY="15.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Zip_Code" Width="1.5" PointX="2.75" PointY="15.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Profile_Image" Width="1.5" PointX="4.75" PointY="15.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

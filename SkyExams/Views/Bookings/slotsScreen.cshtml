@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SkyExams.Models.Instructor_Slots>
+@{
+    ViewBag.Title = "slotsScreen";
+    var uID = ViewData["userId"];
+}
+
+<h2>Booking Slots</h2>
+<div>
+    <button type="button" onclick="location.href='@Url.Action("createSlot", "Bookings", new { id = uID })'">
+        Create Booking Slot
+    </button>
+</div>
+<br />
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Date and Time</th>
+            <th scope="col">Booked</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Date_Time)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Booked)
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("updateSlot", "Bookings", new { id = uID, slotId = item.Slot_ID })'">
+                        Update
+                    </button>
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("deleteSlot", "Bookings", new { id = uID, slotId = item.Slot_ID })'">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+    Back
+</button>

@@ -1,0 +1,32 @@
+﻿@model SkyExams.Models.Sys_User
+
+@{
+    ViewBag.Title = "Home";
+}
+<h2>Home</h2>
+
+<button type="button" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = Model.SysUser_ID })'">
+    View Account
+</button>
+<button type="button" onclick="location.href='@Url.Action("searchScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Search
+</button>
+<button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = Model.SysUser_ID })'">
+    Planes
+</button>
+<button type="button" onclick="location.href='@Url.Action("resourceScreen", "Study_Resource", new { id = Model.SysUser_ID })'">
+    Study Resources
+</button>
+<button type="button" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = Model.SysUser_ID })'">
+    Lesson Plans
+</button>
+<button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = Model.SysUser_ID })'">
+    Exams
+</button>
+<button type="button" id="consult" onclick="location.href='@Url.Action("studentCheck", "Bookings", new { id = Model.SysUser_ID })'">
+    Exam Consultations
+</button>
+<button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Logout
+</button>
+

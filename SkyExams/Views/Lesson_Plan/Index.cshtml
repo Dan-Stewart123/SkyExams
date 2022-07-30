@@ -1,0 +1,45 @@
+﻿@model IEnumerable<SkyExams.Models.Lesson_Plan>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Instructor_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LP_Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Topic_ID)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Instructor_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LP_Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Topic_ID)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Lesson_Plan_ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Lesson_Plan_ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Lesson_Plan_ID })
+        </td>
+    </tr>
+}
+
+</table>

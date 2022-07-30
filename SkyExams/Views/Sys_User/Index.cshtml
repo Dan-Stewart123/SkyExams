@@ -1,0 +1,105 @@
+﻿@model IEnumerable<SkyExams.Models.Sys_User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User_Role_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Surname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cell_Number)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email_Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Physical_Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DOB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ZIP_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employment_ID)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.User_Role_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Surname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cell_Number)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email_Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Physical_Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DOB)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ZIP_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employment_ID)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.SysUser_ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.SysUser_ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SysUser_ID })
+        </td>
+    </tr>
+}
+
+</table>
