@@ -123,6 +123,7 @@ namespace SkyExams.Controllers
         {
             ViewData["loggedId"] = "" + loggedId;
             Study_Resource delResource = db.Study_Resource.ToList().Find(p => p.Study_Resource_ID == id);
+            ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delResource.Rating_ID).Type_Description;
             return View(delResource);
         }// delete Resource
 
@@ -132,8 +133,11 @@ namespace SkyExams.Controllers
             db.Study_Resource.Remove(delResource);
             db.SaveChanges();
             Student_Resource delStuResource = db.Student_Resource.ToList().Find(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
-            db.Student_Resource.Remove(delStuResource);
-            db.SaveChanges();
+            if(delStuResource != null)
+            {
+                db.Student_Resource.Remove(delStuResource);
+                db.SaveChanges();
+            }
             return RedirectToAction("resourceScreen", new { id = loggedId });
         }// delete conformation
 

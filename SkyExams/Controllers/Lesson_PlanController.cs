@@ -68,42 +68,10 @@ namespace SkyExams.Controllers
             }// if user is a student
             else
             {
-                ViewData["topicID"] = "" + 1;
+                ViewData["topicID"] = "" + topicId;
                 ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == topicId).Type_Description;
                 planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == topicId);
                 return View(planList);
-                if (topicId == 1)
-                {
-                    ViewData["topicID"] = "" + 1;
-                    ViewData["planeType"] = "Cessna 172";
-                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == 1);
-                    return View(planList);
-                }// cessna 172
-                if (topicId == 2)
-                {
-                    ViewData["topicID"] = "" + 2;
-                    ViewData["planeType"] = "Cessna 172 RG";
-                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == 2);
-                    return View(planList);
-                }// cessna 172 RG
-                if (topicId == 3)
-                {
-                    ViewData["topicID"] = "" + 3;
-                    ViewData["planeType"] = "Cherokee 140";
-                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == 3);
-                    return View(planList);
-                }// cherokee 140
-                if (topicId == 4)
-                {
-                    ViewData["topicID"] = "" + 4;
-                    ViewData["planeType"] = "Piper Twin Comanche";
-                    planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == 4);
-                    return View(planList);
-                }// twin commanche
-                else
-                {
-                    return View(planList);
-                }
             }// else
         }// theme screen
 
@@ -158,7 +126,7 @@ namespace SkyExams.Controllers
                     newStuPlan.Student_ID = tempStudent.Student_ID;
                     newStuPlan.Lesson_Plan_ID = newPlan.Lesson_Plan_ID;
                     db.Student_Lesson_Plan.Add(newStuPlan);
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }// for each
                 return RedirectToAction("planScreen", new { id = id });
             }// else
@@ -168,6 +136,7 @@ namespace SkyExams.Controllers
         {
             ViewData["loggedId"] = "" + loggedId;
             Lesson_Plan delPlan = db.Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == id);
+            ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlan.Rating_ID).Type_Description;
             return View(delPlan);
         }// delete Resource
 
@@ -177,8 +146,11 @@ namespace SkyExams.Controllers
             db.Lesson_Plan.Remove(delPlan);
             db.SaveChanges();
             Student_Lesson_Plan delStuPlan = db.Student_Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == delPlan.Lesson_Plan_ID);
-            db.Student_Lesson_Plan.Remove(delStuPlan);
-            db.SaveChanges();
+            if(delStuPlan != null)
+            {
+                db.Student_Lesson_Plan.Remove(delStuPlan);
+                db.SaveChanges();
+            }
             return RedirectToAction("planScreen", new { id = loggedId });
         }// delete conformation
 
