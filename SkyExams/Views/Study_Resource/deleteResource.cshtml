@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "deleteResource";
     var uID = ViewData["loggedId"];
+    var type = ViewData["planeType"];
 }
 
 <h2>Delete Resource</h2>
@@ -15,11 +16,7 @@
     </dt>
 
     <dd>
-        <label id="type">@Html.DisplayFor(model => model.Theme_ID)</label>
-        <label id="cessna" style="display:none;">Cessna 172</label>
-        <label id="rg" style="display:none;">Cessna 172 RG</label>
-        <label id="cherokee" style="display:none;">Cherokee 140</label>
-        <label id="twin" style="display:none;">Piper Twin Commanche</label>
+        @type
     </dd>
 
     <dt class="col-md-4">
@@ -30,7 +27,7 @@
         @Html.DisplayFor(model => model.Resource_Name)
     </dd>
 </dl>
-<button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = uID, typeId = Model.Study_Resource_ID })'">
+<button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = uID, typeId = Model.Rating_ID })'">
     Back
 </button>
 <button type="button" onclick="location.href='@Url.Action("deleteResourceConformation", "Study_Resource", new { loggedId = uID, id = Model.Study_Resource_ID })'">

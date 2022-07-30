@@ -175,15 +175,6 @@
     <Compile Include="Models\Booking.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Cessna_172.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Cessna_172_RG.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Cherokee_140.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\City.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -196,7 +187,13 @@
     <Compile Include="Models\EventLocation.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Event_Type.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Exam.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Exam_Average.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Instructor.cs">
@@ -209,6 +206,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Lesson_Plan.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Load_Sheet.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Manager.cs">
@@ -286,9 +286,6 @@
     <Compile Include="Models\Title.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Twin_Commanche.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\uEvent.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -309,6 +306,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AnswerVM.cs" />
+    <Compile Include="ViewModels\planeTypeVM.cs" />
     <Compile Include="ViewModels\QuestionVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -443,6 +441,11 @@
     <Content Include="Views\Bookings\viewSlots.cshtml" />
     <Content Include="Views\Bookings\deleteBooking.cshtml" />
     <Content Include="Views\Bookings\updateBooking.cshtml" />
+    <Content Include="Views\Planes\updatePlaneHours.cshtml" />
+    <Content Include="Views\Planes\captureServiceDetails.cshtml" />
+    <Content Include="Views\Planes\addPlaneTypeScreen.cshtml" />
+    <Content Include="Views\Planes\deletePlaneType.cshtml" />
+    <Content Include="Views\Planes\updatePlaneType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

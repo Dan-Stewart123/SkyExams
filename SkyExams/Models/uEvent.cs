@@ -17,5 +17,6 @@ namespace SkyExams.Models
         public int Event_ID { get; set; }
         public Nullable<System.DateTime> Date_Time { get; set; }
         public int Location_ID { get; set; }
+        public Nullable<int> Event_Type_ID { get; set; }
     }
 }
