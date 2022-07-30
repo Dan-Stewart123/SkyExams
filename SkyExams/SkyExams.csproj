@@ -446,6 +446,7 @@
     <Content Include="Views\Planes\addPlaneTypeScreen.cshtml" />
     <Content Include="Views\Planes\deletePlaneType.cshtml" />
     <Content Include="Views\Planes\updatePlaneType.cshtml" />
+    <Content Include="Views\Sys_User\UpdateUserRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
