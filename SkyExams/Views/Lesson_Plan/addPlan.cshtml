@@ -22,7 +22,7 @@
     <input class="col-md-3" type="file" id="plan" name="plan" />
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = Model.SysUser_ID, typeId = tID })'">
+    <button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = Model.SysUser_ID, topicId = tID })'">
         Cancel
     </button>
     <input type="submit" , value="Submit" id="submitButton" />

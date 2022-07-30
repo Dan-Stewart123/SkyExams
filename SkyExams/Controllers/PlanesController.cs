@@ -95,8 +95,9 @@ namespace SkyExams.Controllers
         public ActionResult deletePlane(int? loggedId, int? id)
         {
             ViewData["loggedId"] = "" + loggedId;
-            ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == id).Type_Description;
+            //ViewData["planeType"] = db.Planes.ToList().Find(p => p.Plane_ID == id);
             Plane delPlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
+            ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlane.Plane_Type_ID).Type_Description;
             return View(delPlane);
         }// delete plane
 

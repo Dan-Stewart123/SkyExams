@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "deletePlan";
     var uID = ViewData["loggedId"];
+    var type = ViewData["planeType"];
 }
 
 <h2>Delete Lesson Plan</h2>
@@ -15,11 +16,7 @@
     </dt>
 
     <dd>
-        <label id="type">@Html.DisplayFor(model => model.Rating_ID)</label>
-        <label id="cessna" style="display:none;">Cessna 172</label>
-        <label id="rg" style="display:none;">Cessna 172 RG</label>
-        <label id="cherokee" style="display:none;">Cherokee 140</label>
-        <label id="twin" style="display:none;">Piper Twin Commanche</label>
+        @type
     </dd>
 
     <dt class="col-md-4">
@@ -30,7 +27,7 @@
         @Html.DisplayFor(model => model.LP_Name)
     </dd>
 </dl>
-<button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = uID, typeId = Model.Lesson_Plan_ID })'">
+<button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = uID, topicId = Model.Rating_ID })'">
     Back
 </button>
 <button type="button" onclick="location.href='@Url.Action("deletePlanConformation", "Lesson_Plan", new { loggedId = uID, id = Model.Lesson_Plan_ID })'">
