@@ -11,6 +11,14 @@
 <button type="button" onclick="location.href='@Url.Action("createQuestion", "Questions", new { id = uID, ratingId = rID })'">
     Create Question and Answer
 </button>
+<button type="button" onclick="location.href='@Url.Action("addLoadSheet", "Questions", new { id = uID, ratingId = rID })'">
+    Add Load Sheet
+</button>
+<button type="button" onclick="location.href='@Url.Action("deleteLoadSheet", "Questions", new { id = uID, ratingId = rID })'">
+    Delete Load Sheet
+</button>
+<br />
+@Html.ActionLink("View/Download", "downloadLoadSheet", new { id = rID })
 <table class="table">
     <thead>
         <tr>
@@ -24,29 +32,29 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td scope="row">
-                @Html.DisplayFor(modelItem => item.Question1)
-            </td>
-            <td scope="row">
-                @ex
-            </td>
-            <td scope="row">
-                <button type="button" onclick="location.href='@Url.Action("answersScreen", "Questions", new { id = uID, questionId = item.Question_ID })'">
-                    Answers
-                </button>
-            </td>
-            <td scope="row">
-                <button type="button" onclick="location.href='@Url.Action("updateQuestion", "Questions", new { id = uID, questionId = item.Question_ID })'">
-                    Update
-                </button>
-            </td>
-            <td scope="row">
-                <button type="button" onclick="location.href='@Url.Action("deleteQuestion", "Questions", new { id = uID, questionId = item.Question_ID })'">
-                    Delete
-                </button>
-            </td>
-        </tr>
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Question1)
+                </td>
+                <td scope="row">
+                    @ex
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("answersScreen", "Questions", new { id = uID, questionId = item.Question_ID })'">
+                        Answers
+                    </button>
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("updateQuestion", "Questions", new { id = uID, questionId = item.Question_ID })'">
+                        Update
+                    </button>
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("deleteQuestion", "Questions", new { id = uID, questionId = item.Question_ID })'">
+                        Delete
+                    </button>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

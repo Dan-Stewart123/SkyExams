@@ -1,0 +1,28 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "addLoadSheet";
+    var rID = ViewData["ratingId"];
+}
+
+<h2>Add Load Sheet</h2>
+<p>Please enter the following information:</p>
+<br />
+<br />
+@using (Html.BeginForm("addLoadSheet", "Questions", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.SysUser_ID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="ratingId" name="ratingId" value="@rID">
+    </div>
+    <label class="col-md-3">Load Sheet (upload a PDF):</label>
+    <input class="col-md-3" type="file" id="loadSheet" name="loadSheet" />
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = Model.SysUser_ID, ratingId = rID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" />
+}
+

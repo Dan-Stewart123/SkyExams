@@ -1,0 +1,35 @@
+﻿@model SkyExams.Models.Student
+
+@{
+    ViewBag.Title = "Student Hours";
+    var uID = ViewData["userId"];
+    var uName = ViewData["userName"];
+}
+
+<h2>Student Hours</h2>
+
+<p>Please complete the following fields</p>
+
+@using (Html.BeginForm("StudentHours", "Sys_User", FormMethod.Post))
+{
+    <div style="display:none;">
+        <input type="text" id="userId" name="userId" value="@uID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.Student_ID">
+    </div>
+    <div>
+        <label>@uName</label>     
+        <br />
+        <label>@Model.Licence_No</label>
+    </div>
+    <label class="col-md-3">@Html.Label("Hours Flown:")</label>
+    <input class="col-md-3" type="number" id="hoursFlown" name="hoursFlown" value="@Model.Hours_Flown">
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = uID})'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" />
+}
+

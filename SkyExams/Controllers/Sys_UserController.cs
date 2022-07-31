@@ -10,6 +10,12 @@ using SkyExams.Models;
 using MimeKit;
 using MailKit;
 using MailKit.Net.Smtp;
+using System.IO;
+using ExcelDataReader;
+using OfficeOpenXml;
+using NJsonSchema.Annotations;
+using GroupDocs.Conversion.Options.Convert;
+using GroupDocs.Conversion;
 
 namespace SkyExams.Controllers
 {
@@ -794,11 +800,95 @@ namespace SkyExams.Controllers
                 db.SaveChanges();
             }
 
-
-
             //code
             return RedirectToAction("searchScreen", new { id = loggedId });
         }//update user role post
+                
+        [HttpGet]
+        public ActionResult StudentHours(int? id)
+        {
+            Sys_User stuHours = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+            ViewData["userId"] = "" + id;
+            ViewData["userName"] = stuHours.FName + " " + stuHours.Surname;
+            Student stu = db.Students.ToList().Find(s => s.SysUser_ID == stuHours.SysUser_ID);
+            return View(stu);
+        }//Update student hours Get
+
+        [HttpPost]
+        public ActionResult StudentHours(int? userId, int? id, int? hoursFlown)
+        {
+            Student stu = db.Students.ToList().Find(s => s.SysUser_ID == id);
+            Student updateHours = stu;
+            if(hoursFlown != null)
+            {
+                updateHours.Hours_Flown = hoursFlown;
+                db.Students.Remove(stu);
+                db.SaveChanges();
+                db.Students.Add(updateHours);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("viewAccount", new { id = userId });
+        }// update student hours post
+
+        [HttpGet]
+        public ActionResult captureRegistration(int? id)
+        {
+            Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+            ViewData["userId"] = tempUser.SysUser_ID;
+            Registration_Sheet tempSheet = db.Registration_Sheet.ToList().Find(r => r.Sheet_ID == 1);
+            return View(tempSheet);
+        }// capture registration get
+
+        [HttpPost]
+        public ActionResult captureRegistration(int? id, HttpPostedFileBase regSheet)
+        {
+            Registration_Sheet newSheet = new Registration_Sheet();
+            newSheet.Sheet_ID = db.Registration_Sheet.ToList().Count + 1;
+
+            Stream stream = regSheet.InputStream;
+
+            IExcelDataReader reader = null;
+
+            if (regSheet.FileName.EndsWith(".xls"))
+            {
+                reader = ExcelReaderFactory.CreateBinaryReader(stream);
+            }
+            else if (regSheet.FileName.EndsWith(".xlsx"))
+            {
+                reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+            }
+
+            BinaryReader br = new BinaryReader(stream);
+            byte[] fileDetails = br.ReadBytes((Int32)stream.Length);
+
+            newSheet.Registration_Sheet1 = fileDetails;
+
+            db.Registration_Sheet.Add(newSheet);
+            db.SaveChanges();
+
+            return RedirectToAction("viewAccount", new { id = id });
+        }// capture registration post
+
+        
+
+        public class ExcelResult : FileResult
+        {
+            private const string MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+            public ExcelResult([NotNull] ExcelPackage package) : base(MimeType)
+            {
+                if (package is null) throw new ArgumentNullException(nameof(package));
+                Package = package;
+            }
+
+            public ExcelPackage Package { get; }
+
+            protected override void WriteFile([NotNull] HttpResponseBase response)
+            {
+                Package.SaveAs(response.OutputStream);
+            }
+        }// excel result
 
         public static string encodePassword(string password)
         {
