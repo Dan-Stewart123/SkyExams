@@ -73,6 +73,16 @@
     Update Account Details
 </button>
 <br />
+<div id="persHrs" style="display: none;">
+    <button type="button" onclick="location.href='@Url.Action("StudentHours", "Sys_User", new { id = Model.SysUser_ID })'">
+        Update Personal Hours Flown
+    </button>
+</div>
+<div id="captureReg" style="display: none;">
+    <button type="button" onclick="location.href='@Url.Action("captureRegistration", "Sys_User", new { id = Model.SysUser_ID })'">
+        Capture Registration
+    </button>
+</div>
 <button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
     Logout
 </button>
@@ -102,6 +112,12 @@
         if (document.getElementById("title").textContent === "4") {
             document.getElementById("title").style.display = "none";
             document.getElementById("other").style.display = "block";
+        }
+        if (@Model.User_Role_ID == 1){
+            document.getElementById("persHrs").style.display = "block";
+        }
+        if (@Model.User_Role_ID == 2){
+            document.getElementById("captureReg").style.display = "block";
         }
     }
     window.onload = displayTitle;
