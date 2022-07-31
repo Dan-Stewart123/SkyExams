@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -141,6 +142,53 @@ namespace SkyExams.Controllers
                 return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
             }// else
         }// create question post
+
+        [HttpGet]
+        public ActionResult addLoadSheet(int? id, int? ratingId)
+        {
+            ViewData["ratingId"] = "" + ratingId;
+            Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+            return View(tempUser);
+        }// add load sheet get
+
+        [HttpPost]
+        public ActionResult addLoadSheet(int? id, int? ratingId, HttpPostedFileBase loadSheet)
+        {
+            if (loadSheet == null)
+            {
+                return RedirectToAction("addLoadSheet", new { id = id, ratingId = ratingId });
+            }// if fields are empty
+            else
+            {
+                Load_Sheet newLS = new Load_Sheet();
+                newLS.Exam_ID = Convert.ToInt32(ratingId);
+
+                Stream str = loadSheet.InputStream;
+                BinaryReader br = new BinaryReader(str);
+                Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
+                newLS.load_Sheet1 = fileDetails;
+
+                db.Load_Sheet.Add(newLS);
+                db.SaveChanges();
+            }// else
+
+            return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
+        }// add load sheet post
+
+        public FileResult downloadLoadSheet(int? id)
+        {
+            Load_Sheet downloadLoadSheet = db.Load_Sheet.ToList().Find(l => l.Exam_ID == id);
+            var file = downloadLoadSheet.load_Sheet1;
+            return File(file, "application/pdf");
+        }// download file
+
+        public ActionResult deleteLoadSheet(int? id, int? ratingId)
+        {
+            Load_Sheet delSheet = db.Load_Sheet.ToList().Find(l => l.Exam_ID == ratingId);
+            db.Load_Sheet.Remove(delSheet);
+            db.SaveChanges();
+            return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
+        }// delete load sheet
 
         [HttpGet]
         public ActionResult deleteQuestion(int? id, int? questionId)
