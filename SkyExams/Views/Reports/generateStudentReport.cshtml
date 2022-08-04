@@ -44,9 +44,13 @@
     </dt>
 
     <dd>
-        @foreach (var e in Model.planeTypes)
+        @foreach (var item in Model.planeTypes)
         {
-            @e.Type_Description
+            <ul>
+                <li>
+                    @Html.DisplayFor(modelItem => item.Type_Description)
+                </li>
+            </ul>
         }
     </dd>
 
@@ -55,9 +59,13 @@
     </dt>
 
     <dd>
-        @foreach (var e in Model.examMarks)
+        @foreach (var item in Model.examMarks)
         {
-            @e.Exam_Mark
+            <ul>
+                <li>
+                    @Html.DisplayFor(modelItem => item.Exam_Mark)
+                </li>
+            </ul>
         }
     </dd>
 </dl>

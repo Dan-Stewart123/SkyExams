@@ -28,10 +28,7 @@
                 <td scope="row">
                     @Html.DisplayFor(modelItem => item.Cell_Number)
                 </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.DOB)
-                </td>
-                <td scope="row" id="del" style="display: none;">
+                <td scope="row" id="del">
                     <button type="button" onclick="location.href='@Url.Action("generateStudentReport", "Reports", new { loggedId = uID, id = item.SysUser_ID })'">
                         Generate Report
                     </button>
