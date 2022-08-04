@@ -14,11 +14,11 @@
 <button type="button" onclick="location.href='@Url.Action("addLoadSheet", "Questions", new { id = uID, ratingId = rID })'">
     Add Load Sheet
 </button>
-<button type="button" id="delLoadSheet" onclick="location.href='@Url.Action("deleteLoadSheet", "Questions", new { id = uID, ratingId = rID })'">
+<button type="button" onclick="location.href='@Url.Action("deleteLoadSheet", "Questions", new { id = uID, ratingId = rID })'">
     Delete Load Sheet
 </button>
 <br />
-@Html.ActionLink("View/Download Load Sheet", "downloadLoadSheet", new { id = rID })
+@Html.ActionLink("View/Download", "downloadLoadSheet", new { id = rID })
 <table class="table">
     <thead>
         <tr>
