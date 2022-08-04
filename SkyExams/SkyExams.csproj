@@ -192,6 +192,7 @@
     <Compile Include="Controllers\Lesson_PlanController.cs" />
     <Compile Include="Controllers\PlanesController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\Study_ResourceController.cs" />
     <Compile Include="Controllers\Sys_UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -345,6 +346,7 @@
     <Compile Include="ViewModels\AnswerVM.cs" />
     <Compile Include="ViewModels\planeTypeVM.cs" />
     <Compile Include="ViewModels\QuestionVM.cs" />
+    <Compile Include="ViewModels\StudentVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\140.JPEG" />
@@ -487,6 +489,9 @@
     <Content Include="Views\Sys_User\StudentHours.cshtml" />
     <Content Include="Views\Sys_User\captureRegistration.cshtml" />
     <Content Include="Views\Questions\addLoadSheet.cshtml" />
+    <Content Include="Views\Reports\reportsScreen.cshtml" />
+    <Content Include="Views\Reports\studentReport.cshtml" />
+    <Content Include="Views\Reports\generateStudentReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
