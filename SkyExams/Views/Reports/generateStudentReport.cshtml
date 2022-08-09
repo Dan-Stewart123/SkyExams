@@ -1,0 +1,113 @@
+﻿@model SkyExams.ViewModels.StudentVM
+@{
+    ViewBag.Title = "generateStudentReport";
+    var uID = ViewData["userID"];
+}
+
+<h2>Generate Student Report</h2>
+<br />
+<dl class="dl-horizontal" id="report">
+    <dt class="col-md-4">
+        @Html.Label("Title:")
+    </dt>
+
+    <dd>
+        @Model.title
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Name:")
+    </dt>
+
+    <dd>
+        @Model.name
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Licence No:")
+    </dt>
+
+    <dd>
+        @Model.licence
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Hours Flown:")
+    </dt>
+
+    <dd>
+        @Model.hoursFlown
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Exams:")
+    </dt>
+
+    <dd>
+        @foreach (var item in Model.planeTypes)
+        {
+            <ul>
+                <li>
+                    @Html.DisplayFor(modelItem => item.Type_Description)
+                </li>
+            </ul>
+        }
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Respective Exam Marks:")
+    </dt>
+
+    <dd>
+        @foreach (var item in Model.examMarks)
+        {
+            <ul>
+                <li>
+                    @Html.DisplayFor(modelItem => item.Exam_Mark)
+                </li>
+            </ul>
+        }
+    </dd>
+</dl>
+<button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+    Back
+</button>
+<button type="button" id="generate">
+    Generate Report
+</button>
+
+@section studentReportScript
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+    <script>
+        $('#generate').on('click', function () {
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            source = $('#report')[0];
+
+
+            specialElementHandlers = {
+
+            };
+            margins = {
+                top: 80,
+                bottom: 60,
+                left: 40,
+                width: 522
+            };
+
+            pdf.fromHTML(
+                source,
+                margins.left,
+                margins.top, {
+                'width': margins.width,
+                'elementHandlers': specialElementHandlers
+            },
+
+
+                function (dispose) {
+                    pdf.save('studentReport.pdf');
+                }, margins
+            );
+        });
+    </script>
+}
