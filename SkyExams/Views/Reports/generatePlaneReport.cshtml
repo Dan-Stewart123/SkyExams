@@ -1,69 +1,46 @@
-﻿@model SkyExams.ViewModels.StudentVM
+﻿@model SkyExams.ViewModels.planeVM
 @{
-    ViewBag.Title = "generateStudentReport";
+    ViewBag.Title = "generatePlaneReport";
     var uID = ViewData["userID"];
 }
 
-<h2>Generate Student Report</h2>
+<h2>Generate Plane Report</h2>
 <br />
 <dl class="dl-horizontal" id="report">
     <dt class="col-md-4">
-        @Html.Label("Title:")
+        @Html.Label("Plane Type:")
     </dt>
 
     <dd>
-        @Model.title
+        @Model.Type_Description
     </dd>
 
     <dt class="col-md-4">
-        @Html.Label("Name:")
+        @Html.Label("Call Sign:")
     </dt>
 
     <dd>
-        @Model.name
+        @Model.Call_Sign
     </dd>
 
     <dt class="col-md-4">
-        @Html.Label("Licence No:")
+        @Html.Label("Description:")
     </dt>
 
     <dd>
-        @Model.licence
+        @Model.Description
     </dd>
 
     <dt class="col-md-4">
-        @Html.Label("Hours Flown:")
+        @Html.Label("Services:")
     </dt>
 
     <dd>
-        @Model.hoursFlown
-    </dd>
-
-    <dt class="col-md-4">
-        @Html.Label("Exams:")
-    </dt>
-
-    <dd>
-        @foreach (var item in Model.planeTypes)
+        @foreach (var item in Model.services)
         {
             <ul>
                 <li>
-                    @Html.DisplayFor(modelItem => item.Type_Description)
-                </li>
-            </ul>
-        }
-    </dd>
-
-    <dt class="col-md-4">
-        @Html.Label("Respective Exam Marks:")
-    </dt>
-
-    <dd>
-        @foreach (var item in Model.examMarks)
-        {
-            <ul>
-                <li>
-                    @Html.DisplayFor(modelItem => item.Exam_Mark)
+                    @Html.DisplayFor(modelItem => item.Service_Details)
                 </li>
             </ul>
         }
@@ -76,7 +53,7 @@
     Download Report
 </button>
 
-@section studentReportScript
+@section planeReportScript
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
     <script>
@@ -105,9 +82,11 @@
 
 
                 function (dispose) {
-                    pdf.save('studentReport.pdf');
+                    pdf.save('planeReport.pdf');
                 }, margins
             );
         });
     </script>
 }
+
+

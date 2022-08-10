@@ -1,0 +1,124 @@
+﻿@model SkyExams.ViewModels.groupStudentVM
+@{
+    ViewBag.Title = "generateGroupReport";
+    var uID = ViewData["userID"];
+}
+
+<h2>Generate Group Student Report</h2>
+<br />
+<dl class="dl-horizontal" id="report">
+    @foreach (var s in Model.students)
+    {
+        <dt class="col-md-4">
+            @Html.Label("Title:")
+        </dt>
+
+        <dd>
+            @s.title
+        </dd>
+
+        <dt class="col-md-4">
+            @Html.Label("Name:")
+        </dt>
+
+        <dd>
+            @s.name
+        </dd>
+
+        <dt class="col-md-4">
+            @Html.Label("Licence No:")
+        </dt>
+
+        <dd>
+            @s.licence
+        </dd>
+
+        <dt class="col-md-4">
+            @Html.Label("Hours Flown:")
+        </dt>
+
+        <dd>
+            @s.hoursFlown
+        </dd>
+
+        <dt class="col-md-4">
+            @Html.Label("Exams:")
+        </dt>
+
+        <dd>
+            @foreach (var item in s.planeTypes)
+            {
+                <ul>
+                    <li>
+                        @Html.DisplayFor(modelItem => item.Type_Description)
+                    </li>
+                </ul>
+            }
+        </dd>
+
+        <dt class="col-md-4">
+            @Html.Label("Respective Exam Marks:")
+        </dt>
+
+        <dd>
+            @foreach (var item in s.examMarks)
+            {
+                <ul>
+                    <li>
+                        @Html.DisplayFor(modelItem => item.Exam_Mark)
+                    </li>
+                </ul>
+            }
+        </dd>
+    }
+    <dt class="col-md-4">
+        @Html.Label("Total Hours Flown:")
+    </dt>
+
+    <dd>
+        @Model.totHours
+    </dd>
+</dl>
+<button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+    Back
+</button>
+<button type="button" id="generate">
+    Download Report
+</button>
+
+@section groupReportScript
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+    <script>
+        $('#generate').on('click', function () {
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            source = $('#report')[0];
+
+
+            specialElementHandlers = {
+
+            };
+            margins = {
+                top: 80,
+                bottom: 60,
+                left: 40,
+                width: 522
+            };
+
+            pdf.fromHTML(
+                source,
+                margins.left,
+                margins.top, {
+                'width': margins.width,
+                'elementHandlers': specialElementHandlers
+            },
+
+
+                function (dispose) {
+                    pdf.save('groupStudentReport.pdf');
+                }, margins
+            );
+        });
+    </script>
+}
+
