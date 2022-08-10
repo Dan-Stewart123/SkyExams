@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SkyExams.Models.Plane>
+@{
+    ViewBag.Title = "planeReport";
+    var uID = ViewData["userID"];
+}
+
+<h2>Plane Report</h2>
+<p>Please select a plane to generate their report</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Call Sign</th>
+            <th scope="col">Description</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Call_Sign)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td scope="row" id="del">
+                    <button type="button" onclick="location.href='@Url.Action("generatePlaneReport", "Reports", new { loggedId = uID, id = item.Plane_ID })'">
+                        Generate Report
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+    Back
+</button>
