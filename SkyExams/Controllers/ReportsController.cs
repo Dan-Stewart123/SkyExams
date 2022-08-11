@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using SkyExams.Models;
 using SkyExams.ViewModels;
 
@@ -68,7 +69,7 @@ namespace SkyExams.Controllers
             ViewData["userID"] = "" + id;
             List<Country> countries = db.Countries.ToList();
             return View(countries);
-        }// student report
+        }// group student report
 
         public ActionResult generateGroupReport(int? loggedId, int? country)
         {
@@ -186,6 +187,34 @@ namespace SkyExams.Controllers
             ViewData["userID"] = "" + loggedId;
             return View(insReport);
         }// generate instructor report
+
+        public ActionResult examReport(int? id)
+        {
+            List<ExamAverageVM> averages = new List<ExamAverageVM>();
+            List<Exam> exams = db.Exams.ToList();
+            foreach(var e in exams)
+            {
+                ExamAverageVM tempAverage = new ExamAverageVM();
+                tempAverage.examId = e.Exam_ID;
+                tempAverage.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == e.Exam_ID).Type_Description;
+                if(db.Exam_Average.ToList().Find(a => a.Exam_ID == e.Exam_ID) != null)
+                {
+                    tempAverage.examAvg = db.Exam_Average.ToList().Find(a => a.Exam_ID == e.Exam_ID).Average;
+                }// if statement
+                else
+                {
+                    tempAverage.examAvg = 0;
+                }// else statement
+                averages.Add(tempAverage);
+            }// for each
+
+            AveragesVM avgs = new AveragesVM();
+            avgs.examAverages = averages;
+            ViewData["userID"] = "" + id;
+            ViewBag.DataPoints = JsonConvert.SerializeObject(averages, _jsonSetting);
+            return View(avgs);
+        }// exam report
+        JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
 
         public ActionResult Index()
         {

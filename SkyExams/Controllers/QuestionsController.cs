@@ -457,7 +457,29 @@ namespace SkyExams.Controllers
             db.Student_Exam.Add(newStuExam);
             db.SaveChanges();
 
+            List<Student_Exam> stuExams = db.Student_Exam.ToList().FindAll(s => s.Exam_ID == ratingId && s.Completed == true);
+            int totalMarks = 0;
+            foreach(var e in stuExams)
+            {
+                totalMarks = totalMarks + Convert.ToInt32(e.Exam_Mark);
+            }// for each
 
+            int totalExams = stuExams.Count();
+            int average = totalMarks / totalExams;
+
+            Exam_Average newAverage = new Exam_Average();
+            newAverage.Exam_ID = Convert.ToInt32(ratingId);
+            newAverage.Average = average;
+
+            Exam_Average tempAverage = db.Exam_Average.ToList().Find(e => e.Exam_ID == ratingId);
+            if(tempAverage != null)
+            {
+                db.Exam_Average.Remove(tempAverage);
+                db.SaveChanges();
+            }// if statement
+
+            db.Exam_Average.Add(newAverage);
+            db.SaveChanges();
 
             return Json(new { result = finalResultQuiz }, JsonRequestBehavior.AllowGet);
         }// write exam post
