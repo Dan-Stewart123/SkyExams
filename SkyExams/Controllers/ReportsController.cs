@@ -69,7 +69,7 @@ namespace SkyExams.Controllers
             ViewData["userID"] = "" + id;
             List<Country> countries = db.Countries.ToList();
             return View(countries);
-        }// group student report
+        }// student report
 
         public ActionResult generateGroupReport(int? loggedId, int? country)
         {
@@ -192,12 +192,12 @@ namespace SkyExams.Controllers
         {
             List<ExamAverageVM> averages = new List<ExamAverageVM>();
             List<Exam> exams = db.Exams.ToList();
-            foreach(var e in exams)
+            foreach (var e in exams)
             {
                 ExamAverageVM tempAverage = new ExamAverageVM();
                 tempAverage.examId = e.Exam_ID;
                 tempAverage.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == e.Exam_ID).Type_Description;
-                if(db.Exam_Average.ToList().Find(a => a.Exam_ID == e.Exam_ID) != null)
+                if (db.Exam_Average.ToList().Find(a => a.Exam_ID == e.Exam_ID) != null)
                 {
                     tempAverage.examAvg = db.Exam_Average.ToList().Find(a => a.Exam_ID == e.Exam_ID).Average;
                 }// if statement
