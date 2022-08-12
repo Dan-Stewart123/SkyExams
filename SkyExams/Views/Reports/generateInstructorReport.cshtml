@@ -2,55 +2,65 @@
 @{
     ViewBag.Title = "generateInstructorReport";
     var uID = ViewData["userID"];
+    var name = ViewData["userName"];
 }
 
 <h2>Generate Instructor Report</h2>
 <br />
 <dl class="dl-horizontal" id="report">
-    <dt class="col-md-4">
-        @Html.Label("Title:")
-    </dt>
+    <dd class="col-md-4">
+        <b>Student Report</b>
+    </dd>
+
+    <dd>
+        @name
+    </dd>
+
+    <dd class="col-md-4">
+        <b>@Html.Label("Title:")</b>
+    </dd>
 
     <dd>
         @Model.title
     </dd>
 
-    <dt class="col-md-4">
-        @Html.Label("Name:")
-    </dt>
+    <dd class="col-md-4">
+        <b>@Html.Label("Name:")</b>
+    </dd>
 
     <dd>
         @Model.name
     </dd>
 
-    <dt class="col-md-4">
-        @Html.Label("Licence No:")
-    </dt>
+    <dd class="col-md-4">
+        <b>@Html.Label("Licence No:")</b>
+    </dd>
 
     <dd>
         @Model.licence
     </dd>
 
-    <dt class="col-md-4">
-        @Html.Label("Number of Students:")
-    </dt>
+    <dd class="col-md-4">
+        <b>@Html.Label("Number of Students:")</b>
+    </dd>
 
     <dd>
         @Model.students
     </dd>
 
-    <dt class="col-md-4">
-        @Html.Label("Combined Student Hours Flown:")
-    </dt>
+    <dd class="col-md-4">
+        <b>@Html.Label("Combined Student Hours Flown:")</b>
+    </dd>
 
     <dd>
         @Model.studentHours
     </dd>
 
-    <dt class="col-md-4">
-        @Html.Label("Exams:")
-    </dt>
-
+    <dd class="col-md-4">
+        <b>@Html.Label("Exams:")</b>
+    </dd>
+    <br />
+    <br />
     <dd>
         @foreach (var item in Model.examAverages)
         {

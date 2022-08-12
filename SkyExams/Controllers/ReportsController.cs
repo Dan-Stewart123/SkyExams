@@ -60,6 +60,7 @@ namespace SkyExams.Controllers
             reportStu.planeTypes = types;
 
             ViewData["userID"] = "" + loggedId;
+            ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
             return View(reportStu);
 
         }// generate student report
@@ -109,6 +110,7 @@ namespace SkyExams.Controllers
             groupReport.students = studentList;
             groupReport.totHours = totH;
             ViewData["userID"] = "" + loggedId;
+            ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
             return View(groupReport);
         }// generate group student report
 
@@ -122,6 +124,7 @@ namespace SkyExams.Controllers
         public ActionResult generatePlaneReport(int? loggedId, int? id)
         {
             ViewData["userID"] = "" + loggedId;
+            ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
             Plane tempPlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
             planeVM reportPlane = new planeVM();
 
@@ -185,6 +188,7 @@ namespace SkyExams.Controllers
             insReport.examAverages = avgs;
 
             ViewData["userID"] = "" + loggedId;
+            ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
             return View(insReport);
         }// generate instructor report
 
@@ -211,6 +215,7 @@ namespace SkyExams.Controllers
             AveragesVM avgs = new AveragesVM();
             avgs.examAverages = averages;
             ViewData["userID"] = "" + id;
+            ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
             ViewBag.DataPoints = JsonConvert.SerializeObject(averages, _jsonSetting);
             return View(avgs);
         }// exam report

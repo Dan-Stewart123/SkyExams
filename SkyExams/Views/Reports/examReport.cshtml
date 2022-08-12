@@ -2,10 +2,15 @@
 @{
     ViewBag.Title = "examReport";
     var uID = ViewData["userID"];
+    var name = ViewData["userName"];
 }
 
 <h2>Exam Report</h2>
 <div id="report">
+    <label class="col-md-4">Exam Report</label>
+    <br />
+    <label>@name</label>
+    <br />
     <img src="~/Content/SkyExamsEdited-removebg-preview (1).png" width="150px" height="75px" title="title" alt="additional title" />
     <br />
     @DateTime.Now.Year / @DateTime.Now.Month / @DateTime.Now.Day
