@@ -2,39 +2,49 @@
 @{
     ViewBag.Title = "generatePlaneReport";
     var uID = ViewData["userID"];
+    var name = ViewData["userName"];
 }
 
 <h2>Generate Plane Report</h2>
 <br />
 <dl class="dl-horizontal" id="report">
-    <dt class="col-md-4">
-        @Html.Label("Plane Type:")
-    </dt>
+    <dd class="col-md-4">
+        <b>Student Report</b>
+    </dd>
+
+    <dd>
+        @name
+    </dd>
+
+    <dd class="col-md-4">
+        <b>@Html.Label("Plane Type:")</b>
+    </dd>
 
     <dd>
         @Model.Type_Description
     </dd>
 
-    <dt class="col-md-4">
-        @Html.Label("Call Sign:")
-    </dt>
+    <dd class="col-md-4">
+        <b>@Html.Label("Call Sign:")</b>
+    </dd>
 
     <dd>
         @Model.Call_Sign
     </dd>
 
-    <dt class="col-md-4">
-        @Html.Label("Description:")
-    </dt>
+    <dd class="col-md-4">
+        <b>@Html.Label("Description:")</b>
+    </dd>
 
     <dd>
         @Model.Description
     </dd>
 
-    <dt class="col-md-4">
-        @Html.Label("Services:")
-    </dt>
-
+    <dd class="col-md-4">
+        <b>@Html.Label("Services:")</b>
+    </dd>
+    <br />
+    <br />
     <dd>
         @foreach (var item in Model.services)
         {
