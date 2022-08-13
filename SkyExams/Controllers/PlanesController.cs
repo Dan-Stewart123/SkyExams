@@ -245,7 +245,7 @@ namespace SkyExams.Controllers
                 updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
                 updatePlane.Call_Sign = plane.Call_Sign;
                 updatePlane.Hours_Flown = plane.Hours_Flown;
-                updatePlane.Hours_Until_Service = 0;
+                updatePlane.Hours_Until_Service = 50;
                 updatePlane.Description = plane.Description;
                 updatePlane.In_Service = false;
 
