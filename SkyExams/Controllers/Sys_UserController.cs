@@ -17,6 +17,7 @@ using OfficeOpenXml;
 using NJsonSchema.Annotations;
 using GroupDocs.Conversion.Options.Convert;
 using GroupDocs.Conversion;
+using ClosedXML.Excel;
 
 namespace SkyExams.Controllers
 {
@@ -212,19 +213,19 @@ namespace SkyExams.Controllers
                 db.SaveChanges();
 
                 //create email
-                MimeMessage requestEmail = new MimeMessage();
-                requestEmail.From.Add(new MailboxAddress("New user", "danielmarcstewart@gmail.com"));
-                requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));
-                requestEmail.Subject = "New user request";
-                requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system: User name: " + firstName + " " + lastName  + " email address: " + email};
+                //MimeMessage requestEmail = new MimeMessage();
+                //requestEmail.From.Add(new MailboxAddress("New user", "danielmarcstewart@gmail.com"));
+                //requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));
+                //requestEmail.Subject = "New user request";
+                //requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system: User name: " + firstName + " " + lastName  + " email address: " + email};
 
                 //send email
-                SmtpClient client = new SmtpClient();
-                client.Connect("smtp.gmail.com", 465, true);
-                client.Authenticate("danielmarcstewart@gmail.com", "Titan0208");
-                client.Send(requestEmail);
-                client.Disconnect(true);
-                client.Dispose();
+                //SmtpClient client = new SmtpClient();
+                //client.Connect("smtp.gmail.com", 465, true);
+                //client.Authenticate("danielmarcstewart@gmail.com", "Titan0208");
+                //client.Send(requestEmail);
+                //client.Disconnect(true);
+                //client.Dispose();
                 return RedirectToAction("registrationConformationScreen");
             }// adds user, emails admin
             
@@ -245,7 +246,7 @@ namespace SkyExams.Controllers
                 newStudent.Licence_No = Convert.ToInt32(studentLicence);
 
                 Sys_User newStudentUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
-                newStudentUser.User_Role_ID = 2;
+                newStudentUser.User_Role_ID = 1;
                 db.Entry(newStudentUser).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChangesAsync();
                 newStudent.SysUser_ID = newStudentUser.SysUser_ID;
@@ -835,61 +836,58 @@ namespace SkyExams.Controllers
         [HttpGet]
         public ActionResult captureRegistration(int? id)
         {
-            Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
-            ViewData["userId"] = tempUser.SysUser_ID;
-            Registration_Sheet tempSheet = db.Registration_Sheet.ToList().Find(r => r.Sheet_ID == 1);
-            return View(tempSheet);
+            ViewData["userId"] = "" + id;
+            return View(db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 1));
         }// capture registration get
 
-        [HttpPost]
-        public ActionResult captureRegistration(int? id, HttpPostedFileBase regSheet)
+        [HttpGet]
+        public ActionResult CapturePlaneRegistration(int? loggedId, int? id)
         {
-            Registration_Sheet newSheet = new Registration_Sheet();
-            newSheet.Sheet_ID = db.Registration_Sheet.ToList().Count + 1;
+            ViewData["userId"] = "" + loggedId;
+            ViewData["studentId"] = "" + id;
+            return View(db.Plane_Type.ToList());
+        }//Capture plane registration get
 
-            Stream stream = regSheet.InputStream;
+        [HttpPost]
+        public ActionResult CapturePlaneRegistration(int? loggedId, int? id, int plane)
+        {
+            Registration_Sheet regSheet = new Registration_Sheet();
 
-            IExcelDataReader reader = null;
-
-            if (regSheet.FileName.EndsWith(".xls"))
-            {
-                reader = ExcelReaderFactory.CreateBinaryReader(stream);
-            }
-            else if (regSheet.FileName.EndsWith(".xlsx"))
-            {
-                reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-            }
-
-            BinaryReader br = new BinaryReader(stream);
-            byte[] fileDetails = br.ReadBytes((Int32)stream.Length);
-
-            newSheet.Registration_Sheet1 = fileDetails;
-
-            db.Registration_Sheet.Add(newSheet);
+            regSheet.Sys_User_ID = Convert.ToInt32(id);
+            regSheet.First_Name = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName;
+            regSheet.Surname = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
+            regSheet.Plane_Type_ID = plane;
+            regSheet.Type_Desctription = db.Plane_Type.ToList().Find(s => s.Plane_Type_ID == plane).Type_Description;
+            regSheet.Paid = true;
+            db.Registration_Sheet.Add(regSheet);
             db.SaveChanges();
 
-            return RedirectToAction("viewAccount", new { id = id });
-        }// capture registration post
+            return RedirectToAction("viewAccount", new { id = loggedId });
+        }//capture plane registration post
 
-        
-
-        public class ExcelResult : FileResult
+        public FileResult ExportToExcel()
         {
-            private const string MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-            public ExcelResult([NotNull] ExcelPackage package) : base(MimeType)
+            DataTable dt = new DataTable("Grid");
+            dt.Columns.AddRange(new DataColumn[4] { new DataColumn("First Name"),
+                                                     new DataColumn("Surname"),
+                                                     new DataColumn("Rating"),
+                                                     new DataColumn("Paid")});
+            var regSheet = from Registration_Sheet in db.Registration_Sheet select Registration_Sheet;
+            foreach (var sheet in regSheet)
             {
-                if (package is null) throw new ArgumentNullException(nameof(package));
-                Package = package;
+                dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Type_Desctription, sheet.Paid);
             }
 
-            public ExcelPackage Package { get; }
-
-            protected override void WriteFile([NotNull] HttpResponseBase response)
+            using (XLWorkbook wb = new XLWorkbook())
             {
-                Package.SaveAs(response.OutputStream);
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream()) //using System.IO;
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "StudentRegistration.xlsx");
+                }
             }
-        }// excel result
+        }//export to excel post
 
         public static string encodePassword(string password)
         {

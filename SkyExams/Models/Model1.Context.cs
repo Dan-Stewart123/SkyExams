@@ -64,7 +64,6 @@ namespace SkyExams.Models
         public virtual DbSet<User_Event> User_Event { get; set; }
         public virtual DbSet<User_Role> User_Role { get; set; }
         public virtual DbSet<UserPassword> UserPasswords { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Verification_Code> Verification_Code { get; set; }
         public virtual DbSet<Zip_Code> Zip_Code { get; set; }
         public virtual DbSet<Profile_Image> Profile_Image { get; set; }
