@@ -1,27 +1,56 @@
-﻿@model SkyExams.Models.Registration_Sheet
+﻿@model IEnumerable<SkyExams.Models.Sys_User>
 @{
     ViewBag.Title = "captureRegistration";
     var uID = ViewData["userId"];
 }
 
 <h2>Capture Registration</h2>
-@using (Html.BeginForm("captureRegistration", "Sys_User", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div style="display:none;">
-        <input type="text" id="id" name="id" value="@uID">
-    </div>
-    <div style="display:none;">
-        <input type="text" id="id" name="id" value="@Model.Sheet_ID">
-    </div>
-    @Html.ActionLink("View/Download", "downloadSheet", new { id = Model.Sheet_ID })
-    <label class="col-md-3">Upload the Spreadsheet (upload a .xls or .xlsx file):</label>
-    <input class="col-md-3" type="file" id="regSheet" name="regSheet" />
-    <br />
-    <br />
-    <button type="button" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = uID })'">
-        Cancel
-    </button>
-    <input type="submit" , value="Submit" id="submitButton" />
-}
 
+@Html.ActionLink("Download Excel Document", "ExportToExcel")
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Cell number</th>
+            <th scope="col">Email Address</th>
+            <th scope="col">Physical Address</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.FName)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Cell_Number)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Email_Address)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Physical_Address)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.DOB)
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("CapturePlaneRegistration", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">Capture Registration</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID})'">
+    Back
+</button>

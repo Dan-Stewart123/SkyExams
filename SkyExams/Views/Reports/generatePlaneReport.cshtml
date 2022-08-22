@@ -48,11 +48,14 @@
     <dd>
         @foreach (var item in Model.services)
         {
-            <ul>
-                <li>
-                    @Html.DisplayFor(modelItem => item.Service_Details)
-                </li>
-            </ul>
+        <ul>
+            <li>
+                @Html.DisplayFor(modelItem => item.Service_Details)
+            </li>
+            <li>
+                @Html.DisplayFor(modelItem => item.Last_Service_Date)
+            </li>
+        </ul>
         }
     </dd>
     <img src="~/Content/SkyExamsEdited-removebg-preview (1).png" width="150px" height="75px" title="title" alt="additional title" />
