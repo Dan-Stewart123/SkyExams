@@ -1,0 +1,28 @@
+﻿@model IEnumerable<SkyExams.Models.Country>
+@{
+    ViewBag.Title = "groupReport";
+    var uID = ViewData["userID"];
+}
+
+<h2>Group Student Report</h2>
+<p>Please select a country to generate a report for all the students from that country</p>
+@using (Html.BeginForm("generateGroupReport", "Reports", FormMethod.Post))
+{
+    <div style="display:none;">
+        <input type="text" id="loggedId" name="loggedId" value="@uID">
+    </div>
+    <select id="country" name="country">
+        @foreach (var item in Model)
+        {
+            <option value="@item.Country_ID">@item.Country_Name</option>
+        }
+    </select>
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+        Back
+    </button>
+    <input type="submit" , value="Generate Report" />
+}
+
+

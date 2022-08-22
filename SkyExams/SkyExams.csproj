@@ -344,7 +344,11 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AnswerVM.cs" />
-    <Compile Include="ViewModels\planeTypeVM.cs" />
+    <Compile Include="ViewModels\AveragesVM.cs" />
+    <Compile Include="ViewModels\ExamAverageVM.cs" />
+    <Compile Include="ViewModels\groupStudentVM.cs" />
+    <Compile Include="ViewModels\InstructorVM.cs" />
+    <Compile Include="ViewModels\planeVM.cs" />
     <Compile Include="ViewModels\QuestionVM.cs" />
     <Compile Include="ViewModels\StudentVM.cs" />
   </ItemGroup>
@@ -492,6 +496,13 @@
     <Content Include="Views\Reports\reportsScreen.cshtml" />
     <Content Include="Views\Reports\studentReport.cshtml" />
     <Content Include="Views\Reports\generateStudentReport.cshtml" />
+    <Content Include="Views\Reports\planeReport.cshtml" />
+    <Content Include="Views\Reports\generatePlaneReport.cshtml" />
+    <Content Include="Views\Reports\groupReport.cshtml" />
+    <Content Include="Views\Reports\generateGroupReport.cshtml" />
+    <Content Include="Views\Reports\instructorReport.cshtml" />
+    <Content Include="Views\Reports\generateInstructorReport.cshtml" />
+    <Content Include="Views\Reports\examReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,15 +1,15 @@
-﻿@model SkyExams.ViewModels.StudentVM
+﻿@model SkyExams.ViewModels.planeVM
 @{
-    ViewBag.Title = "generateStudentReport";
+    ViewBag.Title = "generatePlaneReport";
     var uID = ViewData["userID"];
     var name = ViewData["userName"];
 }
 
-<h2>Generate Student Report</h2>
+<h2>Generate Plane Report</h2>
 <br />
 <dl class="dl-horizontal" id="report">
     <dd class="col-md-4">
-        <b>Student Report</b>
+        <b>Plane Report</b>
     </dd>
 
     <dd>
@@ -17,64 +17,40 @@
     </dd>
 
     <dd class="col-md-4">
-        <b> @Html.Label("Title:")</b>
+        <b>@Html.Label("Plane Type:")</b>
     </dd>
 
     <dd>
-        @Model.title
+        @Model.Type_Description
     </dd>
 
     <dd class="col-md-4">
-        <b>@Html.Label("Name:")</b>
+        <b>@Html.Label("Call Sign:")</b>
     </dd>
 
     <dd>
-        @Model.name
+        @Model.Call_Sign
     </dd>
 
     <dd class="col-md-4">
-        <b>@Html.Label("Licence No:")</b>
+        <b>@Html.Label("Description:")</b>
     </dd>
 
     <dd>
-        @Model.licence
+        @Model.Description
     </dd>
 
     <dd class="col-md-4">
-        <b>@Html.Label("Hours Flown:")</b>
-    </dd>
-
-    <dd>
-        @Model.hoursFlown
-    </dd>
-
-    <dd class="col-md-4">
-        <b>@Html.Label("Exams:")</b>
+        <b>@Html.Label("Services:")</b>
     </dd>
     <br />
     <br />
     <dd>
-        @foreach (var item in Model.planeTypes)
+        @foreach (var item in Model.services)
         {
             <ul>
                 <li>
-                    @Html.DisplayFor(modelItem => item.Type_Description)
-                </li>
-            </ul>
-        }
-    </dd>
-
-    <dd class="col-md-4">
-        <b>@Html.Label("Respective Exam Marks:")</b>
-    </dd>
-    <br />
-    <br />
-    <dd>
-        @foreach (var item in Model.examMarks)
-        {
-            <ul>
-                <li>
-                    @Html.DisplayFor(modelItem => item.Exam_Mark)
+                    @Html.DisplayFor(modelItem => item.Service_Details)
                 </li>
             </ul>
         }
@@ -91,7 +67,7 @@
     Download Report
 </button>
 
-@section studentReportScript
+@section planeReportScript
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
     <script>
@@ -120,9 +96,11 @@
 
 
                 function (dispose) {
-                    pdf.save('studentReport.pdf');
+                    pdf.save('planeReport.pdf');
                 }, margins
             );
         });
     </script>
 }
+
+

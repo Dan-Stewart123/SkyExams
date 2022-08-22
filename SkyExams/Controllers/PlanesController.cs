@@ -28,14 +28,7 @@ namespace SkyExams.Controllers
             Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
             ViewData["userRole"] = "" + forRole.User_Role_ID;
             List<Plane_Type> planeTypes = db.Plane_Type.ToList();
-            List<planeTypeVM> planeTypeView = new List<planeTypeVM>();
-            foreach(var p in planeTypes)
-            {
-                planeTypeVM temp = new planeTypeVM();
-                temp.Plane_Type_ID = p.Plane_Type_ID;
-                temp.Type_Description = p.Type_Description;
-                temp.Plane_Image = p.Plane_Image;
-            }// for each
+            
             return View(planeTypes);
         }// returns plane screen
 
@@ -252,7 +245,7 @@ namespace SkyExams.Controllers
                 updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
                 updatePlane.Call_Sign = plane.Call_Sign;
                 updatePlane.Hours_Flown = plane.Hours_Flown;
-                updatePlane.Hours_Until_Service = 0;
+                updatePlane.Hours_Until_Service = 50;
                 updatePlane.Description = plane.Description;
                 updatePlane.In_Service = false;
 

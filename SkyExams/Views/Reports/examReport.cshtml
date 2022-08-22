@@ -1,0 +1,103 @@
+﻿@model SkyExams.ViewModels.AveragesVM
+@{
+    ViewBag.Title = "examReport";
+    var uID = ViewData["userID"];
+    var name = ViewData["userName"];
+}
+
+<h2>Exam Report</h2>
+<div id="report">
+    <label class="col-md-4">Exam Report</label>
+    <br />
+    <label>@name</label>
+    <br />
+    <img src="~/Content/SkyExamsEdited-removebg-preview (1).png" width="150px" height="75px" title="title" alt="additional title" />
+    <img src="~/Content/fts_logo.jpeg" width="150px" height="50px" title="title" alt="additional title" />
+    <br />
+    @DateTime.Now.Year / @DateTime.Now.Month / @DateTime.Now.Day
+    <br />
+
+    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+    <br />
+</div>
+<button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+    Back
+</button>
+<button type="button" id="generate">
+    Download Report
+</button>
+
+@section examReportScript
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script>
+        $('#generate').on('click', function () {
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            source = $('#report')[0];
+            var canvas = document.getElementById('myChart');
+            var canvasImg = canvas.toDataURL();
+            var width = pdf.internal.pageSize.width;
+            pdf.addImage(canvasImg, 'PNG', 5, 20, width-20, 500);
+
+            specialElementHandlers = {
+
+            };
+            margins = {
+                top: 550,
+                bottom: 60,
+                left: 40,
+                width: 522
+            };
+
+            pdf.fromHTML(
+                source,
+                margins.left,
+                margins.top, {
+                'width': margins.width,
+                'elementHandlers': specialElementHandlers
+            },
+
+
+                function (dispose) {
+                    pdf.save('examsReport.pdf');
+                }, margins
+            );
+        });
+
+    </script>
+
+    <script>
+        window.onload = function chart() {
+
+
+            var result = @Html.Raw(ViewBag.DataPoints);
+            var dataPoints = [];
+            var lables = [];
+            for (var i = 0; i < result.length; i++) {
+                dataPoints.push(result[i].examAvg);
+                lables.push(result[i].examName);
+            }
+
+            new Chart("myChart", {
+                type: "bar",
+                data: {
+                    labels: lables,
+                    datasets: [{
+                        data: dataPoints
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Exam Averages"
+                    }
+                }
+            });
+        }
+    </script>
+}
+
+
