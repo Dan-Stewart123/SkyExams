@@ -194,10 +194,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
         </EntityType>
         <EntityType Name="Registration_Sheet">
           <Key>
-            <PropertyRef Name="Sheet_ID" />
+            <PropertyRef Name="Registration_ID" />
           </Key>
-          <Property Name="Sheet_ID" Type="int" Nullable="false" />
-          <Property Name="Registration_Sheet" Type="varbinary(max)" />
+          <Property Name="Registration_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sys_User_ID" Type="int" Nullable="false" />
+          <Property Name="First_Name" Type="varchar(max)" Nullable="false" />
+          <Property Name="Surname" Type="varchar(max)" Nullable="false" />
+          <Property Name="Plane_Type_ID" Type="int" Nullable="false" />
+          <Property Name="Type_Desctription" Type="varchar(max)" Nullable="false" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Save_Exam">
           <Key>
@@ -343,15 +348,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Encrypted_password" Type="varchar" MaxLength="20" />
           <Property Name="Date_Set" Type="datetime" />
         </EntityType>
-        <EntityType Name="Users">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" />
-          <Property Name="Address" Type="nvarchar" MaxLength="150" />
-          <Property Name="ContactNo" Type="varchar" MaxLength="50" />
-        </EntityType>
         <EntityType Name="Verification_Code">
           <Key>
             <PropertyRef Name="Verif_Code_ID" />
@@ -406,7 +402,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="User_Event" EntityType="Self.User_Event" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Role" EntityType="Self.User_Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserPassword" EntityType="Self.UserPassword" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Verification_Code" EntityType="Self.Verification_Code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Zip_Code" EntityType="Self.Zip_Code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Profile_Image" EntityType="Self.Profile_Image" store:Type="Tables" store:Schema="dbo">
@@ -460,7 +455,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="User_Event" EntityType="SkyExamsModel.User_Event" />
           <EntitySet Name="User_Role" EntityType="SkyExamsModel.User_Role" />
           <EntitySet Name="UserPasswords" EntityType="SkyExamsModel.UserPassword" />
-          <EntitySet Name="Users" EntityType="SkyExamsModel.User" />
           <EntitySet Name="Verification_Code" EntityType="SkyExamsModel.Verification_Code" />
           <EntitySet Name="Zip_Code" EntityType="SkyExamsModel.Zip_Code" />
           <EntitySet Name="Profile_Image" EntityType="SkyExamsModel.Profile_Image" />
@@ -645,10 +639,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
         </EntityType>
         <EntityType Name="Registration_Sheet">
           <Key>
-            <PropertyRef Name="Sheet_ID" />
+            <PropertyRef Name="Registration_ID" />
           </Key>
-          <Property Name="Sheet_ID" Type="Int32" Nullable="false" />
-          <Property Name="Registration_Sheet1" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Registration_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sys_User_ID" Type="Int32" Nullable="false" />
+          <Property Name="First_Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Plane_Type_ID" Type="Int32" Nullable="false" />
+          <Property Name="Type_Desctription" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Save_Exam">
           <Key>
@@ -793,15 +792,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Password_ID" Type="Int32" Nullable="false" />
           <Property Name="Encrypted_password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Date_Set" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Verification_Code">
           <Key>
@@ -1031,8 +1021,13 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Registration_Sheet">
             <EntityTypeMapping TypeName="SkyExamsModel.Registration_Sheet">
               <MappingFragment StoreEntitySet="Registration_Sheet">
-                <ScalarProperty Name="Registration_Sheet1" ColumnName="Registration_Sheet" />
-                <ScalarProperty Name="Sheet_ID" ColumnName="Sheet_ID" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="Type_Desctription" ColumnName="Type_Desctription" />
+                <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="First_Name" ColumnName="First_Name" />
+                <ScalarProperty Name="Sys_User_ID" ColumnName="Sys_User_ID" />
+                <ScalarProperty Name="Registration_ID" ColumnName="Registration_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1187,16 +1182,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
                 <ScalarProperty Name="Date_Set" ColumnName="Date_Set" />
                 <ScalarProperty Name="Encrypted_password" ColumnName="Encrypted_password" />
                 <ScalarProperty Name="Password_ID" ColumnName="Password_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="SkyExamsModel.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
