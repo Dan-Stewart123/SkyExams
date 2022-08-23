@@ -1,0 +1,45 @@
+﻿@model IEnumerable<SkyExams.Models.uEvent>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date_Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Event_Type_ID)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date_Time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Location_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Event_Type_ID)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Event_ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Event_ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Event_ID })
+        </td>
+    </tr>
+}
+
+</table>
