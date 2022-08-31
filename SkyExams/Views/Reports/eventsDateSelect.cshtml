@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "eventsDateSelect";
+    var uID = ViewData["userId"];
+}
+
+<h2>Events Reports Date Select</h2>
+<br />
+<p>Please select a date to filter the events</p>
+<br />
+@using (Html.BeginForm("eventsReport", "Reports", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@uID">
+    </div>
+    <label class="col-md-3">@Html.Label("Start Date:")</label>
+    <input type="datetime-local" id="startDate" name="startDate">
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" />
+}
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+
+

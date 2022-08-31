@@ -69,10 +69,12 @@ namespace SkyExams.Controllers
                         }// searches passwords
                     }// matches username to db username
                 }// searches users
+                ViewData["err"] = "Username or password is incorrect";
                 return View();
             }
             else
             {
+                ViewData["err"] = "Please complete all the required fields";
                 return View();
             }
             // verify username and password here, if correct then display home screen, else login screen with a pop up
@@ -109,11 +111,13 @@ namespace SkyExams.Controllers
         {
             if(firstName == "" || lastName == "" || uName == "" || title == "" || cellNo == "" || email == "" || pAddress == "" || country == "" || city == "" || zip == "" || dob == "" || empStatus == "" || password =="" || confPass == "")
             {
-                return RedirectToAction("registerScreen");
+                ViewData["err"] = "Please complete all the required fields";
+                return View();
             }// checks that fileds are not empty
             if (password != confPass)
             {
-                return RedirectToAction("registerScreen");
+                ViewData["err"] = "Passwords do not match";
+                return View();
             }// checks that passwords match
             else
             {
@@ -200,7 +204,7 @@ namespace SkyExams.Controllers
 
                 List<UserPassword> passList = db.UserPasswords.ToList();
                 UserPassword newPassword = new UserPassword();
-                newPassword.Password_ID = passList.Count + 1;
+                //newPassword.Password_ID = passList.Count + 1;
                 string encPassword = encodePassword(confPass);
                 newPassword.Encrypted_password = encPassword;
                 newPassword.Date_Set = DateTime.Now;
@@ -208,98 +212,133 @@ namespace SkyExams.Controllers
                 db.UserPasswords.Add(newPassword);
                 db.SaveChanges();
                 user.Password_ID = newPassword.Password_ID;
-                user.SysUser_ID = db.Sys_User.ToList().Count + 1;
+                //user.SysUser_ID = db.Sys_User.ToList().Count + 1;
                 db.Sys_User.Add(user);
                 db.SaveChanges();
 
                 //create email
-                //MimeMessage requestEmail = new MimeMessage();
-                //requestEmail.From.Add(new MailboxAddress("New user", "danielmarcstewart@gmail.com"));
-                //requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));
-                //requestEmail.Subject = "New user request";
-                //requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be requstered on the system: User name: " + firstName + " " + lastName  + " email address: " + email};
+                MimeMessage requestEmail = new MimeMessage();
+                requestEmail.From.Add(new MailboxAddress("New user", "skyexams.fts@gmail.com"));
+                requestEmail.To.Add(MailboxAddress.Parse("skyexams.fts@gmail.com"));
+                requestEmail.Subject = "New user request";
+                requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be registered on the system: User name: " + firstName + " " + lastName + " email address: " + email };
 
                 //send email
-                //SmtpClient client = new SmtpClient();
-                //client.Connect("smtp.gmail.com", 465, true);
-                //client.Authenticate("danielmarcstewart@gmail.com", "Titan0208");
-                //client.Send(requestEmail);
-                //client.Disconnect(true);
-                //client.Dispose();
+                SmtpClient client = new SmtpClient();
+                client.Connect("smtp.gmail.com", 465, true);
+                client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                client.Send(requestEmail);
+                client.Disconnect(true);
+                client.Dispose();
                 return RedirectToAction("registrationConformationScreen");
             }// adds user, emails admin
             
         }// registering users
 
+        public ContentResult SaveCapture(string data)
+        {
+            string fileName = DateTime.Now.ToString("dd-MM-yy hh-mm-ss");
+
+            int index = data.IndexOf("*");
+            string image = data.Substring(0, index);
+            string user = data.Substring(index);
+            string userName = user.Trim('*');
+
+            //Convert Base64 Encoded string to Byte Array.
+            byte[] imageBytes = Convert.FromBase64String(image.Split(',')[1]);
+
+            Profile_Image newImg = new Profile_Image();
+            newImg.Profile_Image1 = imageBytes;
+            newImg.Sys_User_ID = db.Sys_User.ToList().Find(u => u.User_Name == userName).SysUser_ID;
+
+            db.Profile_Image.Add(newImg);
+            db.SaveChanges();
+
+            //Save the Byte Array as Image File.
+            string filePath = Server.MapPath(string.Format("~/Captures/{0}.jpg", fileName));
+            //System.IO.File.WriteAllBytes(filePath, imageBytes);
+
+            return Content("true");
+        }// save profile image
+
+        [HttpGet]
+        public ActionResult registrationConformationScreen()
+        {
+            return View();
+        }// confirm registration
+
+        [HttpPost]
         public ActionResult registrationConformationScreen(string uName, string code)
         {
             if (uName == "" || code == "")
             {
+                ViewData["err"] = "Please complete all the required fields";
                 return View();
-            }// student 
+            }// no input 
             if (code == "101")
             {
                 string studentLicence = Request["licence"];
                 Student newStudent = new Student();
-                int studentID = db.Students.ToList().Count + 1;
-                newStudent.Student_ID = studentID;
+                //int studentID = db.Students.ToList().Count + 1;
+                //newStudent.Student_ID = studentID;
                 newStudent.Licence_No = Convert.ToInt32(studentLicence);
 
                 Sys_User newStudentUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
                 newStudentUser.User_Role_ID = 1;
                 db.Entry(newStudentUser).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 newStudent.SysUser_ID = newStudentUser.SysUser_ID;
+                newStudent.Hours_Flown = 0;
                 db.Students.Add(newStudent);
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// student 
             if (code == "102")
             {
                 string instructorLicence = Request["licence"];
                 Instructor newInstructor = new Instructor();
-                int indtructorId = db.Instructors.ToList().Count + 1;
-                newInstructor.Instructor_ID = indtructorId;
+                //int indtructorId = db.Instructors.ToList().Count + 1;
+                //newInstructor.Instructor_ID = indtructorId;
                 newInstructor.Licence_No = Convert.ToInt32(instructorLicence);
 
                 Sys_User newInsUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
                 newInsUser.User_Role_ID = 2;
                 db.Entry(newInsUser).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 newInstructor.SysUser_ID = newInsUser.SysUser_ID;
                 db.Instructors.Add(newInstructor);
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// instructor
             if (code == "103")
             {
                 Admin newAdmin = new Admin();
-                int adminId = db.Admins.ToList().Count + 1;
-                newAdmin.Admin_ID = adminId;
+                //int adminId = db.Admins.ToList().Count + 1;
+                //newAdmin.Admin_ID = adminId;
 
 
                 Sys_User newAdminUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
                 newAdminUser.User_Role_ID = 2;
                 db.Entry(newAdminUser).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 newAdmin.SysUser_ID = newAdminUser.SysUser_ID;
                 db.Admins.Add(newAdmin);
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// admin
             if (code == "104")
             {
                 Manager newManager = new Manager();
-                int managerId = db.Managers.ToList().Count + 1;
-                newManager.Manager_ID = managerId;
+                //int managerId = db.Managers.ToList().Count + 1;
+                //newManager.Manager_ID = managerId;
 
                 Sys_User newManagerUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
                 newManagerUser.User_Role_ID = 2;
                 db.Entry(newManagerUser).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 newManager.SysUser_ID = newManagerUser.SysUser_ID;
                 db.Managers.Add(newManager);
-                db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// manager 
             else
@@ -328,6 +367,22 @@ namespace SkyExams.Controllers
             }
 
         }// view account function
+
+        public FileContentResult getImg(int id)
+        {
+            try
+            {
+                byte[] byteArray = null;
+                byteArray = db.Profile_Image.Find(id).Profile_Image1;
+                return byteArray != null
+                    ? new FileContentResult(byteArray, "image/jpeg")
+                    : null;
+            }// try
+            catch(Exception e)
+            {
+                return null;
+            }// catch
+        }// get profile image
 
         public ActionResult searchScreen(int? id)
         {
@@ -385,15 +440,13 @@ namespace SkyExams.Controllers
             Sys_User sys_User = db.Sys_User.ToList().Find(u => u.SysUser_ID == idUser);
             if (firstName == "" || lastName == "" || uName == "" || title == "" || cellNo == "" || email == "" || pAddress == "" || country == "" || city == "" || zip == "" || dob == "" || empStatus == "")
             {
-                return RedirectToAction("updateAccount");
+                return RedirectToAction("updateAccount", new { id = idUser });
             }// checks that fileds are not empty
             else
             {
                 Sys_User updateUser = new Sys_User();
                 DateTime DOB = DateTime.Parse(dob);
-                updateUser.SysUser_ID = idUser;
-                updateUser.User_Role_ID = sys_User.User_Role_ID;
-                updateUser.Password_ID = sys_User.Password_ID;
+                updateUser = sys_User;
                 updateUser.FName = firstName;
                 updateUser.Surname = lastName;
                 updateUser.Cell_Number = cellNo;
@@ -474,10 +527,7 @@ namespace SkyExams.Controllers
                     updateUser.ZIP_ID = zList[zipIndex].Zip_ID;
                 }// if zip exists
 
-                db.Sys_User.Remove(sys_User);
-                db.SaveChanges();
-
-                db.Sys_User.Add(updateUser);
+                db.Entry(updateUser).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
                 return RedirectToAction("homeScreen", new { id = idUser });
@@ -629,6 +679,7 @@ namespace SkyExams.Controllers
         {
             if (userName == "" || email =="" || newPass == "" || confPass == "")
             {
+                ViewData["err"] = "Please complete all the required fields";
                 return View();
             }// if fields are empty
             if (newPass != confPass)
@@ -658,7 +709,7 @@ namespace SkyExams.Controllers
             return View(delUser);
         }// delete get
 
-        public ActionResult deleteConformation(int? loggedId, int? id)
+        public ActionResult deleteConformation(int? loggedId, int? id)// fix up student and instructor deletes
         {
             Sys_User sys_User = db.Sys_User.Find(id);
             int passId = sys_User.Password_ID;
@@ -675,14 +726,23 @@ namespace SkyExams.Controllers
                 db.Students.Remove(delStudent);
                 db.SaveChanges();
                 Student_Instructor delStudentInstructor = db.Student_Instructor.ToList().Find(s => s.Student_ID == delStudent.Student_ID);
-                db.Student_Instructor.Remove(delStudentInstructor);
-                db.SaveChanges();
+                if(delStudentInstructor != null)
+                {
+                    db.Student_Instructor.Remove(delStudentInstructor);
+                    db.SaveChanges();
+                }// if not null
                 Student_Resource delStuResource = db.Student_Resource.ToList().Find(s => s.Student_ID == id);
-                db.Student_Resource.Remove(delStuResource);
-                db.SaveChanges();
+                if(delStuResource != null)
+                {
+                    db.Student_Resource.Remove(delStuResource);
+                    db.SaveChanges();
+                }// if not null
                 Student_Lesson_Plan delStuPlan = db.Student_Lesson_Plan.ToList().Find(s => s.Student_ID == id);
-                db.Student_Lesson_Plan.Remove(delStuPlan);
-                db.SaveChanges();
+                if(delStuPlan != null)
+                {
+                    db.Student_Lesson_Plan.Remove(delStuPlan);
+                    db.SaveChanges();
+                }// if not null
             }// students
             if (sys_User.User_Role_ID == 2)
             {
@@ -690,15 +750,19 @@ namespace SkyExams.Controllers
                 Instructor delInstructor = tempInstructorList.Find(u => u.SysUser_ID == id);
                 db.Instructors.Remove(delInstructor);
                 db.SaveChanges();
-                Student_Instructor delStudentInstructor = db.Student_Instructor.ToList().Find(s => s.Instructor_ID == delInstructor.Instructor_ID);
-                db.Student_Instructor.Remove(delStudentInstructor);
-                db.SaveChanges();
+                List<Student_Instructor> delStudentInstructor = db.Student_Instructor.ToList().FindAll(s => s.Instructor_ID == delInstructor.Instructor_ID);
+                foreach(var sI in delStudentInstructor)
+                {
+                    db.Student_Instructor.Remove(sI);
+                    db.SaveChanges();
+                }// for each
+
                 List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(i => i.Instructor_ID == id);
                 foreach(Lesson_Plan temp in planList)
                 {
                     db.Lesson_Plan.Remove(temp);
-                    db.SaveChangesAsync();
-                }
+                    db.SaveChanges();
+                }// del lesson plans
             }// instructors
             if (sys_User.User_Role_ID == 3)
             {

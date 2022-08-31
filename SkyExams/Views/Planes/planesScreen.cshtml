@@ -7,6 +7,11 @@
 
 <h2>Planes</h2>
 <br />
+<div style="text-align:right;">
+    <button type="button" id="consult" onclick="location.href='@Url.Action("planesHelp", "Help", new { id = uID })'">
+        Help
+    </button>
+</div>
 <br />
 <div id="createButton" style="display:none;">
     <button type="button" onclick="location.href='@Url.Action("addPlaneScreen", "Planes", new { id = uID })'">
@@ -16,6 +21,10 @@
         Add Plane Type
     </button>
 </div>
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+    Back
+</button>
 <br />
 <br />
 @foreach (var modelItem in Model)
@@ -67,9 +76,6 @@
 <br />
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
-    Back
-</button>
 
 <script>
     function adminCheck() {
@@ -98,6 +104,10 @@
     }
 
     window.onload = adminCheck;
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
 </script>
 
 

@@ -11,6 +11,11 @@
     </button>
 </div>
 <br />
+<div style="text-align:right;">
+    <button type="button" id="consult" onclick="location.href='@Url.Action("consultationHelp", "Help", new { id = uID })'">
+        Help
+    </button>
+</div>
 <br />
 <table class="table">
     <thead>
@@ -50,3 +55,10 @@
 <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
     Back
 </button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>

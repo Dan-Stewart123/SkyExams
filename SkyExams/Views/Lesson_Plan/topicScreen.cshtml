@@ -15,6 +15,11 @@
 </div>
 <br />
 <br />
+<button type="button" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = uID })'">
+    Back
+</button>
+<br />
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -49,9 +54,7 @@
 </table>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = uID })'">
-    Back
-</button>
+
 <script>
     function adminCheck() {
         var userId = @userRole;
@@ -64,6 +67,10 @@
         }
     }
     window.onload = adminCheck;
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
 </script>
 
 

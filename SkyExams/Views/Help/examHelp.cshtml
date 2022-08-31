@@ -1,0 +1,22 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "examHelp";
+    var help = ViewData["help"];
+}
+
+<h2>Exam Help</h2>
+<button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = Model.SysUser_ID })'">
+    Back
+</button>
+<br />
+<label><b>Search</b></label>
+<br />
+<p>@help</p>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

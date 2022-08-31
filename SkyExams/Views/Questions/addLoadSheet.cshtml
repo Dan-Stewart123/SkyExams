@@ -23,6 +23,17 @@
     <button type="button" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = Model.SysUser_ID, ratingId = rID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" />
+    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 
+<script>
+    function checkInput() {
+        var loadSheet = $("#loadSheet").val();
+        if (loadSheet != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>

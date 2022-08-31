@@ -20,5 +20,6 @@ namespace SkyExams.Models
         public Nullable<bool> Started { get; set; }
         public bool Completed { get; set; }
         public int Stu_Exam { get; set; }
+        public Nullable<System.DateTime> Date_Completed { get; set; }
     }
 }

@@ -6,13 +6,112 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+//using DHTMLX.Common;
+//using DHTMLX.Scheduler;
+//using DHTMLX.Scheduler.Data;
 using SkyExams.Models;
 
 namespace SkyExams.Controllers
 {
+
+    public class CalendarActionResponseModel
+    {
+        public String Status;
+        public Int64 Source_id;
+        public Int64 Target_id;
+
+        public CalendarActionResponseModel(String status, Int64 source_id, Int64 target_id)
+        {
+            Status = status;
+            Source_id = source_id;
+            Target_id = target_id;
+        }
+    }
+
+
     public class uEventsController : Controller
     {
         private SkyExamsEntities db = new SkyExamsEntities();
+
+        public ActionResult viewEvents(int? id)
+        {
+            ViewData["userId"] = "" + id;
+
+            return View();
+
+        }// view events
+
+        //public ContentResult Data()
+        //{
+        //    try
+        //    {
+        //        var details = db.uEvents.ToList();
+
+
+
+        //        return new SchedulerAjaxData(details);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+
+        //}// get events from db
+
+        //public ContentResult Save(int? id, FormCollection actionValues)
+        //{
+
+        //    var action = new DataAction(actionValues);
+
+        //    try
+        //    {
+        //        var changedEvent = (uEvent)DHXEventsHelper.Bind(typeof(uEvent), actionValues);
+
+
+
+        //        switch (action.Type)
+        //        {
+        //            case DataActionTypes.Insert:
+        //                uEvent EV = new uEvent();
+        //                EV.Event_ID = changedEvent.Event_ID;
+        //                EV.Start_Time = changedEvent.Start_Time;
+        //                EV.End_Time = changedEvent.End_Time;
+        //                EV.text = changedEvent.text;
+        //                EV.Event_Type_ID = 1;
+        //                db.uEvents.Add(EV);
+        //                db.SaveChanges();
+
+
+        //                break;
+        //            case DataActionTypes.Delete:
+        //                var details = db.uEvents.Where(x => x.Event_ID == id).FirstOrDefault();
+        //                db.uEvents.Remove(details);
+        //                db.SaveChanges();
+
+        //                break;
+        //            default:// "update"    
+        //                var data = db.uEvents.Where(x => x.Event_ID == id).FirstOrDefault();
+        //                data.Start_Time = changedEvent.Start_Time;
+        //                data.End_Time = changedEvent.End_Time;
+        //                data.text = changedEvent.text;
+        //                data.Event_Type_ID = 1;
+        //                db.SaveChanges();
+
+
+        //                break;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        action.Type = DataActionTypes.Error;
+        //    }
+        //    return (ContentResult)new AjaxSaveResponse(action);
+        //}
+
+
+
+
 
         // GET: uEvents
         public ActionResult Index()
@@ -46,7 +145,7 @@ namespace SkyExams.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Event_ID,Date_Time,Location_ID,Event_Type_ID")] uEvent uEvent)
+        public ActionResult Create([Bind(Include = "Event_ID,Start_Time,End_Time,Location_ID,Event_Type_ID")] uEvent uEvent)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +177,7 @@ namespace SkyExams.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Event_ID,Date_Time,Location_ID,Event_Type_ID")] uEvent uEvent)
+        public ActionResult Edit([Bind(Include = "Event_ID,Start_Time,End_Time,Location_ID,Event_Type_ID")] uEvent uEvent)
         {
             if (ModelState.IsValid)
             {
