@@ -41,23 +41,20 @@ namespace SkyExams.Controllers
             reportStu.name = user.FName + " " + user.Surname;
             reportStu.licence = "" + stu.Licence_No;
             reportStu.hoursFlown = "" + stu.Hours_Flown;
+            List<ExamAverageVM> avgs = new List<ExamAverageVM>();
             List<Student_Exam> sExams = db.Student_Exam.ToList().FindAll(e => e.Student_ID == stu.Student_ID);
-            reportStu.examMarks = sExams;
-
-            List <Plane_Type> temp = db.Plane_Type.ToList();
-            List<Plane_Type> types = new List<Plane_Type>();
-
-            foreach(var e in sExams)
+            foreach (var s in sExams)
             {
-                foreach(var p in temp)
-                {
-                    if(p.Plane_Type_ID == e.Exam_ID)
-                    {
-                        types.Add(p);
-                    }// if statement
-                }// inner for each
+                
+                ExamAverageVM avg = new ExamAverageVM();
+                avg.examId = s.Exam_ID;
+                avg.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == s.Exam_ID).Type_Description;
+                avg.examAvg = Convert.ToInt32(s.Exam_Mark);
+                avgs.Add(avg);
+
             }// for each
-            reportStu.planeTypes = types;
+
+            reportStu.examAverages = avgs;
 
             ViewData["userID"] = "" + loggedId;
             ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
@@ -70,7 +67,7 @@ namespace SkyExams.Controllers
             ViewData["userID"] = "" + id;
             List<Country> countries = db.Countries.ToList();
             return View(countries);
-        }// student report
+        }// group report
 
         public ActionResult generateGroupReport(int? loggedId, int? country)
         {
@@ -86,23 +83,21 @@ namespace SkyExams.Controllers
                 Student stu = db.Students.ToList().Find(st => st.SysUser_ID == s.SysUser_ID);
                 temp.licence = "" + stu.Licence_No;
                 temp.hoursFlown = "" + stu.Hours_Flown;
+
+
+                List<ExamAverageVM> avgs = new List<ExamAverageVM>();
+
                 List<Student_Exam> sExams = db.Student_Exam.ToList().FindAll(e => e.Student_ID == stu.Student_ID);
-                temp.examMarks = sExams;
-
-                List<Plane_Type> tempPlanes = db.Plane_Type.ToList();
-                List<Plane_Type> types = new List<Plane_Type>();
-
-                foreach (var e in sExams)
+                foreach (var se in sExams)
                 {
-                    foreach (var p in tempPlanes)
-                    {
-                        if (p.Plane_Type_ID == e.Exam_ID)
-                        {
-                            types.Add(p);
-                        }// if statement
-                    }// inner for each
+                    ExamAverageVM avg = new ExamAverageVM();
+                    avg.examId = se.Exam_ID;
+                    avg.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == se.Exam_ID).Type_Description;
+                    avg.examAvg = Convert.ToInt32(se.Exam_Mark);
+                    avgs.Add(avg);
+
                 }// for each
-                temp.planeTypes = types;
+                temp.examAverages = avgs;
 
                 studentList.Add(temp);
                 totH = totH + Convert.ToInt32(stu.Hours_Flown);
@@ -130,6 +125,7 @@ namespace SkyExams.Controllers
 
             reportPlane.Plane_Type_ID = tempPlane.Plane_Type_ID;
             reportPlane.Type_Description = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == tempPlane.Plane_Type_ID).Type_Description;
+            reportPlane.planeHours = Convert.ToInt32(tempPlane.Hours_Flown);
             reportPlane.Plane_ID = tempPlane.Plane_ID;
             reportPlane.Call_Sign = tempPlane.Call_Sign;
             reportPlane.Description = tempPlane.Description;
@@ -192,18 +188,31 @@ namespace SkyExams.Controllers
             return View(insReport);
         }// generate instructor report
 
-        public ActionResult examReport(int? id)
+        public ActionResult examDateSelect(int? id)
+        {
+            ViewData["userID"] = "" + id;
+            return View();
+        }// date select for exam report
+
+        public ActionResult examReport(int? id, DateTime startDate)
         {
             List<ExamAverageVM> averages = new List<ExamAverageVM>();
             List<Exam> exams = db.Exams.ToList();
             foreach (var e in exams)
             {
                 ExamAverageVM tempAverage = new ExamAverageVM();
+                List<Student_Exam> stuExamList = db.Student_Exam.ToList().FindAll(s => s.Date_Completed >= startDate && s.Exam_ID == e.Exam_ID);
+                int count = stuExamList.Count();
+                int totalMark = 0;
                 tempAverage.examId = e.Exam_ID;
                 tempAverage.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == e.Exam_ID).Type_Description;
-                if (db.Exam_Average.ToList().Find(a => a.Exam_ID == e.Exam_ID) != null)
+                if (stuExamList.Count != 0)
                 {
-                    tempAverage.examAvg = db.Exam_Average.ToList().Find(a => a.Exam_ID == e.Exam_ID).Average;
+                    foreach(var s in stuExamList)
+                    {
+                        totalMark = totalMark + Convert.ToInt32(s.Exam_Mark);
+                    }// inner for each
+                    tempAverage.examAvg = (totalMark / count);
                 }// if statement
                 else
                 {
@@ -220,6 +229,20 @@ namespace SkyExams.Controllers
             return View(avgs);
         }// exam report
         JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
+
+        public ActionResult eventsDateSelect(int? id)
+        {
+            ViewData["userID"] = "" + id;
+            return View();
+        }// events report date select
+
+        public ActionResult eventsReport(int? id, DateTime startDate)
+        {
+            List<uEvent> events = db.uEvents.ToList().FindAll(u => u.End_Time >= startDate);
+            ViewData["userID"] = "" + id;
+            ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
+            return View(events);
+        }// events report
 
         public ActionResult Index()
         {

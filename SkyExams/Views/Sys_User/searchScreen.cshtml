@@ -5,6 +5,12 @@
 
 <h2>Search</h2>
 <br />
+<div style="text-align:right;">
+    <button type="button" id="consult" onclick="location.href='@Url.Action("searchHelp", "Help", new { id = Model.SysUser_ID })'">
+        Help
+    </button>
+</div>
+<br />
 <p>Select a user profile to search:</p>
 <br />
 @using (Html.BeginForm("searchResultsScreen", "Sys_User", FormMethod.Post))
@@ -31,5 +37,18 @@
     <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
         Cancel
     </button>
-    <input type="submit" , value="Search" />
+    <input type="submit" , value="Search" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
+<script>
+    function checkInput() {
+        var list = $("#list").val();
+        var name = $("#firstName").val();
+        var surname = $("#lastName").val();
+        if (list != "" && name != "" || surname != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+</script>
+

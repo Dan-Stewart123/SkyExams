@@ -18,7 +18,11 @@
     Delete Load Sheet
 </button>
 <br />
-@Html.ActionLink("View/Download", "downloadLoadSheet", new { id = rID })
+<button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = uID })'">
+    Back
+</button>
+<br />
+@Html.ActionLink("View/Download Load Sheet", "downloadLoadSheet", new { id = rID })
 <table class="table">
     <thead>
         <tr>
@@ -60,7 +64,12 @@
 </table>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = uID })'">
-    Back
-</button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+
 

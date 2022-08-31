@@ -9,6 +9,9 @@ using System.Web;
 using System.Web.Mvc;
 using SkyExams.Models;
 using SkyExams.ViewModels;
+using MimeKit;
+using MailKit;
+using MailKit.Net.Smtp;
 
 namespace SkyExams.Controllers
 {
@@ -171,7 +174,24 @@ namespace SkyExams.Controllers
                 updatePlane.Description = plane.Description;
                 updatePlane.In_Service = plane.In_Service;
 
-                //if for email 
+                if(updatePlane.Hours_Flown <= 10)
+                {
+                    Plane_Type type = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == updatePlane.Plane_Type_ID);
+
+                    MimeMessage requestEmail = new MimeMessage();
+                    requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
+                    requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to admin email
+                    requestEmail.Subject = "New user request";
+                    requestEmail.Body = new TextPart("plain") { Text = "The following plane is due for its service soon: Call Sign: " + updatePlane.Call_Sign + " Plane type: " + type.Type_Description + " Hours until service: " + updatePlane.Hours_Until_Service };
+
+                    //send email
+                    SmtpClient client = new SmtpClient();
+                    client.Connect("smtp.gmail.com", 465, true);
+                    client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                    client.Send(requestEmail);
+                    client.Disconnect(true);
+                    client.Dispose();
+                }// if for email
 
                 db.Planes.Remove(plane);
                 db.SaveChanges();

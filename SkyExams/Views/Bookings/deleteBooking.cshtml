@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "deleteBooking";
     var uID = ViewData["uID"];
+    var ins = ViewData["ins"];
 }
 
 <h2>Delete Booking</h2>
@@ -17,6 +18,14 @@
         @Html.DisplayFor(model => model.Date_Time)
     </dd>
 
+    <dt class="col-md-4">
+        @Html.Label("Instructor:")
+    </dt>
+
+    <dd>
+        @ins
+    </dd>
+
 </dl>
 <button type="button" onclick="location.href='@Url.Action("bookingsScreen", "Bookings", new { id = uID })'">
     Back
@@ -24,4 +33,11 @@
 <button type="button" onclick="location.href='@Url.Action("deleteBookingConformation", "Bookings", new { id = uID, bookingId = Model.Booking_ID })'">
     Delete
 </button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
 

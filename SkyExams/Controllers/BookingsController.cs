@@ -7,6 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkyExams.Models;
+using MimeKit;
+using MailKit;
+using MailKit.Net.Smtp;
 
 namespace SkyExams.Controllers
 {
@@ -142,6 +145,8 @@ namespace SkyExams.Controllers
             Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
             Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
             List<Instructor_Slots> slots = db.Instructor_Slots.ToList().FindAll(i => i.Instructor_ID == stuIns.Instructor_ID && i.Booked == false);
+            Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == stuIns.Instructor_ID);
+            ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
             ViewData["uID"] = "" + id;
             return View(slots);
         }// view slots
@@ -171,7 +176,29 @@ namespace SkyExams.Controllers
             db.Bookings.Add(newBooking);
             db.SaveChanges();
 
-            // send emails
+            Sys_User stu = db.Sys_User.ToList().Find(s => s.SysUser_ID == sForId.SysUser_ID);
+
+            try
+            {
+                //create email
+                MimeMessage requestEmail = new MimeMessage();
+                requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
+                requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
+                requestEmail.Subject = "New user request";
+                requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + updateSlot.Date_Time + " has been booked by " + stu.FName + " " + stu.Surname };
+
+                //send email
+                SmtpClient client = new SmtpClient();
+                client.Connect("smtp.gmail.com", 465, true);
+                client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                client.Send(requestEmail);
+                client.Disconnect(true);
+                client.Dispose();
+            }// try
+            catch
+            {
+                return RedirectToAction("bookingsScreen", new { id = id });
+            }// catch
 
             return RedirectToAction("bookingsScreen", new { id = id });
         }// book slot
@@ -180,6 +207,8 @@ namespace SkyExams.Controllers
         {
             ViewData["uID"] = "" + id;
             Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
+            Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == delBooking.Instructor_ID);
+            ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
             return View(delBooking);
         }// delete slot 
 
@@ -210,6 +239,8 @@ namespace SkyExams.Controllers
             List<Instructor_Slots> slots = db.Instructor_Slots.ToList().FindAll(i => i.Instructor_ID == stuIns.Instructor_ID && i.Booked == false);
             ViewData["uID"] = "" + id;
             ViewData["bID"] = "" + bookingId;
+            Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == stuIns.Instructor_ID);
+            ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
             return View(slots);
         }// update booking get
 

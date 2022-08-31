@@ -16,5 +16,6 @@ namespace SkyExams.Models
     {
         public int Profile_Image_ID { get; set; }
         public byte[] Profile_Image1 { get; set; }
+        public int Sys_User_ID { get; set; }
     }
 }
