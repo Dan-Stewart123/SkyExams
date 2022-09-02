@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -26,10 +27,21 @@ namespace SkyExams.Controllers
             ViewData["userID"] = "" + id;
             Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
             ViewData["userRole"] = "" + forRole.User_Role_ID;
-            List<Plane_Type> planeTypes = db.Plane_Type.ToList();
+            List<Plane_Type> planeTypes  = db.Plane_Type.ToList();
+
+            if (forRole.User_Role_ID == 1)
+            {
+                List<Student_Exam> sExam = db.Student_Exam.ToList().FindAll(s => s.Student_ID == id);
+                List<Plane_Type> tempPlaneList = db.Plane_Type.ToList();
+                planeTypes.RemoveRange(sExam.Count(), (tempPlaneList.Count() - sExam.Count()));
+            }// stu check
+            else
+            {
+                planeTypes = db.Plane_Type.ToList();
+            }// else     
 
             return View(planeTypes);
-        }// exam
+        }// exam screen
 
         public FileContentResult getImg(int id)
         {
@@ -37,7 +49,7 @@ namespace SkyExams.Controllers
             return byteArray != null
                 ? new FileContentResult(byteArray, "image/jpeg")
                 : null;
-        }
+        }// get plane images
 
         public ActionResult examScreen(int? id, int? ratingId)
         {
@@ -98,9 +110,9 @@ namespace SkyExams.Controllers
         [HttpPost]
         public ActionResult createQuestion(int? id, int? ratingId, int sec, string question, string correct, string false1, string false2)
         {
-            if(question == null || correct == null || false1 == null || false2 == null)
+            if(question == "" || correct == "" || false1 == "" || false2 == "")
             {
-                return View();
+                return RedirectToAction("createQuestion", new { id = id, ratingId = ratingId });
             }// if statement
             else
             {
@@ -141,6 +153,80 @@ namespace SkyExams.Controllers
                 return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
             }// else
         }// create question post
+
+        [HttpGet]
+        public ActionResult addLoadSheet(int? id, int? ratingId)
+        {
+            ViewData["ratingId"] = "" + ratingId;
+            Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+            return View(tempUser);
+        }// add load sheet get
+
+        [HttpPost]
+        public ActionResult addLoadSheet(int? id, int? ratingId, HttpPostedFileBase loadSheet)
+        {
+            if (loadSheet == null)
+            {
+                return RedirectToAction("addLoadSheet", new { id = id, ratingId = ratingId });
+            }// if fields are empty
+            else
+            {
+                Load_Sheet tempLS = db.Load_Sheet.ToList().Find(l => l.Exam_ID == Convert.ToInt32(ratingId));
+                if(tempLS == null)
+                {
+                    Load_Sheet newLS = new Load_Sheet();
+                    newLS.Exam_ID = Convert.ToInt32(ratingId);
+
+                    Stream str = loadSheet.InputStream;
+                    BinaryReader br = new BinaryReader(str);
+                    Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
+                    newLS.load_Sheet1 = fileDetails;
+
+                    db.Load_Sheet.Add(newLS);
+                    db.SaveChanges();
+                }// if no load sheet exists
+                else
+                {
+                    db.Load_Sheet.Remove(tempLS);
+                    db.SaveChanges();
+
+                    Load_Sheet newLS = new Load_Sheet();
+                    newLS.Exam_ID = Convert.ToInt32(ratingId);
+
+                    Stream str = loadSheet.InputStream;
+                    BinaryReader br = new BinaryReader(str);
+                    Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
+                    newLS.load_Sheet1 = fileDetails;
+
+                    db.Load_Sheet.Add(newLS);
+                    db.SaveChanges();
+                }// if load sheet exists
+            }// else
+
+            return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
+        }// add load sheet post
+
+        public FileResult downloadLoadSheet(int? id)
+        {
+            Load_Sheet downloadLoadSheet = db.Load_Sheet.ToList().Find(l => l.Exam_ID == id);
+            if(downloadLoadSheet != null)
+            {
+                var file = downloadLoadSheet.load_Sheet1;
+                return File(file, "application/pdf");
+            }// if loadsheet exists
+            else
+            {
+                return null;
+            }// no load sheet
+        }// download file
+
+        public ActionResult deleteLoadSheet(int? id, int? ratingId)
+        {
+            Load_Sheet delSheet = db.Load_Sheet.ToList().Find(l => l.Exam_ID == ratingId);
+            db.Load_Sheet.Remove(delSheet);
+            db.SaveChanges();
+            return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
+        }// delete load sheet
 
         [HttpGet]
         public ActionResult deleteQuestion(int? id, int? questionId)
@@ -288,18 +374,24 @@ namespace SkyExams.Controllers
                         }// shuffle while
                         temp.Answers = tempAns;
 
-                        foreach (var s in savedQuestions)
+                        QuestionVM questionCheck = questions.Find(t => t.QuestionID == q.Question_ID);
+                        if(questionCheck == null)
                         {
-                            if (s.QuestionID != q.Question_ID)
-                            {
-                                questions.Add(temp);
-                            }// if statement
-                        }// for each
-
+                            questions.Add(temp);
+                        }// question check
 
                     }// for each
                 }// if statement
 
+                if(questions.Count() > tempQ.Count())
+                {
+                    questions.RemoveRange(tempQ.Count(), (questions.Count - tempQ.Count()));
+                }// change questions array length
+
+                if (questions.Count() > 100)
+                {
+                    questions.RemoveRange(100, questions.Count());
+                }// 100 questions
                 return View(questions);
             }// if student has started the exam
             else
@@ -352,6 +444,12 @@ namespace SkyExams.Controllers
                     temp.Answers = tempAns;
                     questions.Add(temp);
                 }// for each
+
+                if(questions.Count() > 100)
+                {
+                    questions.RemoveRange(100, questions.Count());
+                }// 100 questions
+
                 return View(questions);
             }// if student hasent started the exam
             
@@ -395,6 +493,7 @@ namespace SkyExams.Controllers
             newStuExam.Started = true;
             newStuExam.Completed = true;
             newStuExam.Exam_Mark = finalGrade;
+            newStuExam.Date_Completed = DateTime.Now;
 
             foreach(var s in savedQuestions)
             {
@@ -409,7 +508,29 @@ namespace SkyExams.Controllers
             db.Student_Exam.Add(newStuExam);
             db.SaveChanges();
 
+            List<Student_Exam> stuExams = db.Student_Exam.ToList().FindAll(s => s.Exam_ID == ratingId && s.Completed == true);
+            int totalMarks = 0;
+            foreach(var e in stuExams)
+            {
+                totalMarks = totalMarks + Convert.ToInt32(e.Exam_Mark);
+            }// for each
 
+            int totalExams = stuExams.Count();
+            int average = totalMarks / totalExams;
+
+            Exam_Average newAverage = new Exam_Average();
+            newAverage.Exam_ID = Convert.ToInt32(ratingId);
+            newAverage.Average = average;
+
+            Exam_Average tempAverage = db.Exam_Average.ToList().Find(e => e.Exam_ID == ratingId);
+            if(tempAverage != null)
+            {
+                db.Exam_Average.Remove(tempAverage);
+                db.SaveChanges();
+            }// if statement
+
+            db.Exam_Average.Add(newAverage);
+            db.SaveChanges();
 
             return Json(new { result = finalResultQuiz }, JsonRequestBehavior.AllowGet);
         }// write exam post

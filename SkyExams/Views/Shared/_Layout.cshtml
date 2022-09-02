@@ -21,9 +21,6 @@
             </div>
             <div class="navbar-collapse collapse" style="background-color:lightblue;">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
             </div>
         </div>
@@ -41,5 +38,12 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     @RenderSection("MyScritps", required: false)
+    @RenderSection("studentReportScript", required: false)
+    @RenderSection("planeReportScript", required: false)
+    @RenderSection("groupReportScript", required: false)
+    @RenderSection("instructorReportScript", required: false)
+    @RenderSection("examReportScript", required: false)
+    @RenderSection("eventsScript", required: false)
+    @RenderSection("eventsReportScript", required: false)
 </body>
 </html>

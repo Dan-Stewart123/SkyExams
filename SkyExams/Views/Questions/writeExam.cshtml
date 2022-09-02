@@ -70,7 +70,7 @@
             </div> <!-- END BlockQ --> count++;
         }
         <span id="countQuections" style="display:none;">@count</span>
-        <p id="checkLabel">Please ensure that all your answers are checked before you submit</p>
+        <p id="checkLabel">Hint: Ensure that all your answers are checked before you submit to get the maximun marks.</p>
         <br />
         <button type="button" id="SubmitQuiz" class="btn btn-default" style="margin-top: 10px;"><span class="glyphicon glyphicon-ok"></span>   Submit Exam </button>
         <div id="consult" style="display:none;">
@@ -208,7 +208,7 @@
 
             });// submit exam
 
-        $('#saveExam').on('click', function () {
+        $('#saveExam').on('click', function saveExam() {
             var questionsCount = $('#countQuections').text();
 
             var saveQuestion = [], countQuestion = parseInt(questionsCount), question = {}, j = 1;

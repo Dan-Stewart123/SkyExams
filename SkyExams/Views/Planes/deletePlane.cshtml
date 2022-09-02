@@ -51,3 +51,10 @@
 <button type="button" onclick="location.href='@Url.Action("deletePlaneConformation", "Planes", new { loggedId = uID, id = Model.Plane_ID })'">
     Delete
 </button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>

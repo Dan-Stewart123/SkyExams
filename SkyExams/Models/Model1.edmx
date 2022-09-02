@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="Admin_ID" />
           </Key>
-          <Property Name="Admin_ID" Type="int" Nullable="false" />
+          <Property Name="Admin_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SysUser_ID" Type="int" />
         </EntityType>
         <EntityType Name="Answer">
@@ -86,7 +86,7 @@
             <PropertyRef Name="Instructor_ID" />
             <PropertyRef Name="Licence_No" />
           </Key>
-          <Property Name="Instructor_ID" Type="int" Nullable="false" />
+          <Property Name="Instructor_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Licence_No" Type="int" Nullable="false" />
           <Property Name="SysUser_ID" Type="int" Nullable="false" />
         </EntityType>
@@ -129,7 +129,7 @@
           <Key>
             <PropertyRef Name="Manager_ID" />
           </Key>
-          <Property Name="Manager_ID" Type="int" Nullable="false" />
+          <Property Name="Manager_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SysUser_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Plane">
@@ -160,14 +160,13 @@
           <Property Name="Type_Description" Type="varchar" MaxLength="255" />
           <Property Name="Plane_Image" Type="varbinary(max)" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Profile_Image">
           <Key>
             <PropertyRef Name="Profile_Image_ID" />
           </Key>
-          <Property Name="Profile_Image_ID" Type="int" Nullable="false" />
-          <Property Name="Profile_Image" Type="varbinary(max)" />
+          <Property Name="Profile_Image_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Profile_Image" Type="varbinary(max)" Nullable="false" />
+          <Property Name="Sys_User_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Question_Rating">
           <Key>
@@ -191,6 +190,18 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           </Key>
           <Property Name="Rating_ID" Type="int" Nullable="false" />
           <Property Name="Rating_Description" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Registration_Sheet">
+          <Key>
+            <PropertyRef Name="Registration_ID" />
+          </Key>
+          <Property Name="Registration_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sys_User_ID" Type="int" Nullable="false" />
+          <Property Name="First_Name" Type="varchar(max)" Nullable="false" />
+          <Property Name="Surname" Type="varchar(max)" Nullable="false" />
+          <Property Name="Plane_Type_ID" Type="int" Nullable="false" />
+          <Property Name="Type_Desctription" Type="varchar(max)" Nullable="false" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Save_Exam">
           <Key>
@@ -220,7 +231,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
             <PropertyRef Name="Student_ID" />
             <PropertyRef Name="Licence_No" />
           </Key>
-          <Property Name="Student_ID" Type="int" Nullable="false" />
+          <Property Name="Student_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SysUser_ID" Type="int" Nullable="false" />
           <Property Name="Licence_No" Type="int" Nullable="false" />
           <Property Name="Hours_Flown" Type="int" />
@@ -235,6 +246,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Started" Type="bit" />
           <Property Name="Completed" Type="bit" Nullable="false" />
           <Property Name="Stu_Exam" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date_Completed" Type="datetime" />
         </EntityType>
         <EntityType Name="Student_Instructor">
           <Key>
@@ -281,7 +293,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="SysUser_ID" />
           </Key>
-          <Property Name="SysUser_ID" Type="int" Nullable="false" />
+          <Property Name="SysUser_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="User_Role_ID" Type="int" />
           <Property Name="Title_ID" Type="int" Nullable="false" />
           <Property Name="FName" Type="varchar" MaxLength="50" />
@@ -308,10 +320,11 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="Event_ID" />
           </Key>
-          <Property Name="Event_ID" Type="int" Nullable="false" />
-          <Property Name="Date_Time" Type="datetime" />
-          <Property Name="Location_ID" Type="int" Nullable="false" />
-          <Property Name="Event_Type_ID" Type="int" />
+          <Property Name="Event_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Start_Time" Type="datetime" Nullable="false" />
+          <Property Name="End_Time" Type="datetime" Nullable="false" />
+          <Property Name="text" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Event_Type_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User_Event">
           <Key>
@@ -332,7 +345,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="Password_ID" />
           </Key>
-          <Property Name="Password_ID" Type="int" Nullable="false" />
+          <Property Name="Password_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Encrypted_password" Type="varchar" MaxLength="20" />
           <Property Name="Date_Set" Type="datetime" />
         </EntityType>
@@ -370,9 +383,11 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Plane" EntityType="Self.Plane" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plane_Service" EntityType="Self.Plane_Service" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plane_Type" EntityType="Self.Plane_Type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profile_Image" EntityType="Self.Profile_Image" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question_Rating" EntityType="Self.Question_Rating" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Registration_Sheet" EntityType="Self.Registration_Sheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Save_Exam" EntityType="Self.Save_Exam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SkyExams" EntityType="Self.SkyExams" Schema="dbo" store:Type="Tables" />
@@ -391,12 +406,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="UserPassword" EntityType="Self.UserPassword" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Verification_Code" EntityType="Self.Verification_Code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Zip_Code" EntityType="Self.Zip_Code" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Profile_Image" EntityType="Self.Profile_Image" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Profile_Image].[Profile_Image_ID] AS [Profile_Image_ID], 
-    [Profile_Image].[Profile_Image] AS [Profile_Image]
-    FROM [dbo].[Profile_Image] AS [Profile_Image]</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -422,9 +431,11 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="Planes" EntityType="SkyExamsModel.Plane" />
           <EntitySet Name="Plane_Service" EntityType="SkyExamsModel.Plane_Service" />
           <EntitySet Name="Plane_Type" EntityType="SkyExamsModel.Plane_Type" />
+          <EntitySet Name="Profile_Image" EntityType="SkyExamsModel.Profile_Image" />
           <EntitySet Name="Question_Rating" EntityType="SkyExamsModel.Question_Rating" />
           <EntitySet Name="Questions" EntityType="SkyExamsModel.Question" />
           <EntitySet Name="Ratings" EntityType="SkyExamsModel.Rating" />
+          <EntitySet Name="Registration_Sheet" EntityType="SkyExamsModel.Registration_Sheet" />
           <EntitySet Name="Save_Exam" EntityType="SkyExamsModel.Save_Exam" />
           <EntitySet Name="Sections" EntityType="SkyExamsModel.Section" />
           <EntitySet Name="SkyExams" EntityType="SkyExamsModel.SkyExam" />
@@ -443,13 +454,12 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySet Name="UserPasswords" EntityType="SkyExamsModel.UserPassword" />
           <EntitySet Name="Verification_Code" EntityType="SkyExamsModel.Verification_Code" />
           <EntitySet Name="Zip_Code" EntityType="SkyExamsModel.Zip_Code" />
-          <EntitySet Name="Profile_Image" EntityType="SkyExamsModel.Profile_Image" />
         </EntityContainer>
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Admin_ID" />
           </Key>
-          <Property Name="Admin_ID" Type="Int32" Nullable="false" />
+          <Property Name="Admin_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SysUser_ID" Type="Int32" />
         </EntityType>
         <EntityType Name="Answer">
@@ -526,7 +536,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
             <PropertyRef Name="Instructor_ID" />
             <PropertyRef Name="Licence_No" />
           </Key>
-          <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
+          <Property Name="Instructor_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Licence_No" Type="Int32" Nullable="false" />
           <Property Name="SysUser_ID" Type="Int32" Nullable="false" />
         </EntityType>
@@ -569,7 +579,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="Manager_ID" />
           </Key>
-          <Property Name="Manager_ID" Type="Int32" Nullable="false" />
+          <Property Name="Manager_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SysUser_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Plane">
@@ -600,6 +610,14 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Type_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Plane_Image" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <EntityType Name="Profile_Image">
+          <Key>
+            <PropertyRef Name="Profile_Image_ID" />
+          </Key>
+          <Property Name="Profile_Image_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Profile_Image1" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="Sys_User_ID" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Question_Rating">
           <Key>
             <PropertyRef Name="Question_Rating_ID" />
@@ -622,6 +640,18 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           </Key>
           <Property Name="Rating_ID" Type="Int32" Nullable="false" />
           <Property Name="Rating_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Registration_Sheet">
+          <Key>
+            <PropertyRef Name="Registration_ID" />
+          </Key>
+          <Property Name="Registration_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sys_User_ID" Type="Int32" Nullable="false" />
+          <Property Name="First_Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Plane_Type_ID" Type="Int32" Nullable="false" />
+          <Property Name="Type_Desctription" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Save_Exam">
           <Key>
@@ -651,7 +681,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
             <PropertyRef Name="Student_ID" />
             <PropertyRef Name="Licence_No" />
           </Key>
-          <Property Name="Student_ID" Type="Int32" Nullable="false" />
+          <Property Name="Student_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SysUser_ID" Type="Int32" Nullable="false" />
           <Property Name="Licence_No" Type="Int32" Nullable="false" />
           <Property Name="Hours_Flown" Type="Int32" />
@@ -666,6 +696,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Property Name="Started" Type="Boolean" />
           <Property Name="Completed" Type="Boolean" Nullable="false" />
           <Property Name="Stu_Exam" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date_Completed" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Student_Instructor">
           <Key>
@@ -712,7 +743,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="SysUser_ID" />
           </Key>
-          <Property Name="SysUser_ID" Type="Int32" Nullable="false" />
+          <Property Name="SysUser_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="User_Role_ID" Type="Int32" />
           <Property Name="Title_ID" Type="Int32" Nullable="false" />
           <Property Name="FName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -739,10 +770,11 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="Event_ID" />
           </Key>
-          <Property Name="Event_ID" Type="Int32" Nullable="false" />
-          <Property Name="Date_Time" Type="DateTime" Precision="3" />
-          <Property Name="Location_ID" Type="Int32" Nullable="false" />
-          <Property Name="Event_Type_ID" Type="Int32" />
+          <Property Name="Event_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Start_Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="End_Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Event_Type_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="User_Event">
           <Key>
@@ -763,7 +795,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <Key>
             <PropertyRef Name="Password_ID" />
           </Key>
-          <Property Name="Password_ID" Type="Int32" Nullable="false" />
+          <Property Name="Password_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Encrypted_password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Date_Set" Type="DateTime" Precision="3" />
         </EntityType>
@@ -780,13 +812,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           </Key>
           <Property Name="Zip_ID" Type="Int32" Nullable="false" />
           <Property Name="Code" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Profile_Image">
-          <Key>
-            <PropertyRef Name="Profile_Image_ID" />
-          </Key>
-          <Property Name="Profile_Image_ID" Type="Int32" Nullable="false" />
-          <Property Name="Profile_Image1" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -966,6 +991,15 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Profile_Image">
+            <EntityTypeMapping TypeName="SkyExamsModel.Profile_Image">
+              <MappingFragment StoreEntitySet="Profile_Image">
+                <ScalarProperty Name="Sys_User_ID" ColumnName="Sys_User_ID" />
+                <ScalarProperty Name="Profile_Image1" ColumnName="Profile_Image" />
+                <ScalarProperty Name="Profile_Image_ID" ColumnName="Profile_Image_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Question_Rating">
             <EntityTypeMapping TypeName="SkyExamsModel.Question_Rating">
               <MappingFragment StoreEntitySet="Question_Rating">
@@ -989,6 +1023,19 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               <MappingFragment StoreEntitySet="Rating">
                 <ScalarProperty Name="Rating_Description" ColumnName="Rating_Description" />
                 <ScalarProperty Name="Rating_ID" ColumnName="Rating_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registration_Sheet">
+            <EntityTypeMapping TypeName="SkyExamsModel.Registration_Sheet">
+              <MappingFragment StoreEntitySet="Registration_Sheet">
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="Type_Desctription" ColumnName="Type_Desctription" />
+                <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="First_Name" ColumnName="First_Name" />
+                <ScalarProperty Name="Sys_User_ID" ColumnName="Sys_User_ID" />
+                <ScalarProperty Name="Registration_ID" ColumnName="Registration_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1031,6 +1078,7 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
           <EntitySetMapping Name="Student_Exam">
             <EntityTypeMapping TypeName="SkyExamsModel.Student_Exam">
               <MappingFragment StoreEntitySet="Student_Exam">
+                <ScalarProperty Name="Date_Completed" ColumnName="Date_Completed" />
                 <ScalarProperty Name="Stu_Exam" ColumnName="Stu_Exam" />
                 <ScalarProperty Name="Completed" ColumnName="Completed" />
                 <ScalarProperty Name="Started" ColumnName="Started" />
@@ -1115,8 +1163,9 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
             <EntityTypeMapping TypeName="SkyExamsModel.uEvent">
               <MappingFragment StoreEntitySet="uEvent">
                 <ScalarProperty Name="Event_Type_ID" ColumnName="Event_Type_ID" />
-                <ScalarProperty Name="Location_ID" ColumnName="Location_ID" />
-                <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
+                <ScalarProperty Name="text" ColumnName="text" />
+                <ScalarProperty Name="End_Time" ColumnName="End_Time" />
+                <ScalarProperty Name="Start_Time" ColumnName="Start_Time" />
                 <ScalarProperty Name="Event_ID" ColumnName="Event_ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1159,14 +1208,6 @@ warning 6002: The table/view 'SkyExams.dbo.Profile_Image' does not have a primar
               <MappingFragment StoreEntitySet="Zip_Code">
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Zip_ID" ColumnName="Zip_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Profile_Image">
-            <EntityTypeMapping TypeName="SkyExamsModel.Profile_Image">
-              <MappingFragment StoreEntitySet="Profile_Image">
-                <ScalarProperty Name="Profile_Image1" ColumnName="Profile_Image" />
-                <ScalarProperty Name="Profile_Image_ID" ColumnName="Profile_Image_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,0 +1,83 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "helpScreen";
+}
+
+<h2>Help</h2>
+<br />
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Home
+</button>
+<div style="text-align:right;">
+    <input type="text" id="search" name="search">
+    <input type="submit" class="btn btn-primary" , value="Search" id="submitButton" onclick="searchFunction()" />
+</div>
+<br />
+<br />
+<label><b>Overview</b></label>
+<br />
+<p>
+    This system is an exam system for Flight Training Services(FTS) and is designed to allow students to write an online exam and for the exam to be instantly marked. The student will also be able to view study resources and lesson plans to assist them in passing their exam. The planes that are used and events that will be hosted by the flight school will be displayed on the website.
+</p>
+<br />
+<label><b>View Account</b></label>
+<br />
+<p>
+    By clicking on the “view account” button, you can view your account details.<br />
+    To update your account, click on the “update account details” button and enter your updated information in the relevant fields.<br />
+    To reset your password, click on the “Reset password” button and enter your new password.<br />
+    When a student registers for a new rating you can capture that registration by clicking on the “Capture registration” button. Select the student you want to capture a registration for and the plane they have registered for. By clicking the download excel document link, you can download an excel spreadsheet with all the registration information.<br />
+    You can generate and download different reports by clicking on the “Reports” button.
+
+</p>
+<br />
+<label><b>Search</b></label>
+<br />
+<p>
+    By clicking on the “search” button you can search for different users under different user profiles.<br />
+    Once you have searched for a user you can delete them from the system or update their user role. If the users you have searched for, is a student, you can assign them to an instructor, add new study resources for them to access, or add them to a new exam.
+</p>
+<br />
+<label><b>Planes</b></label>
+<br />
+<p>
+    By clicking on the “Planes” button, you will be able to view all the plane types at the flight school. Then by clicking on the “View planes” button, you will be able to view all the planes of that plane type.<br />
+    By clicking on the relevant buttons, you will be able to add, update, and delete plane types as well as individual planes. You can also update the individual plane’s hours flown as and book them out for services and capture their service details.
+</p>
+<label><b>Study Resources</b></label>
+<br />
+<p>
+    By clicking on the “Study resources” button, you will be able to see all the plane types. Then by clicking on the relevant “Resources’ button you will be able to view all that plane’s resources. You will be able to view/download individual study resources by clicking on the view/download link.<br />
+    You can add or remove study resources by clicking on the relevant buttons.
+</p>
+<label><b>Lesson Plans</b></label>
+<br />
+<p>
+    By clicking on the “Lesson Plan” button, you will be able to see all the plane types. Then by clicking on the relevant “View Lesson Plans” button you will be able to view all that plane’s Lesson Plans. You will be able to view/download individual Lesson Plans by clicking on the view/download link.<br />
+    You can add or remove Lesson Plans by clicking on the relevant buttons.
+</p>
+<br />
+<label><b>Exams</b></label>
+<br />
+<p>
+    By clicking on the “Exam” button you will be able to see all the plane types. By clicking on an “exam” button under a plane type, you will be able to view all the questions for that plane type. You can create, update, delete, and view the answer to a specific question. You can also upload and delete the load sheet for that exam. You can also view/download the load sheet by clicking the view/download load sheet link.
+</p>
+<br />
+<label><b>Exam Conultations</b></label>
+<br />
+<p>
+    By clicking on the “exam consultation” button, you can view all your available and booked consultation sessions. You can also create new booking slots as well as update or delete existing consultation bookings.(Please note that only instructors are able to do this.)
+</p>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+
+    function searchFunction() {
+        var searchString = $("#search").val();
+        window.find(searchString);
+    }
+</script>
+

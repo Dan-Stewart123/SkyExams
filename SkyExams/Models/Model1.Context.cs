@@ -44,9 +44,11 @@ namespace SkyExams.Models
         public virtual DbSet<Plane> Planes { get; set; }
         public virtual DbSet<Plane_Service> Plane_Service { get; set; }
         public virtual DbSet<Plane_Type> Plane_Type { get; set; }
+        public virtual DbSet<Profile_Image> Profile_Image { get; set; }
         public virtual DbSet<Question_Rating> Question_Rating { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
+        public virtual DbSet<Registration_Sheet> Registration_Sheet { get; set; }
         public virtual DbSet<Save_Exam> Save_Exam { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<SkyExam> SkyExams { get; set; }
@@ -65,6 +67,5 @@ namespace SkyExams.Models
         public virtual DbSet<UserPassword> UserPasswords { get; set; }
         public virtual DbSet<Verification_Code> Verification_Code { get; set; }
         public virtual DbSet<Zip_Code> Zip_Code { get; set; }
-        public virtual DbSet<Profile_Image> Profile_Image { get; set; }
     }
 }

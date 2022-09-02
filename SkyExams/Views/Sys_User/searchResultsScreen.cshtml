@@ -50,6 +50,9 @@
                 <button type="button" onclick="location.href='@Url.Action("deleteUser", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Delete
                 </button>
+                <button type="button" onclick="location.href='@Url.Action("UpdateUserRole", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Update user Role
+                </button>
             </td>
             <td scope="row" id="studentFunctions" style="display: none;">
                 <button type="button" onclick="location.href='@Url.Action("addStudentResource", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
@@ -96,5 +99,9 @@
 
     }
     window.onload = adminCheck;
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
 </script>
 
