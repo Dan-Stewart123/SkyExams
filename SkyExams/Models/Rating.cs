@@ -12,10 +12,9 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Cessna_172
+    public partial class Rating
     {
-        public int c172_ID { get; set; }
-        public int Plane_ID { get; set; }
-        public string Plane_Description { get; set; }
+        public int Rating_ID { get; set; }
+        public string Rating_Description { get; set; }
     }
 }

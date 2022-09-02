@@ -1,0 +1,63 @@
+﻿@model IEnumerable<SkyExams.Models.Section>
+
+@{
+    ViewBag.Title = "createQuestion";
+    var uID = ViewData["userId"];
+    var rID = ViewData["ratingId"];
+}
+
+<h2>Create Question and Answer</h2>
+<br />
+<br />
+@using (Html.BeginForm("createQuestion", "Questions", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@uID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="ratingId" name="ratingId" value="@rID">
+    </div>
+    <label class="col-md-3">@Html.Label("Question:")</label>
+    <input class="col-md-3" type="text" id="question" name="question">
+    <label class="col-md-3">@Html.Label("Section:")</label>
+    <select id="sec" name="sec">
+        @foreach (var item in Model)
+        {
+            <option value="@item.Section_ID">@item.Section1</option>
+        }
+    </select>
+    <br />
+    <br />
+    <label class="col-md-3">@Html.Label("Correct Answer:")</label>
+    <input class="col-md-3" type="text" id="correct" name="correct">
+    <label class="col-md-3">@Html.Label("1st Incorrect Answer:")</label>
+    <input class="col-md-3" type="text" id="false1" name="false1">
+    <br />
+    <br />
+    <label class="col-md-3">@Html.Label("2nd Incorrect Answer:")</label>
+    <input class="col-md-3" type="text" id="false2" name="false2">
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
+}
+
+<script>
+    function checkInput() {
+        var question = $("#question").val();
+        var sec = $("#sec").val();
+        var correct = $("#correct").val();
+        var false1 = $("#false1").val();
+        var false2 = $("#false2").val();
+        if (question != "" && sec != "" && correct != "" && false1 != "" && false2 != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>
+
+

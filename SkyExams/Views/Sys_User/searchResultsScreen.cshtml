@@ -3,6 +3,7 @@
     ViewBag.Title = "searchResultsScreen";
     var uID = ViewData["userID"];
     var role = ViewData["role"];
+    var userRole = ViewData["userRole"];
 }
 
 <h2>Search Results</h2>
@@ -49,10 +50,16 @@
                 <button type="button" onclick="location.href='@Url.Action("deleteUser", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Delete
                 </button>
+                <button type="button" onclick="location.href='@Url.Action("UpdateUserRole", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Update user Role
+                </button>
             </td>
             <td scope="row" id="studentFunctions" style="display: none;">
                 <button type="button" onclick="location.href='@Url.Action("addStudentResource", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Add resources
+                </button>
+                <button type="button" onclick="location.href='@Url.Action("addStudentExam", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
+                    Add Student to an Exam
                 </button>
                 <button type="button" onclick="location.href='@Url.Action("addStudentInstructor", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Assign Student an Instructor
@@ -65,11 +72,11 @@
 <br />
 <br />
 <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
-    Continue
+    Back
 </button>
 <script>
     function adminCheck() {
-        var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
+        var userId = @Html.Raw(Json.Encode(ViewData["userRole"]));
         var userRole = @Html.Raw(Json.Encode(ViewData["role"]));
         if (userId == '2') {
             document.getElementById("del").style.display = "block";
@@ -92,5 +99,9 @@
 
     }
     window.onload = adminCheck;
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
 </script>
 

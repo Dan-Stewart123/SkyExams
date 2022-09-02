@@ -1,0 +1,240 @@
+﻿@model IEnumerable<SkyExams.ViewModels.QuestionVM>
+
+@{
+    ViewBag.Title = "writeExam";
+    var uID = ViewData["userId"];
+    var rID = ViewData["ratingId"];
+    var name = ViewData["userName"];
+    int count = 1, countR = 0;
+}
+
+<h2>Write Exam</h2>
+<button type="button" id="saveExam" class="btn btn-default" style="margin-top: 10px;"><span class="glyphicon glyphicon-ok"></span>   Save Exam </button>
+<br />
+<p>You can save your exam and come back to it at a later time.</p>
+<div id="home" style="display:none;">
+    <p id="bookLabel">Your Exam has been saved, click the button bellow to leave the exam</p>
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+        Home
+    </button>
+</div>
+<div class="Quiz" id="Quiz">
+    <div id="examMark">
+
+
+    </div>
+    <br />
+    <h4 style="margin-top: 4%;"> <span class="label label-info">Questions :</span> </h4>
+    <br />
+    <h4 style="margin-top: 4%;">@name</h4>
+    <br />
+
+    @if (Model != null && Model.Any())
+    {
+
+        foreach (var question in Model)
+        {
+            <div class="BlockQ" style="border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: #f0ffff; padding: 8px;">
+
+                <div class="Question" style="padding: 2%;">
+                    <span class="label label-warning"> @string.Format("{0}{1}.", "Q", count)</span>
+                    <span id="@string.Format("{0}{1}", "ID_Q", count)" style="display:none;">@question.QuestionID</span>
+                    <p style="display: inline; padding: 2%;" id="@string.Format("{0}{1}", "Q", count)">@question.QuestionText</p>
+                </div>
+
+                <div class="Choices" style="margin-left: 8%;">
+
+                    @foreach (var choice in question.Answers)
+                    {
+                        <label class="radio-inline">
+                            <input tag="radioButton" type="radio" name="@string.Format("{0}{1}", "inlineRadioOptions",count)" id="@string.Format("{0}{1}", "inlineRadio", countR)" value="@choice.Answer_ID" style="margin-left: -16px;"> @choice.ANS
+                        </label><br />countR++;
+                        if (question.Answers.Count == 1)
+                        {
+                            <script>
+
+                                document.getElementsByTagName('radioButton').checked = true;
+                            </script>
+                        }
+                    }
+
+                </div> <!--END Choices-->
+
+                <div id="@string.Format("{0}{1}{2}", "Ans","Q", count)">
+
+
+                </div>
+
+            </div> <!-- END BlockQ --> count++;
+        }
+        <span id="countQuections" style="display:none;">@count</span>
+        <p id="checkLabel">Hint: Ensure that all your answers are checked before you submit to get the maximun marks.</p>
+        <br />
+        <button type="button" id="SubmitQuiz" class="btn btn-default" style="margin-top: 10px;"><span class="glyphicon glyphicon-ok"></span>   Submit Exam </button>
+        <div id="consult" style="display:none;">
+            <p>Please print your exam script and bring it to your consultation</p>
+            <br />
+            <br />
+            <p id="bookLabel">Book your consultation by clicking the button bellow</p>
+            <br />
+            <br />
+            <button type="button" onclick="location.href='@Url.Action("viewSlots", "Bookings", new { id = uID })'">
+                Book Consultation
+            </button>
+        </div>
+    }
+
+</div> <!-- END QUIZ -->
+
+@section MyScritps
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+    <script type="text/javascript">
+
+            $('#SubmitQuiz').on('click', async function submit() {
+
+                //count Questions
+                var sel = $('#countQuections').text();
+                var correctsAnswers = 0;
+                var totAnswers = 0;
+                var grade = 0;
+
+                console.log(sel);
+
+                var resultExam = [], countQuestion = parseInt(sel), question = {}, j = 1;
+
+                for (var i = 1; i < countQuestion; i++) {
+                    question = {
+                        QuestionID: $('#ID_Q'+ i).text(),
+                        QuestionText: $('#Q' + i).text(),
+                        AnswerID: $('input[name=inlineRadioOptions' + i + ']:checked').val(),
+                        AnswerQ: $('input[name=inlineRadioOptions' + i + ']:checked').text()
+                    }
+                    $('#SubmitQuiz').hide();
+                    $('#consult').show();
+                    resultExam.push(question);
+                }// for loop
+
+                var pdf = await $.ajax({
+
+                    type: 'POST',
+                    url: '@Url.Action("writeExam", "Questions")',
+                    data: { id: @uID, ratingId: @rID, resultExam: resultExam },
+
+                    success: function (response) {
+
+                        if (response.result.length > 0)
+                        {
+                            for(var i = 0; i <response.result.length; i++ )
+                            {
+                                if(response.result[i].isCorrect == true)
+                                {
+                                    correctsAnswers = correctsAnswers + 1;
+                                    $('#AnsQ' + j).html('<div class="alert alert-success" role="alert"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Correct answer, well done <b>' + response.result[i].AnswerQ + '</b></div>');
+                                }
+                                else
+                                {
+                                    $('#AnsQ' + j).html('<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Incorrect answer - The Correct Answer is <b>' + response.result[i].AnswerQ + '</b></div>');
+                                }
+                                j++;
+                                totAnswers = totAnswers + 1;
+                            }
+                            grade = (correctsAnswers / totAnswers) * 100;
+                            $('#examMark').html('<div class="alert alert-success" role="alert">Your mark is ' + correctsAnswers + "/" + totAnswers + " " + grade + '%</div>');
+
+                        }
+                        else
+                        {
+                            alert("Something Wrong");
+                        }
+
+
+
+                    },
+                    error: function (response) {
+
+                    }
+                });// ajax function
+                pdf = new jsPDF('p', 'pt', 'letter');
+
+                source = $('#Quiz')[0];
+
+
+                specialElementHandlers = {
+
+                    '#bookLabel': function (element, renderer) {
+
+                        return true
+                    },
+                    '#checkLabel': function (element, renderer) {
+
+                        return true
+                    },
+                    '#SubmitQuiz': function (element, renderer) {
+
+                        return true
+                    },
+                    '#countQuections': function (element, renderer) {
+
+                        return true
+                    },
+                    '#home': function (element, renderer) {
+
+                        return true
+                    }
+                };
+                margins = {
+                    top: 80,
+                    bottom: 60,
+                    left: 40,
+                    width: 522
+                };
+
+                pdf.fromHTML(
+                    source,
+                    margins.left,
+                    margins.top, {
+                    'width': margins.width,
+                    'elementHandlers': specialElementHandlers
+                },
+
+
+                    function (dispose) {
+                        pdf.save('examScript.pdf');
+                    }, margins
+                );
+
+            });// submit exam
+
+        $('#saveExam').on('click', function saveExam() {
+            var questionsCount = $('#countQuections').text();
+
+            var saveQuestion = [], countQuestion = parseInt(questionsCount), question = {}, j = 1;
+
+            for (var i = 1; i < countQuestion; i++) {
+                question = {
+                    QuestionID: $('#ID_Q' + i).text(),
+                    QuestionText: $('#Q' + i).text(),
+                    AnswerID: $('input[name=inlineRadioOptions' + i + ']:checked').val(),
+                    AnswerQ: $('input[name=inlineRadioOptions' + i + ']:checked').text()
+                }
+                $('#home').show();
+                if (question.AnswerID != null) {
+                    saveQuestion.push(question);
+                }// if statement
+
+            }// for loop
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("saveExam", "Questions")',
+                data: { id: @uID, ratingId: @rID, examSave: saveQuestion }
+
+            });// ajax function
+
+        });// save exam
+    </script>
+}
+

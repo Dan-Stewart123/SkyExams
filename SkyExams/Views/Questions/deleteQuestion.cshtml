@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SkyExams.Models.Answer>
+
+@{
+    ViewBag.Title = "deleteQuestion";
+    var uID = ViewData["userId"];
+    var rId = ViewData["ratingId"];
+    var qId = ViewData["questionId"];
+    var quest = ViewData["question"];
+}
+
+<h2>Delete Question:</h2>
+<p>Are you sure you wish to delete this Question and Answers</p>
+<br />
+<br />
+<dl class="dl-horizontal">
+    <dt class="col-md-4">
+        @Html.Label("Question:")
+    </dt>
+
+    <dd>
+        @quest
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Answers:")
+    </dt>
+
+    <dd>
+        @foreach (var item in Model)
+        {
+            <ul>
+                <li>
+                    @Html.DisplayFor(modelItem => item.ANS)
+                </li>
+            </ul>
+        }
+    </dd>
+</dl>
+<button type="button" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rId })'">
+    Back
+</button>
+<button type="button" onclick="location.href='@Url.Action("deleteQuestionConformation", "Questions", new { id = uID, questionId = qId })'">
+    Delete
+</button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<SkyExams.Models.Plane_Type>
+@{
+    var uID = ViewData["userID"];
+    var type = ViewData["planeType"];
+    var userRole = ViewData["userRole"];
+}
+<h2>Exams</h2>
+<br />
+<div style="text-align:right;">
+    <button type="button" id="consult" onclick="location.href='@Url.Action("examHelp", "Help", new { id = uID })'">
+        Help
+    </button>
+</div>
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+    Back
+</button>
+<br />
+<br />
+@foreach (var modelItem in Model)
+{
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h4>@modelItem.Type_Description</h4></div>
+            <div class="card-body">
+                <img src="@Url.Action("getImg", "Questions", new { id = modelItem.Plane_Type_ID })" width="280px" height="150px" title="title" alt="additional title" />
+            </div>
+            <div class="card-footer">
+                <button type="button" onclick="location.href='@Url.Action("studentCheck", "Questions", new { id = uID, ratingId = modelItem.Plane_Type_ID })'">
+                    Exams
+                </button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

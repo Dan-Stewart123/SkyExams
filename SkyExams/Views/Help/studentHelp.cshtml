@@ -1,0 +1,77 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "studentHelp";
+}
+
+<h2>Help</h2>
+<br />
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Home
+</button>
+<div style="text-align:right;">
+    <input type="text" id="search" name="search">
+    <input type="submit" class="btn btn-primary" , value="Search" id="submitButton" onclick="searchFunction()" />
+</div>
+<br />
+<br />
+<label><b>Overview</b></label>
+<br />
+<p>
+    This system is an exam system for Flight Training Services(FTS) and is designed to allow students to write an online exam and for the exam to be instantly marked. The student will also be able to view study resources and lesson plans to assist them in passing their exam. The planes that are used and events that will be hosted by the flight school will be displayed on the website.
+</p>
+<br />
+<label><b>View Account</b></label>
+<br />
+<p>
+    By clicking on the “view account” button, you can view your account details.<br />
+    To update your account, click on the “update account details” button and enter your updated information in the relevant fields.<br />
+    To reset your password, click on the “Reset password” button and enter your new password.<br />
+    As a student, you can update your hours flown by clicking the “update personal hours flown” button and entering your updated hours.
+</p>
+<br />
+<label><b>Search</b></label>
+<br />
+<p>
+    By clicking on the “search” button you can search for different users under different user profiles.
+</p>
+<br />
+<label><b>Planes</b></label>
+<br />
+<p>
+    By clicking on the “Planes” button, you will be able to view all the plane types at the flight school. Then by clicking on the “View planes” button, you will be able to view all the planes of that plane type.
+</p>
+<label><b>Study Resources</b></label>
+<br />
+<p>
+    By clicking on the “Study resources” button, you will be able to see all the plane types. Then by clicking on the relevant “Resources’ button you will be able to view all that plane’s resources. You will be able to view/download individual study resources by clicking on the view/download link.
+</p>
+<label><b>Lesson Plans</b></label>
+<br />
+<p>
+    By clicking on the “Lesson Plan” button, you will be able to see all the plane types. Then by clicking on the relevant “View Lesson Plans” button you will be able to view all that plane’s Lesson Plans. You will be able to view/download individual Lesson Plans by clicking on the view/download link.
+</p>
+<br />
+<label><b>Exams</b></label>
+<br />
+<p>
+    By clicking on the “Exams” button you will be able to view all the exams you have access to. By clicking on the “Exams” button under the relevant plane type, you will be able to begin that exam as well as being able to download the load sheet. Once you have begun the exam, you will have to complete all the questions before pressing the “Submit” button. You can also save your exam by pressing the “Save exam” button, so you can complete the questions at another time.
+</p>
+<br />
+<label><b>Exam Conultations</b></label>
+<br />
+<p>
+    By clicking on the “Exam consultations” button, you can view all your booked consultations. You can also book a new consultation as well as update or delete existing consultations by clicking on the relevant buttons.
+</p>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+
+    function searchFunction() {
+        var searchString = $("#search").val();
+        window.find(searchString);
+    }
+</script>
+

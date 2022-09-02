@@ -1,10 +1,13 @@
 ﻿
 @{
     ViewBag.Title = "Registration Conformation";
+    var error = ViewData["err"];
 }
 
 <h2>Registration Conformation</h2>
 <p>Your registration code will be emailed to you shortly, do not close this page.</p>
+
+<label style="color:red">@error</label>
 
 @using (Html.BeginForm("registrationConformationScreen", "Sys_User", FormMethod.Post))
 {
@@ -23,6 +26,7 @@
         <label class="col-md-4">@Html.Label("Licence Number:")</label>
         <input type="text" id="licence" name="licence">
     </div>
+    
     <br />
     <br />
     <div id="submitButton" style="display:none;">
@@ -31,6 +35,8 @@
 }
 
 
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="~/Scripts/WebCam.js"></script>
 <script>
     function verifyCode() {
         var temp = document.getElementById("code").value;
@@ -42,6 +48,6 @@
         else {
             document.getElementById("submitButton").style.display = "block";
         }
-    }
+    }// code verify
 </script>
 

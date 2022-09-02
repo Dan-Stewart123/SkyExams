@@ -1,0 +1,36 @@
+﻿@model SkyExams.Models.Instructor
+@{
+    ViewBag.Title = "createSlot";
+}
+
+<h2>Create Booking Slot</h2>
+<p>Please enter the following information:</p>
+<br />
+<br />
+@using (Html.BeginForm("createSlot", "Bookings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.SysUser_ID">
+    </div>
+    <label class="col-md-3">@Html.Label("Slot Date and Time:")</label>
+    <input type="datetime-local" id="slotTime" name="slotTime">
+    <br />
+    <br />
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("slotsScreen", "Bookings", new { id = Model.SysUser_ID })'">
+        Cancel
+    </button>
+    <input type="submit" class="btn btn-primary" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
+}
+
+<script>
+    function checkInput() {
+        var slotTime = $("#slotTime").val();
+        if (slotTime != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+</script>
+
+

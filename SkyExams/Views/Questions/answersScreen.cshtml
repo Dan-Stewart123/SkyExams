@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SkyExams.Models.Answer>
+@{
+    ViewBag.Title = "answersScreen";
+    var uID = ViewData["userId"];
+    var rId = ViewData["ratingId"];
+    var quest = ViewData["question"];
+}
+
+<h2>Answers:</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Answer</th>
+            <th scope="col">Question</th>
+            <th scope="col">Correct Answer</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.ANS)
+                </td>
+                <td scope="row">
+                    @quest
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Correct_Answer)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rId })'">
+    Continue
+</button>
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

@@ -1,0 +1,42 @@
+﻿@model SkyExams.Models.Plane_Type
+
+@{
+    ViewBag.Title = "updatePlaneType";
+    var uID = ViewData["loggedId"];
+}
+
+<h2>Update Plane Type</h2>
+@using (Html.BeginForm("updatePlaneType", "Planes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:none;">
+        <input type="text" id="loddedId" name="loggedId" value="@uID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.Plane_Type_ID">
+    </div>
+    <label class="col-md-3">@Html.Label("Plane Type name:")</label>
+    <input class="col-md-3" type="text" id="name" name="name" value="@Model.Type_Description">
+    <label class="col-md-3">@Html.Label("Upload a picture of the Plane:")</label>
+    <input class="col-md-3" type="file" id="pic" name="pic" />
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
+}
+
+<script>
+    function checkInput() {
+        var name = $("#name").val();
+        var pic = $("#pic").val();
+        if (name != "" && pic != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>
+
+

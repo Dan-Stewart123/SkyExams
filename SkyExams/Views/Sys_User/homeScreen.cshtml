@@ -20,3 +20,26 @@
 <button type="button" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = Model.SysUser_ID })'">
     Lesson Plans
 </button>
+<button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = Model.SysUser_ID })'">
+    Exams
+</button>
+<button type="button" id="consult" onclick="location.href='@Url.Action("studentCheck", "Bookings", new { id = Model.SysUser_ID })'">
+    Exam Consultations
+</button>
+<button type="button" id="consult" onclick="location.href='@Url.Action("viewEvents", "uEvents", new { id = Model.SysUser_ID })'">
+    Events
+</button>
+<button type="button" id="consult" onclick="location.href='@Url.Action("studentCheck", "Help", new { id = Model.SysUser_ID })'">
+    Help
+</button>
+<button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Logout
+</button>
+
+<script>  
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

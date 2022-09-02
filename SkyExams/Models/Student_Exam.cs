@@ -12,10 +12,14 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Cessna_172_RG
+    public partial class Student_Exam
     {
-        public int c172_RG_ID { get; set; }
-        public int Plane_ID { get; set; }
-        public string Plane_Description { get; set; }
+        public int Student_ID { get; set; }
+        public int Exam_ID { get; set; }
+        public Nullable<int> Exam_Mark { get; set; }
+        public Nullable<bool> Started { get; set; }
+        public bool Completed { get; set; }
+        public int Stu_Exam { get; set; }
+        public Nullable<System.DateTime> Date_Completed { get; set; }
     }
 }

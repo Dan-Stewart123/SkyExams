@@ -12,10 +12,10 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Cherokee_140
+    public partial class Plane_Service
     {
-        public int Cherokee_140_ID { get; set; }
         public int Plane_ID { get; set; }
-        public string Plane_Description { get; set; }
+        public Nullable<System.DateTime> Last_Service_Date { get; set; }
+        public string Service_Details { get; set; }
     }
 }

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<SkyExams.Models.Sys_User>
+@{
+    ViewBag.Title = "captureRegistration";
+    var uID = ViewData["userId"];
+}
+
+<h2>Capture Registration</h2>
+
+@Html.ActionLink("Download Excel Document", "ExportToExcel")
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Cell number</th>
+            <th scope="col">Email Address</th>
+            <th scope="col">Physical Address</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.FName)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Cell_Number)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Email_Address)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Physical_Address)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.DOB)
+                </td>
+                <td scope="row">
+                    <button type="button" onclick="location.href='@Url.Action("CapturePlaneRegistration", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">Capture Registration</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID})'">
+    Back
+</button>
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>

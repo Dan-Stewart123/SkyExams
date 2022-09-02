@@ -1,0 +1,41 @@
+﻿@model SkyExams.Models.Sys_User
+@{
+    ViewBag.Title = "addPlaneTypeScreen";
+}
+
+<h2>Create Plane Type</h2>
+<p>Please enter the following information:</p>
+<br />
+<br />
+@using (Html.BeginForm("addPlaneTypeScreen", "Planes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.SysUser_ID">
+    </div>
+    <label class="col-md-3">@Html.Label("Plane Type name:")</label>
+    <input class="col-md-3" type="text" id="name" name="name">
+    <label class="col-md-3">@Html.Label("Upload a picture of the Plane:")</label>
+    <input class="col-md-3" type="file" id="pic" name="pic" />
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = Model.SysUser_ID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
+}
+
+<script>
+    function checkInput() {
+        var name = $("#name").val();
+        var pic = $("#pic").val();
+        if (name != "" && pic != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>
+
+
+

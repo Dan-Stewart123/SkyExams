@@ -1,0 +1,38 @@
+﻿@model SkyExams.Models.Plane
+@{
+    ViewBag.Title = "updatePlaneHours";
+    var uID = ViewData["loggedId"];
+}
+
+<h2>Update Plane Hours</h2>
+<p>Please complete the following fields</p>
+
+@using (Html.BeginForm("updatePlaneHours", "Planes", FormMethod.Post))
+{
+    <div style="display:none;">
+        <input type="text" id="userId" name="userId" value="@uID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@Model.Plane_ID">
+    </div>
+    <label class="col-md-3">@Html.Label("Hours Flown:")</label>
+    <input class="col-md-3" type="number" id="hoursFlown" name="hoursFlown" value="@Model.Hours_Flown">
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
+}
+
+<script>
+    function checkInput() {
+        var flown = $("#hoursFlown").val();
+        if (flown != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>

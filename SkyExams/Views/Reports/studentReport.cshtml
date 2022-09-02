@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SkyExams.Models.Sys_User>
+@{
+    ViewBag.Title = "studentReport";
+    var uID = ViewData["userID"];
+}
+
+<h2>Student Report</h2>
+<p>Please select a student to generate their report</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Cell number</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.FName)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Cell_Number)
+                </td>
+                <td scope="row" id="del">
+                    <button type="button" onclick="location.href='@Url.Action("generateStudentReport", "Reports", new { loggedId = uID, id = item.SysUser_ID })'">
+                        Generate Report
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+    Back
+</button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

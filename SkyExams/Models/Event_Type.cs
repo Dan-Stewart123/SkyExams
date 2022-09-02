@@ -12,9 +12,9 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Question_Type
+    public partial class Event_Type
     {
-        public int Question_Type_ID { get; set; }
-        public string Ques_Type { get; set; }
+        public int Event_Type_ID { get; set; }
+        public string Event_Type_Description { get; set; }
     }
 }

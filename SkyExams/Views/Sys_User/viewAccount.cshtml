@@ -5,8 +5,20 @@
 }
 
 <h2>Account Details</h2>
-
+<div style="text-align:right;">
+    <button type="button" id="consult" onclick="location.href='@Url.Action("viewAccountHelp", "Help", new { id = Model.SysUser_ID })'">
+        Help
+    </button>
+</div>
 <dl class="dl-horizontal">
+    @*<dt>
+        @Html.Label("Profile Image:")
+    </dt>*@
+
+    @*<dd>
+        <img src="@Url.Action("getImg", "Sys_User", new { id = Model.SysUser_ID })" width="280px" height="150px" title="title" alt="No Image" />
+    </dd>*@
+
     <dt class="col-md-4">
         @Html.Label("Title:")
     </dt>
@@ -73,6 +85,20 @@
     Update Account Details
 </button>
 <br />
+<div id="persHrs" style="display: none;">
+    <button type="button" onclick="location.href='@Url.Action("StudentHours", "Sys_User", new { id = Model.SysUser_ID })'">
+        Update Personal Hours Flown
+    </button>
+</div>
+<div id="captureReg" style="display: none;">
+    <button type="button" onclick="location.href='@Url.Action("captureRegistration", "Sys_User", new { id = Model.SysUser_ID })'">
+        Capture Registration
+    </button>
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = Model.SysUser_ID })'">
+        Reports
+    </button>
+</div>
 <button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
     Logout
 </button>
@@ -103,7 +129,17 @@
             document.getElementById("title").style.display = "none";
             document.getElementById("other").style.display = "block";
         }
+        if (@Model.User_Role_ID == 1){
+            document.getElementById("persHrs").style.display = "block";
+        }
+        if (@Model.User_Role_ID == 2){
+            document.getElementById("captureReg").style.display = "block";
+        }
     }
     window.onload = displayTitle;
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
 </script>
 

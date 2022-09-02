@@ -16,5 +16,6 @@ namespace SkyExams.Models
     {
         public int Plane_Type_ID { get; set; }
         public string Type_Description { get; set; }
+        public byte[] Plane_Image { get; set; }
     }
 }
