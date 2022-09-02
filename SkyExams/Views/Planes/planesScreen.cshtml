@@ -8,21 +8,21 @@
 <h2>Planes</h2>
 <br />
 <div style="text-align:right;">
-    <button type="button" id="consult" onclick="location.href='@Url.Action("planesHelp", "Help", new { id = uID })'">
+    <button type="button" id="consult" class="btn btn-link" onclick="location.href='@Url.Action("planesHelp", "Help", new { id = uID })'">
         Help
     </button>
 </div>
 <br />
 <div id="createButton" style="display:none;">
-    <button type="button" onclick="location.href='@Url.Action("addPlaneScreen", "Planes", new { id = uID })'">
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("addPlaneScreen", "Planes", new { id = uID })'">
         Add Plane
     </button>
-    <button type="button" onclick="location.href='@Url.Action("addPlaneTypeScreen", "Planes", new { id = uID })'">
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("addPlaneTypeScreen", "Planes", new { id = uID })'">
         Add Plane Type
     </button>
 </div>
 <br />
-<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
     Back
 </button>
 <br />
@@ -37,14 +37,14 @@
                 <img src="@Url.Action("getImg", "Planes", new { id = modelItem.Plane_Type_ID })" width="280px" height="150px" title="title" alt="additional title" />
             </div>
             <div class="card-footer">
-                <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = modelItem.Plane_Type_ID })'">
+                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = modelItem.Plane_Type_ID })'">
                     View Planes
                 </button>
                 <div id="adminFunctions" class="adminFunctions" style="display:none;">
-                    <button type="button" onclick="location.href='@Url.Action("updatePlaneType", "Planes", new { loggedId = uID, id = modelItem.Plane_Type_ID })'">
+                    <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("updatePlaneType", "Planes", new { loggedId = uID, id = modelItem.Plane_Type_ID })'">
                         Update Plane Type
                     </button>
-                    <button type="button" onclick="location.href='@Url.Action("deletePlaneType", "Planes", new { loggedId = uID, id = modelItem.Plane_Type_ID })'">
+                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deletePlaneType", "Planes", new { loggedId = uID, id = modelItem.Plane_Type_ID })'">
                         Delete Plane Type
                     </button>
                 </div>
@@ -56,6 +56,10 @@
     <br />
     <br />
 }
+<br />
+<br />
+<br />
+<br />
 <br />
 <br />
 <br />
