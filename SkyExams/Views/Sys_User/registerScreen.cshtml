@@ -325,10 +325,10 @@
             </tr>
             <tr>
                 <td align="center">
-                    <input type="button" id="btnCapture" value="Capture" />
+                    <input type="button" class="btn btn-info" id="btnCapture" value="Capture" />
                 </td>
                 <td align="center">
-                    <input type="button" id="btnUpload" value="Upload" disabled="disabled" />
+                    <input type="button" class="btn btn-primary" id="btnUpload" value="Upload" disabled="disabled" />
                 </td>
             </tr>
         </table>
@@ -346,11 +346,10 @@
     <span class="label label-warning" id="warningLabel" style="display:none;">Passwords do not match</span>
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User")'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("loginScreen", "Sys_User")'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" class="btn btn-primary", value="Submit" id="submitButton" />
 }
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
