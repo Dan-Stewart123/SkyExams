@@ -25,7 +25,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td scope="row" id="del">
-                    <button type="button" onclick="location.href='@Url.Action("generatePlaneReport", "Reports", new { loggedId = uID, id = item.Plane_ID })'">
+                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("generatePlaneReport", "Reports", new { loggedId = uID, id = item.Plane_ID })'">
                         Generate Report
                     </button>
                 </td>
@@ -35,7 +35,7 @@
 </table>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
     Back
 </button>
 
