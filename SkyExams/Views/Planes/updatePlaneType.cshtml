@@ -20,10 +20,10 @@
     <input class="col-md-3" type="file" id="pic" name="pic" />
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
     <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 

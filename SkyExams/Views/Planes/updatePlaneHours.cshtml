@@ -19,10 +19,10 @@
     <input class="col-md-3" type="number" id="hoursFlown" name="hoursFlown" value="@Model.Hours_Flown">
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
     <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 
