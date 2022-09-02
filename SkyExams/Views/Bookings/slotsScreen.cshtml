@@ -6,13 +6,13 @@
 
 <h2>Booking Slots</h2>
 <div>
-    <button type="button" onclick="location.href='@Url.Action("createSlot", "Bookings", new { id = uID })'">
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("createSlot", "Bookings", new { id = uID })'">
         Create Booking Slot
     </button>
 </div>
 <br />
 <div style="text-align:right;">
-    <button type="button" id="consult" onclick="location.href='@Url.Action("consultationHelp", "Help", new { id = uID })'">
+    <button type="button" class="btn btn-link" id="consult" onclick="location.href='@Url.Action("consultationHelp", "Help", new { id = uID })'">
         Help
     </button>
 </div>
@@ -37,12 +37,12 @@
                     @Html.DisplayFor(modelItem => item.Booked)
                 </td>
                 <td scope="row">
-                    <button type="button" onclick="location.href='@Url.Action("updateSlot", "Bookings", new { id = uID, slotId = item.Slot_ID })'">
+                    <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("updateSlot", "Bookings", new { id = uID, slotId = item.Slot_ID })'">
                         Update
                     </button>
                 </td>
                 <td scope="row">
-                    <button type="button" onclick="location.href='@Url.Action("deleteSlot", "Bookings", new { id = uID, slotId = item.Slot_ID })'">
+                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deleteSlot", "Bookings", new { id = uID, slotId = item.Slot_ID })'">
                         Delete
                     </button>
                 </td>
@@ -52,7 +52,7 @@
 </table>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
     Back
 </button>
 
