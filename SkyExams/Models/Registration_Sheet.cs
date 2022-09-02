@@ -12,9 +12,14 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Theme_Covered
+    public partial class Registration_Sheet
     {
-        public int Theme_ID { get; set; }
-        public string Theme { get; set; }
+        public int Registration_ID { get; set; }
+        public int Sys_User_ID { get; set; }
+        public string First_Name { get; set; }
+        public string Surname { get; set; }
+        public int Plane_Type_ID { get; set; }
+        public string Type_Desctription { get; set; }
+        public bool Paid { get; set; }
     }
 }

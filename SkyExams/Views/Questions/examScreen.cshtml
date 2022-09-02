@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "examScreen";
+    var uID = ViewData["userId"];
+    var rID = ViewData["ratingId"];
+}
+
+<h2>Exam:</h2>
+<br />
+<p>Good Luck!</p>
+<br />
+<p>Remember to download the load sheet before starting your exam.</p>
+<br />
+<button type="button" onclick="location.href='@Url.Action("writeExam", "Questions", new { id = uID, ratingId = rID })'">
+    Begin Exam
+</button>
+<br />
+<br />
+@Html.ActionLink("View/Download Load Sheet", "downloadLoadSheet", new { id = rID })
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("exams", "Questions", new { id = uID })'">
+    Back
+</button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

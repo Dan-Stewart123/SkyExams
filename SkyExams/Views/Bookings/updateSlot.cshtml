@@ -1,0 +1,41 @@
+﻿@model SkyExams.Models.Instructor_Slots
+@{
+    ViewBag.Title = "updateSlot";
+    var uID = ViewData["uID"];
+}
+
+<h2>Update Booking Slot</h2>
+<p>Please enter the following information:</p>
+<br />
+<br />
+@using (Html.BeginForm("updateSlot", "Bookings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:none;">
+        <input type="text" id="id" name="id" value="@uID">
+    </div>
+    <div style="display:none;">
+        <input type="text" id="slotId" name="slotId" value="@Model.Slot_ID">
+    </div>
+    <label class="col-md-3">@Html.Label("Slot Date and Time:")</label>
+    <input type="datetime-local" id="slotTime" name="slotTime">
+    <br />
+    <br />
+    <button type="button" onclick="location.href='@Url.Action("slotsScreen", "Bookings", new { id = uID })'">
+        Cancel
+    </button>
+    <input type="submit" , value="Submit" id="submitButton" disabled/>
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
+}
+
+<script>
+    function checkInput() {
+        var slotTime = $("#slotTime").val();
+        if (slotTime != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+</script>
+
+
+

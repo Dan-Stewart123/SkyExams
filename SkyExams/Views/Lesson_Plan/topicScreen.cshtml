@@ -4,6 +4,7 @@
     var uID = ViewData["userID"];
     var tID = ViewData["topicID"];
     var type = ViewData["planeType"];
+    var userRole = ViewData["userRole"];
 }
 
 <h2>Lesson Plans</h2>
@@ -12,6 +13,11 @@
         Add Lesson Plan
     </button>
 </div>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = uID })'">
+    Back
+</button>
 <br />
 <br />
 <table class="table">
@@ -48,12 +54,10 @@
 </table>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = uID })'">
-    Continue
-</button>
+
 <script>
     function adminCheck() {
-        var userId = @uID;
+        var userId = @userRole;
         if (userId == '2') {
             document.getElementById("createButton").style.display = "block";
             var func = document.getElementsByClassName("deleteFunction");
@@ -63,6 +67,10 @@
         }
     }
     window.onload = adminCheck;
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
 </script>
 
 

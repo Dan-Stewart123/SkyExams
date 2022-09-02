@@ -1,0 +1,41 @@
+﻿@model SkyExams.Models.Instructor_Slots
+@{
+    ViewBag.Title = "deleteSlot";
+    var uID = ViewData["uID"];
+}
+
+<h2>Delete Booking Slot</h2>
+<p>Are you sure you wish to delete this slot</p>
+<br />
+<br />
+<dl class="dl-horizontal">
+    <dt class="col-md-4">
+        @Html.Label("Date and Time:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Date_Time)
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Booked:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Booked)
+    </dd>
+</dl>
+<button type="button" onclick="location.href='@Url.Action("slotsScreen", "Bookings", new { id = uID })'">
+    Back
+</button>
+<button type="button" onclick="location.href='@Url.Action("deleteSlotConformation", "Bookings", new { id = uID, slotId = Model.Slot_ID })'">
+    Delete
+</button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

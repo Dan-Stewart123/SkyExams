@@ -1,6 +1,7 @@
-﻿@model SkyExams.Models.Sys_User
+﻿@model IEnumerable<SkyExams.Models.Plane_Type>
 @{
     ViewBag.Title = "addPlaneScreen";
+    var uID = ViewData["userID"];
 }
 
 <h2>Add New Plane</h2>
@@ -9,15 +10,14 @@
 @using (Html.BeginForm("addPlaneScreen", "Planes", FormMethod.Post))
 {
     <div style="display:none;">
-        <input type="text" id="id" name="id" value="@Model.SysUser_ID">
+        <input type="text" id="id" name="id" value="@uID">
     </div>
     <label class="col-md-3">@Html.Label("Plane Type:")</label>
     <select class="col-md-3" id="type" name="type">
-        <option value=""></option>
-        <option value="1">Cessna 172</option>
-        <option value="2">Cessna 172 RG</option>
-        <option value="3">Cherokee 140</option>
-        <option value="4">Piper Twin Commanche</option>
+        @foreach (var item in Model)
+        {
+            <option value="@item.Plane_Type_ID">@item.Type_Description</option>
+        }
     </select>
     <label class="col-md-3">@Html.Label("Description:")</label>
     <input class="col-md-3" type="text" id="description" name="description">
@@ -33,9 +33,25 @@
     <input class="col-md-3" type="number" id="serviceHours" name="serviceHours">
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("PlanesScreen", "Planes", new { id = Model.SysUser_ID })'">
+    <button type="button" onclick="location.href='@Url.Action("PlanesScreen", "Planes", new { id = uID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" />
+    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
+
+<script>
+    function checkInput() {
+        var type = $("#type").val();
+        var desc = $("#description").val();
+        var sign = $("#sign").val();
+        var flown = $("#hoursFlown").val();
+        var service = $("#serviceHours").val();
+        if (type != "" && desc != "" && sign != "" && flown != "" && service != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>
 

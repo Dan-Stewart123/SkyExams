@@ -12,9 +12,10 @@ namespace SkyExams.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Licence_Type
+    public partial class Load_Sheet
     {
-        public int Licence_Type_ID { get; set; }
-        public string TypeDescription { get; set; }
+        public int load_Sheet_ID { get; set; }
+        public int Exam_ID { get; set; }
+        public byte[] load_Sheet1 { get; set; }
     }
 }

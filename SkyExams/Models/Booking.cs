@@ -15,10 +15,9 @@ namespace SkyExams.Models
     public partial class Booking
     {
         public int Booking_ID { get; set; }
-        public string B_Description { get; set; }
-        public Nullable<System.DateTime> Date_Time { get; set; }
         public int Student_ID { get; set; }
         public int Instructor_ID { get; set; }
-        public int Status_ID { get; set; }
+        public int Slot_ID { get; set; }
+        public System.DateTime Date_Time { get; set; }
     }
 }

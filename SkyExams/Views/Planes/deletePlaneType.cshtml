@@ -1,0 +1,44 @@
+﻿@model SkyExams.Models.Plane_Type
+@{
+    ViewBag.Title = "deletePlaneType";
+    var uID = ViewData["loggedId"];
+}
+
+<h2>Delete Plane Type</h2>
+<br />
+<p>Are you sure you wish to delete this plane</p>
+<br />
+<br />
+<dl class="dl-horizontal">
+    <dt class="col-md-4">
+        @Html.Label("Plane Type:")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Type_Description)
+    </dd>
+
+    <dt class="col-md-4">
+        @Html.Label("Image:")
+    </dt>
+
+    <dd>
+        <img src="@Url.Action("getImg", "Planes", new { id = Model.Plane_Type_ID })" width="280px" height="150px" title="title" alt="additional title" />
+    </dd>
+
+
+</dl>
+<button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
+    Back
+</button>
+<button type="button" onclick="location.href='@Url.Action("deletePlaneTypeConformation", "Planes", new { loggedId = uID, id = Model.Plane_Type_ID })'">
+    Delete
+</button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

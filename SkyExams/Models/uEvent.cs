@@ -15,7 +15,9 @@ namespace SkyExams.Models
     public partial class uEvent
     {
         public int Event_ID { get; set; }
-        public Nullable<System.DateTime> Date_Time { get; set; }
-        public int Location_ID { get; set; }
+        public System.DateTime Start_Time { get; set; }
+        public System.DateTime End_Time { get; set; }
+        public string text { get; set; }
+        public int Event_Type_ID { get; set; }
     }
 }

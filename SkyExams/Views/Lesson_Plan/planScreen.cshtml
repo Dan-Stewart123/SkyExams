@@ -1,75 +1,69 @@
-﻿@model SkyExams.Models.Sys_User
+﻿@model IEnumerable<SkyExams.Models.Plane_Type>
 @{
-    ViewBag.Title = "planScreen";
+    var uID = ViewData["userID"];
+    var type = ViewData["planeType"];
+    var userRole = ViewData["userRole"];
 }
 
 <h2>Lesson Plans</h2>
 <br />
-<br />
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header"><h4>Cessna 172</h4></div>
-        <div class="card-body">
-            <img src="~/Content/Cessna172.jpeg" width="280px" height="150px" title="title" alt="additional title" />
-        </div>
-        <div class="card-footer">
-            <button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = Model.SysUser_ID, topicId = 1 })'">
-                View Lesson Plans
-            </button>
-        </div>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header"><h4>Cessna 172 RG</h4></div>
-        <div class="card-body">
-            
-        </div>
-        <div class="card-footer">
-            <button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = Model.SysUser_ID, topicId = 2 })'">
-                View Lesson Plans
-            </button>
-        </div>
-    </div>
+<div style="text-align:right;">
+    <button type="button" id="consult" onclick="location.href='@Url.Action("lessonPlanHelp", "Help", new { id = uID })'">
+        Help
+    </button>
 </div>
 <br />
-<br />
-<br />
-<br />
-<br />
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header"><h4>Cherokee 140</h4></div>
-        <div class="card-body">
-            
-        </div>
-        <div class="card-footer">
-            <button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = Model.SysUser_ID, topicId = 3 })'">
-                View Lesson Plans
-            </button>
-        </div>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header"><h4>Piper Twin Commanche</h4></div>
-        <div class="card-body">
-            
-        </div>
-        <div class="card-footer">
-            <button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = Model.SysUser_ID, topicId = 4 })'">
-                View Lesson Plans
-            </button>
-        </div>
-    </div>
-</div>
-<br />
-<br />
-<br />
-<br />
-<br />
-<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
     Back
 </button>
+<br />
+<br />
+@foreach (var modelItem in Model)
+{
 
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h4>@modelItem.Type_Description</h4></div>
+            <div class="card-body">
+                <img src="@Url.Action("getImg", "Lesson_Plan", new { id = modelItem.Plane_Type_ID })" width="280px" height="150px" title="title" alt="additional title" />
+            </div>
+            <div class="card-footer">
+                <button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = uID, topicId = modelItem.Plane_Type_ID})'">
+                    View Lesson Plans
+                </button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
 

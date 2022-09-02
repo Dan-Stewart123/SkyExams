@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkyExams.Models;
+using SkyExams.ViewModels;
+using MimeKit;
+using MailKit;
+using MailKit.Net.Smtp;
 
 namespace SkyExams.Controllers
 {
@@ -22,14 +27,27 @@ namespace SkyExams.Controllers
 
         public ActionResult planesScreen(int? id)
         {
-            Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-            return View(user);
+            ViewData["userID"] = "" + id;
+            Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            ViewData["userRole"] = "" + forRole.User_Role_ID;
+            List<Plane_Type> planeTypes = db.Plane_Type.ToList();
+            
+            return View(planeTypes);
         }// returns plane screen
+
+        public FileContentResult getImg(int id)
+        {
+            byte[] byteArray = db.Plane_Type.Find(id).Plane_Image;
+            return byteArray != null
+                ? new FileContentResult(byteArray, "image/jpeg")
+                : null;
+        }
 
         public ActionResult addPlaneScreen(int? id)
         {
-            Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-            return View(user);
+            ViewData["userID"] = "" + id;
+            List <Plane_Type> typeList = db.Plane_Type.ToList();
+            return View(typeList);
         }// get for add plane screen
 
         [HttpPost]
@@ -48,54 +66,10 @@ namespace SkyExams.Controllers
                 newPlane.Call_Sign = sign;
                 newPlane.Hours_Flown = hoursFlown;
                 newPlane.Hours_Until_Service = serviceHours;
-                if(type == "1")
-                {
-                    Cessna_172 new172 = new Cessna_172();
-                    List<Cessna_172> cessna172List = new List<Cessna_172>();
-                    int tempID = cessna172List.Count() + 2;
-                    new172.c172_ID = tempID;
-                    new172.Plane_ID = planeID;
-                    new172.Plane_Description = description;
-                    db.Cessna_172.Add(new172);
-                    db.SaveChanges();
-                    newPlane.Plane_Type_ID = 1;
-                }// cessna 172
-                if (type == "2")
-                {
-                    Cessna_172_RG newRG = new Cessna_172_RG();
-                    List<Cessna_172_RG> rgList = new List<Cessna_172_RG>();
-                    int tempID = rgList.Count() + 2;
-                    newRG.c172_RG_ID = tempID;
-                    newRG.Plane_ID = planeID;
-                    newRG.Plane_Description = description;
-                    db.Cessna_172_RG.Add(newRG);
-                    db.SaveChanges();
-                    newPlane.Plane_Type_ID = 2;
-                }// cessna 172 RG
-                if (type == "3")
-                {
-                    Cherokee_140 new140 = new Cherokee_140();
-                    List<Cherokee_140> cherokeeList = new List<Cherokee_140>();
-                    int tempID = cherokeeList.Count() + 2;
-                    new140.Cherokee_140_ID = tempID;
-                    new140.Plane_ID = planeID;
-                    new140.Plane_Description = description;
-                    db.Cherokee_140.Add(new140);
-                    db.SaveChanges();
-                    newPlane.Plane_Type_ID = 3;
-                }// cherokee 140
-                if (type == "4")
-                {
-                    Twin_Commanche newTwin = new Twin_Commanche();
-                    List<Twin_Commanche> twinList = new List<Twin_Commanche>();
-                    int tempID = twinList.Count() + 2;
-                    newTwin.Twin_Commanche_ID = tempID;
-                    newTwin.Plane_ID = planeID;
-                    newTwin.Plane_Description = description;
-                    db.Twin_Commanche.Add(newTwin);
-                    db.SaveChanges();
-                    newPlane.Plane_Type_ID = 4;
-                }// twin commanche
+                newPlane.Description = description;
+                newPlane.In_Service = false;
+                newPlane.Plane_Type_ID = Convert.ToInt32(type);
+                
                 db.Planes.Add(newPlane);
                 db.SaveChanges();
                 Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -106,41 +80,20 @@ namespace SkyExams.Controllers
         public ActionResult planeTypeScreen(int? id, int? typeId)
         {
             ViewData["userID"] = "" + id;
+            Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+            ViewData["userRole"] = "" + forRole.User_Role_ID;
             List<Plane> planeList = new List<Plane>();
-            if(typeId == 1)
-            {
-                ViewData["planeType"] = "Cessna 172";
-                planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == 1);
-                return View(planeList);
-            }// cessna 172
-            if (typeId == 2)
-            {
-                ViewData["planeType"] = "Cessna 172 RG";
-                planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == 2);
-                return View(planeList);
-            }// cessna 172 RG
-            if (typeId == 3)
-            {
-                ViewData["planeType"] = "Cherokee 140";
-                planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == 3);
-                return View(planeList);
-            }// cherokee 140
-            if (typeId == 4)
-            {
-                ViewData["planeType"] = "Piper Twin Comanche";
-                planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == 4);
-                return View(planeList);
-            }// twin commanche
-            else
-            {
-                return View(planeList);
-            }
+            ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == typeId).Type_Description;
+            planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == typeId);
+            return View(planeList);
         }// plane type screen
 
         public ActionResult deletePlane(int? loggedId, int? id)
         {
             ViewData["loggedId"] = "" + loggedId;
+            //ViewData["planeType"] = db.Planes.ToList().Find(p => p.Plane_ID == id);
             Plane delPlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
+            ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlane.Plane_Type_ID).Type_Description;
             return View(delPlane);
         }// delete plane
 
@@ -151,30 +104,7 @@ namespace SkyExams.Controllers
             int planeID = delPlane.Plane_ID;
             db.Planes.Remove(delPlane);
             db.SaveChanges();
-            if(planeType == 1)
-            {
-                Cessna_172 del172 = db.Cessna_172.ToList().Find(p => p.Plane_ID == planeID);
-                db.Cessna_172.Remove(del172);
-                db.SaveChanges();
-            }// cessna 172
-            if (planeType == 2)
-            {
-                Cessna_172_RG delRG = db.Cessna_172_RG.ToList().Find(p => p.Plane_ID == planeID);
-                db.Cessna_172_RG.Remove(delRG);
-                db.SaveChanges();
-            }// cessna 172 RG
-            if (planeType == 3)
-            {
-                Cherokee_140 del140 = db.Cherokee_140.ToList().Find(p => p.Plane_ID == planeID);
-                db.Cherokee_140.Remove(del140);
-                db.SaveChanges();
-            }// Cherokee 140
-            if (planeType == 4)
-            {
-                Twin_Commanche delTwin = db.Twin_Commanche.ToList().Find(p => p.Plane_ID == planeID);
-                db.Twin_Commanche.Remove(delTwin);
-                db.SaveChanges();
-            }// Twin Commanche
+            
             return RedirectToAction("planeTypeScreen", new { id = loggedId, typeId = planeType });
         }// delete plane conformation
 
@@ -202,65 +132,9 @@ namespace SkyExams.Controllers
                 updatePlane.Call_Sign = sign;
                 updatePlane.Hours_Flown = hoursFlown;
                 updatePlane.Hours_Until_Service = serviceHours;
-                if(plane.Plane_Type_ID == 1)
-                {
-                    Cessna_172 c172 = db.Cessna_172.ToList().Find(p => p.Plane_ID == updatePlane.Plane_ID);
-                    Cessna_172 update172 = new Cessna_172();
-                    update172.Plane_Description = description;
-                    update172.c172_ID = c172.c172_ID;
-                    update172.Plane_ID = c172.Plane_ID;
-
-                    db.Cessna_172.Remove(c172);
-                    db.SaveChanges();
-
-                    db.Cessna_172.Add(update172);
-                    db.SaveChanges();
-                }// cessna 172
-
-                if (plane.Plane_Type_ID == 2)
-                {
-                    Cessna_172_RG rg = db.Cessna_172_RG.ToList().Find(p => p.Plane_ID == updatePlane.Plane_ID);
-                    Cessna_172_RG updateRg = new Cessna_172_RG();
-                    updateRg.Plane_Description = description;
-                    updateRg.c172_RG_ID = rg.c172_RG_ID;
-                    updateRg.Plane_ID = rg.Plane_ID;
-
-                    db.Cessna_172_RG.Remove(rg);
-                    db.SaveChanges();
-
-                    db.Cessna_172_RG.Add(updateRg);
-                    db.SaveChanges();
-                }// cessna 172 RG
-
-                if (plane.Plane_Type_ID == 3)
-                {
-                    Cherokee_140 c140 = db.Cherokee_140.ToList().Find(p => p.Plane_ID == updatePlane.Plane_ID);
-                    Cherokee_140 update140 = new Cherokee_140();
-                    update140.Plane_Description = description;
-                    update140.Cherokee_140_ID = c140.Cherokee_140_ID;
-                    update140.Plane_ID = c140.Plane_ID;
-
-                    db.Cherokee_140.Remove(c140);
-                    db.SaveChanges();
-
-                    db.Cherokee_140.Add(update140);
-                    db.SaveChanges();
-                }// cherokee 140
-
-                if (plane.Plane_Type_ID == 4)
-                {
-                    Twin_Commanche twin = db.Twin_Commanche.ToList().Find(p => p.Plane_ID == updatePlane.Plane_ID);
-                    Twin_Commanche updateTwin = new Twin_Commanche();
-                    updateTwin.Plane_Description = description;
-                    updateTwin.Twin_Commanche_ID = twin.Twin_Commanche_ID;
-                    updateTwin.Plane_ID = twin.Plane_ID;
-
-                    db.Twin_Commanche.Remove(twin);
-                    db.SaveChanges();
-
-                    db.Twin_Commanche.Add(updateTwin);
-                    db.SaveChanges();
-                }// twin commanche
+                updatePlane.Description = description;
+                updatePlane.In_Service = plane.In_Service;
+                
 
                 db.Planes.Remove(plane);
                 db.SaveChanges();
@@ -272,6 +146,327 @@ namespace SkyExams.Controllers
                 return RedirectToAction("planeTypeScreen", new { id = uID, typeId = updatePlane.Plane_Type_ID });
             }// else
         }// update plane post
+
+        public ActionResult updatePlaneHours(int? loggedId, int? id)
+        {
+            ViewData["loggedId"] = "" + loggedId;
+            Plane updatePlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
+            return View(updatePlane);
+        }// update plane hours get
+
+        [HttpPost]
+        public ActionResult updatePlaneHours(string userId, string id, int? hoursFlown)
+        {
+            int pID = Convert.ToInt32(id);
+            Plane plane = db.Planes.Find(pID);
+            if (hoursFlown == 0)
+            {
+                return RedirectToAction("updatePlane");
+            }// checks if all fields are complete 
+            else
+            {
+                Plane updatePlane = new Plane();
+                updatePlane.Plane_ID = plane.Plane_ID;
+                updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
+                updatePlane.Call_Sign = plane.Call_Sign;
+                updatePlane.Hours_Flown = hoursFlown;
+                updatePlane.Hours_Until_Service = plane.Hours_Until_Service;
+                updatePlane.Description = plane.Description;
+                updatePlane.In_Service = plane.In_Service;
+
+                if(updatePlane.Hours_Flown <= 10)
+                {
+                    Plane_Type type = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == updatePlane.Plane_Type_ID);
+
+                    MimeMessage requestEmail = new MimeMessage();
+                    requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
+                    requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to admin email
+                    requestEmail.Subject = "New user request";
+                    requestEmail.Body = new TextPart("plain") { Text = "The following plane is due for its service soon: Call Sign: " + updatePlane.Call_Sign + " Plane type: " + type.Type_Description + " Hours until service: " + updatePlane.Hours_Until_Service };
+
+                    //send email
+                    SmtpClient client = new SmtpClient();
+                    client.Connect("smtp.gmail.com", 465, true);
+                    client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                    client.Send(requestEmail);
+                    client.Disconnect(true);
+                    client.Dispose();
+                }// if for email
+
+                db.Planes.Remove(plane);
+                db.SaveChanges();
+
+                updatePlane.Hours_Until_Service = updatePlane.Hours_Until_Service - (updatePlane.Hours_Flown - plane.Hours_Flown);
+                db.Planes.Add(updatePlane);
+                db.SaveChanges();
+
+                int uID = Convert.ToInt32(userId);
+                return RedirectToAction("planeTypeScreen", new { id = uID, typeId = updatePlane.Plane_Type_ID });
+            }// else
+        }// update plane post
+
+        public ActionResult serviceCheck(int? loggedId, int? id)
+        {
+            Plane checkPlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
+            if(checkPlane.In_Service == false)
+            {
+                return RedirectToAction("bookPlaneOut", new { loggedId = loggedId, id = checkPlane.Plane_ID });
+            }// false
+            else
+            {
+                return RedirectToAction("captureServiceDetails", new { loggedId = loggedId, id = checkPlane.Plane_ID });
+            }// true
+        }// service check
+
+        public ActionResult bookPlaneOut(int? loggedId, int? id)
+        {
+            Plane plane = db.Planes.ToList().Find(p => p.Plane_ID == id);
+            Plane updatePlane = new Plane();
+
+            updatePlane.Plane_ID = plane.Plane_ID;
+            updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
+            updatePlane.Call_Sign = plane.Call_Sign;
+            updatePlane.Hours_Flown = plane.Hours_Flown;
+            updatePlane.Hours_Until_Service = plane.Hours_Until_Service;
+            updatePlane.Description = plane.Description;
+            updatePlane.In_Service = true;
+
+
+            db.Planes.Remove(plane);
+            db.SaveChanges();
+
+            db.Planes.Add(updatePlane);
+            db.SaveChanges();
+
+            return RedirectToAction("planeTypeScreen", new { id = loggedId, typeId = updatePlane.Plane_Type_ID });
+        }// book out plane
+
+        public ActionResult captureServiceDetails(int? loggedId, int? id)
+        {
+            ViewData["loggedId"] = "" + loggedId;
+            Plane updatePlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
+            return View(updatePlane);
+        }// capture service details
+
+        [HttpPost]
+        public ActionResult captureServiceDetails(int? loggedId, int? id, string details)
+        {
+            Plane plane = db.Planes.ToList().Find(p => p.Plane_ID == id);
+            Plane updatePlane = new Plane();
+            if (details == "")
+            {
+                return RedirectToAction("captureServiceDetails", new { loggedId = loggedId, id = plane.Plane_ID });
+            }// if statement
+            else
+            {
+                
+
+                updatePlane.Plane_ID = plane.Plane_ID;
+                updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
+                updatePlane.Call_Sign = plane.Call_Sign;
+                updatePlane.Hours_Flown = plane.Hours_Flown;
+                updatePlane.Hours_Until_Service = 50;
+                updatePlane.Description = plane.Description;
+                updatePlane.In_Service = false;
+
+
+                db.Planes.Remove(plane);
+                db.SaveChanges();
+
+                db.Planes.Add(updatePlane);
+                db.SaveChanges();
+
+                Plane_Service newService = new Plane_Service();
+                newService.Plane_ID = updatePlane.Plane_ID;
+                newService.Last_Service_Date = DateTime.Now;
+                newService.Service_Details = details;
+
+                db.Plane_Service.Add(newService);
+                db.SaveChanges();
+
+                return RedirectToAction("planeTypeScreen", new { id = loggedId, typeId = updatePlane.Plane_Type_ID });
+            }// else
+
+        }// capture service details post
+
+        [HttpGet]
+        public ActionResult addPlaneTypeScreen(int? id)
+        {
+            Sys_User user = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+            return View(user);
+        }// add plane type get
+
+        [HttpPost]
+        public ActionResult addPlaneTypeScreen(int? id, string name, HttpPostedFileBase pic)
+        {
+            Plane_Type newPlaneType = new Plane_Type();
+            newPlaneType.Type_Description = name;
+
+            byte[] imageBytes = null;
+            BinaryReader reader = new BinaryReader(pic.InputStream);
+            imageBytes = reader.ReadBytes((int)pic.ContentLength);
+            newPlaneType.Plane_Image = imageBytes;
+
+            db.Plane_Type.Add(newPlaneType);
+            db.SaveChanges();
+
+            Exam newExam = new Exam();
+            newExam.Exam_ID = newPlaneType.Plane_Type_ID;
+            newExam.Plane_Type_ID = newPlaneType.Plane_Type_ID;
+
+            db.Exams.Add(newExam);
+            db.SaveChanges();
+
+            Rating newRating = new Rating();
+            newRating.Rating_ID = newPlaneType.Plane_Type_ID;
+            newRating.Rating_Description = name;
+
+            db.Ratings.Add(newRating);
+            db.SaveChanges();
+
+            Question_Rating newQR = new Question_Rating();
+            newQR.Question_Rating_ID = newPlaneType.Plane_Type_ID;
+            newQR.Ques_Rating = name;
+
+            db.Question_Rating.Add(newQR);
+            db.SaveChanges();
+
+            return RedirectToAction("planesScreen", new { id = id });
+        }// add plane type post
+
+        [HttpGet]
+        public ActionResult deletePlaneType(int? loggedId, int? id)
+        {
+            ViewData["loggedId"] = "" + loggedId;
+            Plane_Type delPlane = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == id);
+            return View(delPlane);
+        }// delete plane type get
+
+        public ActionResult deletePlaneTypeConformation(int? loggedId, int? id)
+        {
+            Plane_Type delPlane = db.Plane_Type.Find(id);
+
+            List<Plane> planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == delPlane.Plane_Type_ID);
+            if(planeList != null)
+            {
+                foreach(var p in planeList)
+                {
+                    Plane_Service temp = db.Plane_Service.ToList().Find(s => s.Plane_ID == p.Plane_ID);
+                    if(temp != null)
+                    {
+                        db.Plane_Service.Remove(temp);
+                        db.SaveChanges();
+                    }// if
+
+                    db.Planes.Remove(p);
+                    db.SaveChanges();
+
+                }// for each
+            }// plane if
+
+            Exam ex = db.Exams.ToList().Find(e => e.Plane_Type_ID == delPlane.Plane_Type_ID);
+            if(ex != null)
+            {
+                Load_Sheet tempSheet = db.Load_Sheet.ToList().Find(l => l.Exam_ID == ex.Exam_ID);
+                Exam_Average tempAverage = db.Exam_Average.ToList().Find(a => a.Exam_ID == ex.Exam_ID);
+                if (tempSheet != null)
+                {
+                    db.Load_Sheet.Remove(tempSheet);
+                    db.SaveChanges();
+                }// sheet if
+                if (tempAverage != null)
+                {
+                    db.Exam_Average.Remove(tempAverage);
+                    db.SaveChanges();
+                }// average if
+
+                db.Exams.Remove(ex);
+                db.SaveChanges();
+
+            }// exam if
+
+            Rating rate = db.Ratings.ToList().Find(r => r.Rating_ID == delPlane.Plane_Type_ID);
+            if(rate != null)
+            {
+                List <Study_Resource> resourceList = db.Study_Resource.ToList().FindAll(s => s.Rating_ID == rate.Rating_ID);
+                foreach(var r in resourceList)
+                {
+                    Student_Resource temp = db.Student_Resource.ToList().Find(s => s.Study_Resource_ID == r.Study_Resource_ID);
+
+                    db.Student_Resource.Remove(temp);
+                    db.SaveChanges();
+
+                    db.Study_Resource.Remove(r);
+                    db.SaveChanges();
+                }// for each
+
+                List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(s => s.Rating_ID == rate.Rating_ID);
+                foreach (var p in planList)
+                {
+                    Student_Lesson_Plan temp = db.Student_Lesson_Plan.ToList().Find(s => s.Lesson_Plan_ID == p.Lesson_Plan_ID);
+
+                    db.Student_Lesson_Plan.Remove(temp);
+                    db.SaveChanges();
+
+                    db.Lesson_Plan.Remove(p);
+                    db.SaveChanges();
+                }// for each
+
+                db.Ratings.Remove(rate);
+                db.SaveChanges();
+            }// rating if
+
+            Question_Rating qRate = db.Question_Rating.ToList().Find(q => q.Question_Rating_ID == delPlane.Plane_Type_ID);
+            if(qRate != null)
+            {
+                List<Question> qList = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == qRate.Question_Rating_ID);
+                foreach(var q in qList)
+                {
+                    List<Answer> answerList = db.Answers.ToList().FindAll(a => a.Question_ID == q.Question_ID);
+                    foreach(var a in answerList)
+                    {
+                        db.Answers.Remove(a);
+                        db.SaveChanges();
+                    }
+                    db.Questions.Remove(q);
+                    db.SaveChanges();
+                }// for each
+
+                db.Question_Rating.Remove(qRate);
+                db.SaveChanges();
+            }// question rating if
+
+            db.Plane_Type.Remove(delPlane);
+            db.SaveChanges();
+
+            return RedirectToAction("planesScreen", new { id = loggedId });
+        }// delete plane type post
+
+        [HttpGet]
+        public ActionResult updatePlaneType(int? loggedId, int? id)
+        {
+            ViewData["loggedId"] = "" + loggedId;
+            Plane_Type plane_Type = db.Plane_Type.Find(id);
+            return View(plane_Type);
+        }// update plane type get
+
+        [HttpPost]
+        public ActionResult updatePlaneType(int? loggedId, int? id, string name, HttpPostedFileBase pic)
+        {
+            Plane_Type updatePType = new Plane_Type();
+            updatePType.Plane_Type_ID = Convert.ToInt32(id);
+            updatePType.Type_Description = name;
+
+            byte[] imageBytes = null;
+            BinaryReader reader = new BinaryReader(pic.InputStream);
+            imageBytes = reader.ReadBytes((int)pic.ContentLength);
+            updatePType.Plane_Image = imageBytes;
+
+            db.Entry(updatePType).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("planesScreen", new { id = loggedId });
+        }// update plane type post
 
         // GET: Planes/Details/5
         public ActionResult Details(int? id)

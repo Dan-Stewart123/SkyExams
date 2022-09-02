@@ -4,9 +4,17 @@
     ViewBag.Title = "planeTypeScreen";
     var uID = ViewData["userID"];
     var type = ViewData["planeType"];
+    var userRole = ViewData["userRole"];
 }
 
 <h2>Planes</h2>
+<br />
+<br />
+<button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
+    Back
+</button>
+<br />
+<br />
 
 <table class="table">
     <thead>
@@ -15,45 +23,57 @@
             <th scope="col">Call Sign</th>
             <th scope="col">Hours Flown</th>
             <th scope="col">Hours Until Next Service</th>
+            <th scope="col">Description</th>
+            <th scope="col">In Service</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td scope="row" class="plane">
-                    @type
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Call_Sign)
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Hours_Flown)
-                </td>
-                <td scope="row">
-                    @Html.DisplayFor(modelItem => item.Hours_Until_Service)
-                </td>
-                <td scope="row" class="adminFunctions" style="display: none;">
-                    <button type="button" onclick="location.href='@Url.Action("updatePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
-                        Update
-                    </button>
-                    <button type="button" onclick="location.href='@Url.Action("deletePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
-                        Delete
-                    </button>
-                </td>
-            </tr>
+        <tr>
+            <td scope="row" class="plane">
+                @type
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Call_Sign)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Hours_Flown)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Hours_Until_Service)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td scope="row">
+                @Html.DisplayFor(modelItem => item.In_Service)
+            </td>
+            <td scope="row" class="adminFunctions" style="display: none;">
+                <button type="button" onclick="location.href='@Url.Action("updatePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                    Update
+                </button>
+                <button type="button" onclick="location.href='@Url.Action("deletePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                    Delete
+                </button>
+                <button type="button" onclick="location.href='@Url.Action("updatePlaneHours", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                    Update Hours flown
+                </button>
+                <button type="button" onclick="location.href='@Url.Action("serviceCheck", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                    Plane Services
+                </button>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
-    Continue
-</button>
+
 <script>
     function adminCheck() {
-        var userId = @Html.Raw(Json.Encode(ViewData["userID"]));
+        var userId = @Html.Raw(Json.Encode(ViewData["userRole"]));
         if (userId == '2') {
             var func = document.getElementsByClassName("adminFunctions");
             for (var i = 0; i <= func.length; i++) {
@@ -75,6 +95,9 @@
     }
 
     window.onload = adminCheck;
-
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
 </script>
 
