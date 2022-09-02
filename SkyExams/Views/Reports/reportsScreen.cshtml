@@ -14,14 +14,24 @@
 <button type="button" onclick="location.href='@Url.Action("planeReport", "Reports", new { id = Model.SysUser_ID })'">
     Plane Report
 </button>
+<button type="button" onclick="location.href='@Url.Action("eventsDateSelect", "Reports", new { id = Model.SysUser_ID })'">
+    Events Report
+</button>
 <button type="button" onclick="location.href='@Url.Action("instructorReport", "Reports", new { id = Model.SysUser_ID })'">
     Insrtuctor Report
 </button>
-<button type="button" onclick="location.href='@Url.Action("examReport", "Reports", new { id = Model.SysUser_ID })'">
+<button type="button" onclick="location.href='@Url.Action("examDateSelect", "Reports", new { id = Model.SysUser_ID })'">
     Exam Report
 </button>
 <br />
 <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
     Home
 </button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
 

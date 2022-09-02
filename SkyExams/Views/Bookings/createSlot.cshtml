@@ -16,10 +16,21 @@
     <input type="datetime-local" id="slotTime" name="slotTime">
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("slotsScreen", "Bookings", new { id = Model.SysUser_ID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("slotsScreen", "Bookings", new { id = Model.SysUser_ID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" />
+    <input type="submit" class="btn btn-primary" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
+
+<script>
+    function checkInput() {
+        var slotTime = $("#slotTime").val();
+        if (slotTime != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+</script>
 
 

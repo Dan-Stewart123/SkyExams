@@ -5,8 +5,20 @@
 }
 
 <h2>Account Details</h2>
-
+<div style="text-align:right;">
+    <button type="button" id="consult" onclick="location.href='@Url.Action("viewAccountHelp", "Help", new { id = Model.SysUser_ID })'">
+        Help
+    </button>
+</div>
 <dl class="dl-horizontal">
+    @*<dt>
+        @Html.Label("Profile Image:")
+    </dt>*@
+
+    @*<dd>
+        <img src="@Url.Action("getImg", "Sys_User", new { id = Model.SysUser_ID })" width="280px" height="150px" title="title" alt="No Image" />
+    </dd>*@
+
     <dt class="col-md-4">
         @Html.Label("Title:")
     </dt>
@@ -125,5 +137,9 @@
         }
     }
     window.onload = displayTitle;
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
 </script>
 

@@ -20,9 +20,20 @@
     <input class="col-md-3" type="text" id="details" name="details">
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" />
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 
+<script>
+    function checkInput() {
+        var details = $("#details").val();
+        if (details != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>

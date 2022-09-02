@@ -1,9 +1,12 @@
 ﻿
 @{
     ViewBag.Title = "Login";
+    var error = ViewData["err"];
 }
 
 <h2>Login</h2>
+
+<label style="color:red">@error</label>
 
 @using (Html.BeginForm("loginScreen", "Sys_User", FormMethod.Post))
 {

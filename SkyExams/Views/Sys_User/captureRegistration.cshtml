@@ -54,3 +54,9 @@
 <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID})'">
     Back
 </button>
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>

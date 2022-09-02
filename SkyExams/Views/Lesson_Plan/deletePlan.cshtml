@@ -27,34 +27,18 @@
         @Html.DisplayFor(model => model.LP_Name)
     </dd>
 </dl>
-<button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = uID, topicId = Model.Rating_ID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = uID, topicId = Model.Rating_ID })'">
     Back
 </button>
-<button type="button" onclick="location.href='@Url.Action("deletePlanConformation", "Lesson_Plan", new { loggedId = uID, id = Model.Lesson_Plan_ID })'">
+<button type="button"class="btn btn-danger" onclick="location.href='@Url.Action("deletePlanConformation", "Lesson_Plan", new { loggedId = uID, id = Model.Lesson_Plan_ID })'">
     Delete
 </button>
 
 <script>
-    function typeCheck() {
-        if (document.getElementById("type").textContent === "1") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("cessna").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "2") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("rg").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "3") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("cherokee").style.display = "block";
-        }
-        if (document.getElementById("type").textContent === "4") {
-            document.getElementById("type").style.display = "none";
-            document.getElementById("twin").style.display = "block";
-        }
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
     }
-
-    window.onload = typeCheck;
+    window.oninput = setTimeout(timer, 300000);
 </script>
 
 

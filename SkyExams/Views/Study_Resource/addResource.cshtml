@@ -25,5 +25,18 @@
     <button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = tID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" />
+    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
+
+<script>
+    function checkInput() {
+        var name = $("#name").val();
+        var resource = $("#resource").val();
+        if (name != "" && resource != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>

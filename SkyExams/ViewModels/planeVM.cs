@@ -13,6 +13,7 @@ namespace SkyExams.ViewModels
         public int Plane_ID { get; set; }
         public string Call_Sign { get; set; }
         public string Description { get; set; }
+        public int planeHours { get; set; }
         public ICollection<Plane_Service> services { get; set; }
     }
 }

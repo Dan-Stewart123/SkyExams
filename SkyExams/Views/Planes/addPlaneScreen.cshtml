@@ -33,9 +33,25 @@
     <input class="col-md-3" type="number" id="serviceHours" name="serviceHours">
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("PlanesScreen", "Planes", new { id = uID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("PlanesScreen", "Planes", new { id = uID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" />
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
+
+<script>
+    function checkInput() {
+        var type = $("#type").val();
+        var desc = $("#description").val();
+        var sign = $("#sign").val();
+        var flown = $("#hoursFlown").val();
+        var service = $("#serviceHours").val();
+        if (type != "" && desc != "" && sign != "" && flown != "" && service != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
+    }
+    window.oninput = checkInput;
+
+</script>
 

@@ -25,10 +25,17 @@
         @Html.DisplayFor(model => model.Booked)
     </dd>
 </dl>
-<button type="button" onclick="location.href='@Url.Action("slotsScreen", "Bookings", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("slotsScreen", "Bookings", new { id = uID })'">
     Back
 </button>
-<button type="button" onclick="location.href='@Url.Action("deleteSlotConformation", "Bookings", new { id = uID, slotId = Model.Slot_ID })'">
+<button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deleteSlotConformation", "Bookings", new { id = uID, slotId = Model.Slot_ID })'">
     Delete
 </button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
 

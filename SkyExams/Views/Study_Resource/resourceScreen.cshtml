@@ -7,6 +7,16 @@
 
 <h2>Resources</h2>
 <br />
+<div style="text-align:right;">
+    <button type="button" id="consult" onclick="location.href='@Url.Action("studyResourceHelp", "Help", new { id = uID })'">
+        Help
+    </button>
+</div>
+<br />
+<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+    Back
+</button>
+<br />
 <br />
 @foreach (var modelItem in Model)
 {
@@ -49,6 +59,11 @@
 <br />
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
-    Back
-</button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
+

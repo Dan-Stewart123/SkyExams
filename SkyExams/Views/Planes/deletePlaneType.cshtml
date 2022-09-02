@@ -28,10 +28,17 @@
 
 
 </dl>
-<button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
     Back
 </button>
-<button type="button" onclick="location.href='@Url.Action("deletePlaneTypeConformation", "Planes", new { loggedId = uID, id = Model.Plane_Type_ID })'">
+<button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deletePlaneTypeConformation", "Planes", new { loggedId = uID, id = Model.Plane_Type_ID })'">
     Delete
 </button>
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, 300000);
+</script>
 
