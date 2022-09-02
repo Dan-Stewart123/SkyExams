@@ -43,7 +43,7 @@
                     @Html.DisplayFor(modelItem => item.DOB)
                 </td>
                 <td scope="row">
-                    <button type="button" onclick="location.href='@Url.Action("CapturePlaneRegistration", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">Capture Registration</button>
+                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CapturePlaneRegistration", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">Capture Registration</button>
                 </td>
             </tr>
         }
@@ -51,7 +51,7 @@
 </table>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID})'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID})'">
     Back
 </button>
 <script>

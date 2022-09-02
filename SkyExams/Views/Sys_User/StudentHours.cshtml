@@ -27,10 +27,10 @@
     <input class="col-md-3" type="number" id="hoursFlown" name="hoursFlown" value="@Model.Hours_Flown">
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = uID})'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = uID})'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" />
+    <input type="submit" class="btn btn-primary", value="Submit" id="submitButton" />
 }
 
 <script>

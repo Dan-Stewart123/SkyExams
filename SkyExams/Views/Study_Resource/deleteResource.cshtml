@@ -27,10 +27,10 @@
         @Html.DisplayFor(model => model.Resource_Name)
     </dd>
 </dl>
-<button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = uID, typeId = Model.Rating_ID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = uID, typeId = Model.Rating_ID })'">
     Back
 </button>
-<button type="button" onclick="location.href='@Url.Action("deleteResourceConformation", "Study_Resource", new { loggedId = uID, id = Model.Study_Resource_ID })'">
+<button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deleteResourceConformation", "Study_Resource", new { loggedId = uID, id = Model.Study_Resource_ID })'">
     Delete
 </button>
 

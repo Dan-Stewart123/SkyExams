@@ -16,15 +16,15 @@
     <br />
     <label>@Html.Label("Password:")</label>
     <input type="password" id="password" name="password">
-    <button type="button" onclick="location.href='@Url.Action("forgotPassword", "Sys_User")'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("forgotPassword", "Sys_User")'">
         Forgot Password
     </button>
     <br />
     <br />
-    <input type="submit" , value="Login" />
+    <input type="submit" class="btn btn-primary", value="Login" />
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("registerScreen", "Sys_User")'">
+    <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("registerScreen", "Sys_User")'">
         Request to Register
     </button>
 }
