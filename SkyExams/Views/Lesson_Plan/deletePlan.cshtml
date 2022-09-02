@@ -27,10 +27,10 @@
         @Html.DisplayFor(model => model.LP_Name)
     </dd>
 </dl>
-<button type="button" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = uID, topicId = Model.Rating_ID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = uID, topicId = Model.Rating_ID })'">
     Back
 </button>
-<button type="button" onclick="location.href='@Url.Action("deletePlanConformation", "Lesson_Plan", new { loggedId = uID, id = Model.Lesson_Plan_ID })'">
+<button type="button"class="btn btn-danger" onclick="location.href='@Url.Action("deletePlanConformation", "Lesson_Plan", new { loggedId = uID, id = Model.Lesson_Plan_ID })'">
     Delete
 </button>
 

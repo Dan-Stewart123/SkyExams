@@ -9,13 +9,13 @@
 
 <h2>Lesson Plans</h2>
 <div id="createButton" style="display:none;">
-    <button type="button" onclick="location.href='@Url.Action("addPlan", "Lesson_Plan", new { id = uID, topicId = tID })'">
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("addPlan", "Lesson_Plan", new { id = uID, topicId = tID })'">
         Add Lesson Plan
     </button>
 </div>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("planScreen", "Lesson_Plan", new { id = uID })'">
     Back
 </button>
 <br />
@@ -44,7 +44,7 @@
                     @Html.ActionLink("View/Download", "downloadPlan", new { id = item.Lesson_Plan_ID })
                 </td>
                 <td scope="row" class="deleteFunction" style="display: none;">
-                    <button type="button" onclick="location.href='@Url.Action("deletePlan", "Lesson_Plan", new { loggedId = uID, id = item.Lesson_Plan_ID })'">
+                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deletePlan", "Lesson_Plan", new { loggedId = uID, id = item.Lesson_Plan_ID })'">
                         Delete
                     </button>
                 </td>

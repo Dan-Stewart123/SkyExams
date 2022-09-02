@@ -10,7 +10,7 @@
 <h2>Planes</h2>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
     Back
 </button>
 <br />
@@ -51,16 +51,16 @@
                 @Html.DisplayFor(modelItem => item.In_Service)
             </td>
             <td scope="row" class="adminFunctions" style="display: none;">
-                <button type="button" onclick="location.href='@Url.Action("updatePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("updatePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
                     Update
                 </button>
-                <button type="button" onclick="location.href='@Url.Action("deletePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deletePlane", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
                     Delete
                 </button>
-                <button type="button" onclick="location.href='@Url.Action("updatePlaneHours", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("updatePlaneHours", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
                     Update Hours flown
                 </button>
-                <button type="button" onclick="location.href='@Url.Action("serviceCheck", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
+                <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("serviceCheck", "Planes", new { loggedId = uID, id = item.Plane_ID })'">
                     Plane Services
                 </button>
             </td>
