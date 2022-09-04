@@ -203,7 +203,7 @@ namespace SkyExams.Controllers
                 MimeMessage requestEmail = new MimeMessage();
                 requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
                 requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
-                requestEmail.Subject = "New user request";
+                requestEmail.Subject = "Booking Conformation";
                 requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + updateSlot.Date_Time + " has been booked by " + stu.FName + " " + stu.Surname };
 
                 //send email
