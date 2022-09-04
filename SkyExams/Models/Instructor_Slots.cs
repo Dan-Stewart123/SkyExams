@@ -17,6 +17,7 @@ namespace SkyExams.Models
         public int Instructor_ID { get; set; }
         public int Slot_ID { get; set; }
         public Nullable<System.DateTime> Date_Time { get; set; }
+        public string Date_Time_String { get; set; }
         public Nullable<bool> Booked { get; set; }
     }
 }

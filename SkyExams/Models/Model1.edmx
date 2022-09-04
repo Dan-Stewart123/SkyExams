@@ -30,6 +30,7 @@
           <Property Name="Instructor_ID" Type="int" Nullable="false" />
           <Property Name="Slot_ID" Type="int" Nullable="false" />
           <Property Name="Date_Time" Type="datetime" Nullable="false" />
+          <Property Name="Plane_Type_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="City">
           <Key>
@@ -105,6 +106,7 @@
           <Property Name="Instructor_ID" Type="int" Nullable="false" />
           <Property Name="Slot_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date_Time" Type="datetime" />
+          <Property Name="Date_Time_String" Type="varchar(max)" />
           <Property Name="Booked" Type="bit" />
         </EntityType>
         <EntityType Name="Lesson_Plan">
@@ -480,6 +482,7 @@
           <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
           <Property Name="Slot_ID" Type="Int32" Nullable="false" />
           <Property Name="Date_Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Plane_Type_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="City">
           <Key>
@@ -555,6 +558,7 @@
           <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
           <Property Name="Slot_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date_Time" Type="DateTime" Precision="3" />
+          <Property Name="Date_Time_String" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Booked" Type="Boolean" />
         </EntityType>
         <EntityType Name="Lesson_Plan">
@@ -840,6 +844,7 @@
           <EntitySetMapping Name="Bookings">
             <EntityTypeMapping TypeName="SkyExamsModel.Booking">
               <MappingFragment StoreEntitySet="Booking">
+                <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
                 <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
                 <ScalarProperty Name="Slot_ID" ColumnName="Slot_ID" />
                 <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
@@ -926,6 +931,7 @@
             <EntityTypeMapping TypeName="SkyExamsModel.Instructor_Slots">
               <MappingFragment StoreEntitySet="Instructor_Slots">
                 <ScalarProperty Name="Booked" ColumnName="Booked" />
+                <ScalarProperty Name="Date_Time_String" ColumnName="Date_Time_String" />
                 <ScalarProperty Name="Date_Time" ColumnName="Date_Time" />
                 <ScalarProperty Name="Slot_ID" ColumnName="Slot_ID" />
                 <ScalarProperty Name="Instructor_ID" ColumnName="Instructor_ID" />
