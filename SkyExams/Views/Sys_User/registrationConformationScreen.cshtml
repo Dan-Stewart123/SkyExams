@@ -19,18 +19,41 @@
     <input type="text" id="code" name="code">
     <br />
     <br />
-    <button id="check" onclick="verifyCode()" type="button">Validate Code</button>
+    <div id="pic">
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <th align="center"><u>Live Camera</u></th>
+                <th align="center"><u>Captured Profile Picture</u></th>
+            </tr>
+            <tr>
+                <td><div id="webcam"></div></td>
+                <td><img id="imgCapture" /></td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <input type="button" class="btn btn-info" id="btnCapture" value="Capture" />
+                </td>
+                <td align="center">
+                    <input type="button" class="btn btn-primary" id="btnUpload" value="Upload" disabled="disabled" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <label>Hint: Please remember to take a profile image.</label>
+    <br />
+    <br />
+    <button id="check" class="btn btn-info" onclick="verifyCode()" type="button">Validate Code</button>
     <br />
     <br />
     <div id="licenceInput" style="display:none;">
         <label class="col-md-4">@Html.Label("Licence Number:")</label>
         <input type="text" id="licence" name="licence">
     </div>
-    
+
     <br />
     <br />
     <div id="submitButton" style="display:none;">
-        <input type="submit" , value="Submit" />
+        <input type="submit" class="btn btn-primary" , value="Submit" />
     </div>
 }
 
@@ -49,5 +72,32 @@
             document.getElementById("submitButton").style.display = "block";
         }
     }// code verify
+
+    $(function () {
+        Webcam.set({
+            width: 320,
+            height: 240,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+        Webcam.attach('#webcam');
+        $("#btnCapture").click(function () {
+            Webcam.snap(function (data_uri) {
+                $("#imgCapture")[0].src = data_uri;
+                $("#btnUpload").removeAttr("disabled");
+            });
+        });
+        $("#btnUpload").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Sys_User/SaveCapture",
+                data: "{data: '" + $("#imgCapture")[0].src + "*" + $("#uName").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) { }
+            });
+        });
+    });// camera upload
+
 </script>
 

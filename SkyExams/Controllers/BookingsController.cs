@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkyExams.Models;
+using SkyExams.ViewModels;
 using MimeKit;
 using MailKit;
 using MailKit.Net.Smtp;
@@ -60,6 +61,7 @@ namespace SkyExams.Controllers
             Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
             newSlot.Instructor_ID = tempIns.Instructor_ID;
             newSlot.Date_Time = slotTime;
+            newSlot.Date_Time_String = "" + slotTime;
             newSlot.Booked = false;
             db.Instructor_Slots.Add(newSlot);
             db.SaveChanges();
@@ -104,6 +106,7 @@ namespace SkyExams.Controllers
             Instructor_Slots updateSlot = new Instructor_Slots();
             updateSlot.Instructor_ID = tempSlot.Instructor_ID;
             updateSlot.Date_Time = slotTime;
+            updateSlot.Date_Time_String = "" + slotTime;
             updateSlot.Booked = false;
 
             db.Instructor_Slots.Remove(tempSlot);
@@ -144,28 +147,44 @@ namespace SkyExams.Controllers
         {
             Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
             Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
-            List<Instructor_Slots> slots = db.Instructor_Slots.ToList().FindAll(i => i.Instructor_ID == stuIns.Instructor_ID && i.Booked == false);
-            Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == stuIns.Instructor_ID);
-            ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
+            List<Sys_User> instructors = db.Sys_User.ToList().FindAll(i => i.User_Role_ID == 2);
+            List<Plane_Type> types = db.Plane_Type.ToList();
+            List<SelectListItem> planeType = new List<SelectListItem>();
+            foreach(var p in types)
+            {
+                SelectListItem temp = new SelectListItem();
+                temp.Value = "" + p.Plane_Type_ID;
+                temp.Text = p.Type_Description;
+                planeType.Add(temp);
+            }// for each
+            ViewBag.planes = planeType;
             ViewData["uID"] = "" + id;
-            return View(slots);
+            return View(instructors);
         }// view slots
 
-        [HttpGet]
-        public ActionResult bookSlot(int? id, int? slotId)
+        public JsonResult getSlots(int instructor)
         {
-            Instructor_Slots bookSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == slotId);
+            Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == instructor);
+            var jsonData = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID && s.Booked == false);
+            return Json(jsonData, JsonRequestBehavior.AllowGet);
+        }// get slots JSON
+
+        public ActionResult bookSlot(int? id, int? instructors, int? planes, int? FromJson)
+        {
+            Instructor_Slots bookSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == FromJson);
             Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
             Booking newBooking = new Booking();
             newBooking.Student_ID = sForId.Student_ID;
             newBooking.Instructor_ID = bookSlot.Instructor_ID;
             //newBooking.Slot_ID = bookSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
             newBooking.Date_Time = Convert.ToDateTime(bookSlot.Date_Time);
+            newBooking.Plane_Type_ID = Convert.ToInt32(planes);
 
             Instructor_Slots updateSlot = new Instructor_Slots();
             updateSlot.Instructor_ID = bookSlot.Instructor_ID;
             updateSlot.Date_Time = bookSlot.Date_Time;
             updateSlot.Booked = true;
+            updateSlot.Date_Time_String = bookSlot.Date_Time_String;
             db.Instructor_Slots.Remove(bookSlot);
             db.SaveChanges();
 
@@ -184,7 +203,7 @@ namespace SkyExams.Controllers
                 MimeMessage requestEmail = new MimeMessage();
                 requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
                 requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
-                requestEmail.Subject = "New user request";
+                requestEmail.Subject = "Booking Conformation";
                 requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + updateSlot.Date_Time + " has been booked by " + stu.FName + " " + stu.Surname };
 
                 //send email
@@ -222,6 +241,7 @@ namespace SkyExams.Controllers
             Instructor_Slots updateSlot = new Instructor_Slots();
             updateSlot.Instructor_ID = bookSlot.Instructor_ID;
             updateSlot.Date_Time = bookSlot.Date_Time;
+            updateSlot.Date_Time_String = bookSlot.Date_Time_String;
             updateSlot.Booked = false;
             db.Instructor_Slots.Remove(bookSlot);
             db.SaveChanges();
@@ -256,6 +276,7 @@ namespace SkyExams.Controllers
             updateBooking.Instructor_ID = tempBooking.Instructor_ID;
             //updateBooking.Slot_ID = tempSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
             updateBooking.Date_Time = Convert.ToDateTime(updateSlot.Date_Time);
+            updateBooking.Plane_Type_ID = tempBooking.Plane_Type_ID;
 
             tempSlot.Booked = false;
             updateSlot.Booked = true;
