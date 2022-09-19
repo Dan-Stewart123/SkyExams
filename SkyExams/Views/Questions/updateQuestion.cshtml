@@ -57,10 +57,10 @@
     <input class="col-md-3" type="text" id="false2" name="false2" value="@f2">
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
     <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 

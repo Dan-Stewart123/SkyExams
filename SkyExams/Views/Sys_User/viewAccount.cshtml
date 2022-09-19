@@ -6,7 +6,7 @@
 
 <h2>Account Details</h2>
 <div style="text-align:right;">
-    <button type="button" id="consult" onclick="location.href='@Url.Action("viewAccountHelp", "Help", new { id = Model.SysUser_ID })'">
+    <button type="button" id="consult" class="btn btn-link" onclick="location.href='@Url.Action("viewAccountHelp", "Help", new { id = Model.SysUser_ID })'">
         Help
     </button>
 </div>
@@ -81,34 +81,42 @@
 
 </dl>
 <br />
-<button type="button" onclick="location.href='@Url.Action("updateAccount", "Sys_User", new { id = Model.SysUser_ID })'">
+<button type="button" class="btn btn-warning" style="width:250px;" onclick="location.href='@Url.Action("updateAccount", "Sys_User", new { id = Model.SysUser_ID })'">
     Update Account Details
 </button>
 <br />
+<br />
 <div id="persHrs" style="display: none;">
-    <button type="button" onclick="location.href='@Url.Action("StudentHours", "Sys_User", new { id = Model.SysUser_ID })'">
+    <button type="button" class="btn btn-warning" style="width:250px;" onclick="location.href='@Url.Action("StudentHours", "Sys_User", new { id = Model.SysUser_ID })'">
         Update Personal Hours Flown
     </button>
+    <br />
+    <br />
 </div>
 <div id="captureReg" style="display: none;">
-    <button type="button" onclick="location.href='@Url.Action("captureRegistration", "Sys_User", new { id = Model.SysUser_ID })'">
+    <button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("captureRegistration", "Sys_User", new { id = Model.SysUser_ID })'">
         Capture Registration
     </button>
     <br />
-    <button type="button" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = Model.SysUser_ID })'">
+    <br />
+    <button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = Model.SysUser_ID })'">
         Reports
     </button>
+    <br />
+    <br />
 </div>
-<button type="button" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
-    Logout
-</button>
-<br />
-<button type="button" onclick="location.href='@Url.Action("resetPassword", "Sys_User", new { id = Model.SysUser_ID })'">
+<button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("resetPassword", "Sys_User", new { id = Model.SysUser_ID })'">
     Reset Password
 </button>
 <br />
-<button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+<br />
+<button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
     Home
+</button>
+<br />
+<br />
+<button type="button" class="btn btn-danger" style="width:250px;" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    Logout
 </button>
 
 <script>

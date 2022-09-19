@@ -36,10 +36,10 @@
         }
     </dd>
 </dl>
-<button type="button" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rId })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rId })'">
     Back
 </button>
-<button type="button" onclick="location.href='@Url.Action("deleteQuestionConformation", "Questions", new { id = uID, questionId = qId })'">
+<button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deleteQuestionConformation", "Questions", new { id = uID, questionId = qId })'">
     Delete
 </button>
 

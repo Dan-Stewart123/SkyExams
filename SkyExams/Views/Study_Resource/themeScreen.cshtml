@@ -10,13 +10,13 @@
 <h2>Resources:</h2>
 
 <div id="createButton" style="display:none;">
-    <button type="button" onclick="location.href='@Url.Action("addResource", "Study_Resource", new { id = uID, themeId = tID })'">
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("addResource", "Study_Resource", new { id = uID, themeId = tID })'">
         Add Resource
     </button>
 </div>
 <br />
 <br />
-<button type="button" onclick="location.href='@Url.Action("resourceScreen", "Study_Resource", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("resourceScreen", "Study_Resource", new { id = uID })'">
     Back
 </button>
 <br />
@@ -45,7 +45,7 @@
                     @Html.ActionLink("View/Download", "downloadResource", new { id = item.Study_Resource_ID })
                 </td>
                 <td scope="row" class="deleteFunction" style="display: none;">
-                    <button type="button" onclick="location.href='@Url.Action("deleteResource", "Study_Resource", new { loggedId = uID, id = item.Study_Resource_ID })'">
+                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deleteResource", "Study_Resource", new { loggedId = uID, id = item.Study_Resource_ID })'">
                         Delete
                     </button>
                 </td>
