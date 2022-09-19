@@ -58,10 +58,10 @@
     </select>
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("searchScreen", "Sys_User", new { id = uID })'">
+    <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("searchScreen", "Sys_User", new { id = uID })'">
         Back
     </button>
-    <button id="check" onclick="verifyCode()" type="button">Check</button>
+    <button id="check" class="btn btn-primary" onclick="verifyCode()" type="button">Check</button>
     <br />
     <br />
     <div id="licenceInput" style="display:none;">
@@ -71,7 +71,7 @@
     <br />
     <br />
     <div id="submitButton" style="display:none;">
-        <input type="submit" , value="Submit" />
+        <input type="submit" class="btn btn-primary", value="Submit" />
     </div>
 }
 

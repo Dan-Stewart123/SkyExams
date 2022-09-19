@@ -22,10 +22,10 @@
     <input class="col-md-3" type="file" id="resource" name="resource" />
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = tID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = tID })'">
         Cancel
     </button>
-    <input type="submit" , value="Submit" id="submitButton" disabled />
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
     <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 

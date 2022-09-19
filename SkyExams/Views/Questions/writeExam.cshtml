@@ -16,7 +16,7 @@
     <p id="bookLabel">Your Exam has been saved, click the button bellow to leave the exam</p>
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+    <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
         Home
     </button>
 </div>
@@ -80,7 +80,7 @@
             <p id="bookLabel">Book your consultation by clicking the button bellow</p>
             <br />
             <br />
-            <button type="button" onclick="location.href='@Url.Action("viewSlots", "Bookings", new { id = uID })'">
+            <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("viewSlots", "Bookings", new { id = uID })'">
                 Book Consultation
             </button>
         </div>

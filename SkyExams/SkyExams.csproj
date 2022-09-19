@@ -385,6 +385,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Cessna172.JPEG" />
     <Content Include="Content\fts_logo.jpeg" />
+    <Content Include="Content\homeImage.jpeg" />
     <Content Include="Content\rg.JPEG" />
     <Content Include="Content\SkyExamsEdited-removebg-preview %281%29.png" />
     <Content Include="Content\twin.JPEG" />

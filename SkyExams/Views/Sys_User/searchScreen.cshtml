@@ -6,7 +6,7 @@
 <h2>Search</h2>
 <br />
 <div style="text-align:right;">
-    <button type="button" id="consult" onclick="location.href='@Url.Action("searchHelp", "Help", new { id = Model.SysUser_ID })'">
+    <button type="button" id="consult" class="btn btn-link" onclick="location.href='@Url.Action("searchHelp", "Help", new { id = Model.SysUser_ID })'">
         Help
     </button>
 </div>
@@ -34,10 +34,10 @@
     <input type="text" id="lastName" name="lastName">
     <br />
     <br />
-    <button type="button" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
         Cancel
     </button>
-    <input type="submit" , value="Search" id="submitButton" disabled />
+    <input type="submit" class="btn btn-primary", value="Search" id="submitButton" disabled />
     <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 <script>
