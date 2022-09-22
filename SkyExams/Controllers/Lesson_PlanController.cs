@@ -23,12 +23,27 @@ namespace SkyExams.Controllers
 
         public ActionResult planScreen(int? id)
         {
-            ViewData["userID"] = "" + id;
-            Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-            ViewData["userRole"] = "" + forRole.User_Role_ID;
-            List<Plane_Type> planeTypes = db.Plane_Type.ToList();
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["userID"] = "" + id;
+                    Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    ViewData["userRole"] = "" + forRole.User_Role_ID;
+                    List<Plane_Type> planeTypes = db.Plane_Type.ToList();
 
-            return View(planeTypes);
+                    return View(planeTypes);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// returns lesson plan screen
 
         public FileContentResult getImg(int id)
@@ -41,38 +56,53 @@ namespace SkyExams.Controllers
 
         public ActionResult topicScreen(int? id, int? topicId)
         {
-            ViewData["userID"] = "" + id;
-            Sys_User user = db.Sys_User.Find(id);
-            ViewData["userRole"] = "" + user.User_Role_ID;
-            int userRole = Convert.ToInt32(user.User_Role_ID);
-            List<Lesson_Plan> planList = new List<Lesson_Plan>();
-            if(userRole == 1)
+            try
             {
-                ViewData["topicId"] = "" + topicId;
-                ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == topicId).Type_Description;
-                Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
-                List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
-                foreach (Student_Lesson_Plan temp in stuPlan)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
-                    foreach (Lesson_Plan temPlan in tempPlans)
+                    ViewData["userID"] = "" + id;
+                    Sys_User user = db.Sys_User.Find(id);
+                    ViewData["userRole"] = "" + user.User_Role_ID;
+                    int userRole = Convert.ToInt32(user.User_Role_ID);
+                    List<Lesson_Plan> planList = new List<Lesson_Plan>();
+                    if (userRole == 1)
                     {
-                        if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == topicId)
+                        ViewData["topicId"] = "" + topicId;
+                        ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == topicId).Type_Description;
+                        Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                        List<Student_Lesson_Plan> stuPlan = db.Student_Lesson_Plan.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
+                        foreach (Student_Lesson_Plan temp in stuPlan)
                         {
-                            planList.Add(temPlan);
-                        }
-                    }// inner for each
-                }// for each
-                return View(planList);
-                
-            }// if user is a student
-            else
+                            List<Lesson_Plan> tempPlans = db.Lesson_Plan.ToList();
+                            foreach (Lesson_Plan temPlan in tempPlans)
+                            {
+                                if (temPlan.Lesson_Plan_ID == temp.Lesson_Plan_ID && temPlan.Rating_ID == topicId)
+                                {
+                                    planList.Add(temPlan);
+                                }
+                            }// inner for each
+                        }// for each
+                        return View(planList);
+
+                    }// if user is a student
+                    else
+                    {
+                        ViewData["topicID"] = "" + topicId;
+                        ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == topicId).Type_Description;
+                        planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == topicId);
+                        return View(planList);
+                    }// else
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
             {
-                ViewData["topicID"] = "" + topicId;
-                ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == topicId).Type_Description;
-                planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == topicId);
-                return View(planList);
-            }// else
+                return RedirectToAction("loginScreen");
+            }
+            
         }// theme screen
 
         [HttpGet]
@@ -85,73 +115,133 @@ namespace SkyExams.Controllers
 
         public ActionResult addPlan(int? id, int? topicId)
         {
-            ViewData["topicID"] = "" + topicId;
-            Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-            return View(user);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["topicID"] = "" + topicId;
+                    Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    return View(user);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// add resource screen get
 
         [HttpPost]
         public ActionResult addPlan(int? id, int? topicId, string name, HttpPostedFileBase plan)
         {
-            List<Lesson_Plan> planList = db.Lesson_Plan.ToList();
-            if (name == "" || plan == null)
+            try
             {
-                return RedirectToAction("addPlan", new { id = id, topicId = topicId });
-            }// if fields are empty
-            else
-            {
-                int resourceId = planList.Count + 3;
-                Lesson_Plan newPlan = new Lesson_Plan();
-                newPlan.Lesson_Plan_ID = resourceId;
-                newPlan.LP_Name = name;
-                int theme = Convert.ToInt32(topicId);
-                newPlan.Rating_ID = theme;
-                int instructorId = db.Instructors.ToList().Find(i => i.SysUser_ID == id).Instructor_ID;
-                newPlan.Instructor_ID = instructorId;
-
-                Stream str = plan.InputStream;
-                BinaryReader br = new BinaryReader(str);
-                Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
-                newPlan.LP_Description = fileDetails;
-
-                db.Lesson_Plan.Add(newPlan);
-                db.SaveChanges();
-                Instructor tempInstructor = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
-                List<Student_Instructor> studentInstructor = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == tempInstructor.Instructor_ID);
-                foreach(Student_Instructor temp in studentInstructor)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    Student tempStudent = db.Students.ToList().Find(s => s.Student_ID == temp.Student_ID);
-                    Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == tempStudent.SysUser_ID);
-                    Student_Lesson_Plan newStuPlan = new Student_Lesson_Plan();
-                    newStuPlan.Student_ID = tempStudent.Student_ID;
-                    newStuPlan.Lesson_Plan_ID = newPlan.Lesson_Plan_ID;
-                    db.Student_Lesson_Plan.Add(newStuPlan);
-                    db.SaveChanges();
-                }// for each
-                return RedirectToAction("planScreen", new { id = id });
-            }// else
+                    List<Lesson_Plan> planList = db.Lesson_Plan.ToList();
+                    if (name == "" || plan == null)
+                    {
+                        return RedirectToAction("addPlan", new { id = id, topicId = topicId });
+                    }// if fields are empty
+                    else
+                    {
+                        int resourceId = planList.Count + 3;
+                        Lesson_Plan newPlan = new Lesson_Plan();
+                        newPlan.Lesson_Plan_ID = resourceId;
+                        newPlan.LP_Name = name;
+                        int theme = Convert.ToInt32(topicId);
+                        newPlan.Rating_ID = theme;
+                        int instructorId = db.Instructors.ToList().Find(i => i.SysUser_ID == id).Instructor_ID;
+                        newPlan.Instructor_ID = instructorId;
+
+                        Stream str = plan.InputStream;
+                        BinaryReader br = new BinaryReader(str);
+                        Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
+                        newPlan.LP_Description = fileDetails;
+
+                        db.Lesson_Plan.Add(newPlan);
+                        db.SaveChanges();
+                        Instructor tempInstructor = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
+                        List<Student_Instructor> studentInstructor = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == tempInstructor.Instructor_ID);
+                        foreach (Student_Instructor temp in studentInstructor)
+                        {
+                            Student tempStudent = db.Students.ToList().Find(s => s.Student_ID == temp.Student_ID);
+                            Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == tempStudent.SysUser_ID);
+                            Student_Lesson_Plan newStuPlan = new Student_Lesson_Plan();
+                            newStuPlan.Student_ID = tempStudent.Student_ID;
+                            newStuPlan.Lesson_Plan_ID = newPlan.Lesson_Plan_ID;
+                            db.Student_Lesson_Plan.Add(newStuPlan);
+                            db.SaveChanges();
+                        }// for each
+                        return RedirectToAction("planScreen", new { id = id });
+                    }// else
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// add resource post
 
         public ActionResult deletePlan(int? loggedId, int? id)
         {
-            ViewData["loggedId"] = "" + loggedId;
-            Lesson_Plan delPlan = db.Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == id);
-            ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlan.Rating_ID).Type_Description;
-            return View(delPlan);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["loggedId"] = "" + loggedId;
+                    Lesson_Plan delPlan = db.Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == id);
+                    ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlan.Rating_ID).Type_Description;
+                    return View(delPlan);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// delete Resource
 
         public ActionResult deletePlanConformation(int? loggedId, int? id)
         {
-            Lesson_Plan delPlan = db.Lesson_Plan.Find(id);
-            db.Lesson_Plan.Remove(delPlan);
-            db.SaveChanges();
-            Student_Lesson_Plan delStuPlan = db.Student_Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == delPlan.Lesson_Plan_ID);
-            if(delStuPlan != null)
+            try
             {
-                db.Student_Lesson_Plan.Remove(delStuPlan);
-                db.SaveChanges();
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Lesson_Plan delPlan = db.Lesson_Plan.Find(id);
+                    db.Lesson_Plan.Remove(delPlan);
+                    db.SaveChanges();
+                    Student_Lesson_Plan delStuPlan = db.Student_Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == delPlan.Lesson_Plan_ID);
+                    if (delStuPlan != null)
+                    {
+                        db.Student_Lesson_Plan.Remove(delStuPlan);
+                        db.SaveChanges();
+                    }
+                    return RedirectToAction("planScreen", new { id = loggedId });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
             }
-            return RedirectToAction("planScreen", new { id = loggedId });
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// delete conformation
 
         // GET: Lesson_Plan/Details/5

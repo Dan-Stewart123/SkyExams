@@ -19,5 +19,6 @@ namespace SkyExams.Models
         public int Instructor_ID { get; set; }
         public int Slot_ID { get; set; }
         public System.DateTime Date_Time { get; set; }
+        public int Plane_Type_ID { get; set; }
     }
 }
