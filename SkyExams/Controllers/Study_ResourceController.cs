@@ -22,12 +22,27 @@ namespace SkyExams.Controllers
 
         public ActionResult resourceScreen(int? id)
         {
-            ViewData["userID"] = "" + id;
-            Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-            ViewData["userRole"] = "" + forRole.User_Role_ID;
-            List<Plane_Type> planeTypes = db.Plane_Type.ToList();
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["userID"] = "" + id;
+                    Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    ViewData["userRole"] = "" + forRole.User_Role_ID;
+                    List<Plane_Type> planeTypes = db.Plane_Type.ToList();
+
+                    return View(planeTypes);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
             
-            return View(planeTypes);
         }// returns resource screen
 
         public FileContentResult getImg(int id)
@@ -40,39 +55,54 @@ namespace SkyExams.Controllers
 
         public ActionResult themeScreen(int? id, int? typeId)
         {
-            ViewData["userID"] = "" + id;
-            Sys_User user = db.Sys_User.Find(id);
-            ViewData["userRole"] = "" + user.User_Role_ID;
-            int userRole = Convert.ToInt32(user.User_Role_ID);
-            List<Study_Resource> resourceList = new List<Study_Resource>();
-            if(userRole == 1)
+            try
             {
-                ViewData["themeID"] = "" + typeId;
-                ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == typeId).Type_Description;
-                Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
-                List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
-                foreach (Student_Resource temp in stuResource)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    List<Study_Resource> tempResources = db.Study_Resource.ToList();
-                    foreach (Study_Resource teResource in tempResources)
+                    ViewData["userID"] = "" + id;
+                    Sys_User user = db.Sys_User.Find(id);
+                    ViewData["userRole"] = "" + user.User_Role_ID;
+                    int userRole = Convert.ToInt32(user.User_Role_ID);
+                    List<Study_Resource> resourceList = new List<Study_Resource>();
+                    if (userRole == 1)
                     {
-                        if (teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Rating_ID == typeId)
+                        ViewData["themeID"] = "" + typeId;
+                        ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == typeId).Type_Description;
+                        Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
+                        List<Student_Resource> stuResource = db.Student_Resource.ToList().FindAll(r => r.Student_ID == tempStu.Student_ID);
+                        foreach (Student_Resource temp in stuResource)
                         {
-                            resourceList.Add(teResource);
-                        }
-                    }// inner for each
-                }// for each
-                return View(resourceList);
-                
-            }// if user is a student
-            else
+                            List<Study_Resource> tempResources = db.Study_Resource.ToList();
+                            foreach (Study_Resource teResource in tempResources)
+                            {
+                                if (teResource.Study_Resource_ID == temp.Study_Resource_ID && teResource.Rating_ID == typeId)
+                                {
+                                    resourceList.Add(teResource);
+                                }
+                            }// inner for each
+                        }// for each
+                        return View(resourceList);
+
+                    }// if user is a student
+                    else
+                    {
+                        ViewData["themeID"] = "" + typeId;
+                        ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == typeId).Type_Description;
+                        resourceList = db.Study_Resource.ToList().FindAll(p => p.Rating_ID == typeId);
+                        return View(resourceList);
+
+                    }// if user is not a student
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
             {
-                ViewData["themeID"] = "" + typeId;
-                ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == typeId).Type_Description;
-                resourceList = db.Study_Resource.ToList().FindAll(p => p.Rating_ID == typeId);
-                return View(resourceList);
-                
-            }// if user is not a student
+                return RedirectToAction("loginScreen");
+            }
+            
         }// theme screen
 
         [HttpGet]
@@ -85,60 +115,120 @@ namespace SkyExams.Controllers
 
         public ActionResult addResource(int? id, int? themeId)
         {
-            ViewData["themeID"] = "" + themeId;
-            Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-            return View(user);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["themeID"] = "" + themeId;
+                    Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    return View(user);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// add resource screen
 
         [HttpPost]
         public ActionResult addResource(int? id, int? themeId, string name, HttpPostedFileBase resource)
         {
-            List<Study_Resource> resourceList = db.Study_Resource.ToList();
-            if(name == "" || resource == null)
+            try
             {
-                return RedirectToAction("addResource", new { id = id, themeId = themeId });
-            }// if fields are empty
-            else
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    List<Study_Resource> resourceList = db.Study_Resource.ToList();
+                    if (name == "" || resource == null)
+                    {
+                        return RedirectToAction("addResource", new { id = id, themeId = themeId });
+                    }// if fields are empty
+                    else
+                    {
+                        int resourceId = resourceList.Count + 2;
+                        Study_Resource newResource = new Study_Resource();
+                        newResource.Study_Resource_ID = resourceId;
+                        newResource.Resource_Name = name;
+                        int theme = Convert.ToInt32(themeId);
+                        newResource.Rating_ID = theme;
+
+                        Stream str = resource.InputStream;
+                        BinaryReader br = new BinaryReader(str);
+                        Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
+                        newResource.Resources = fileDetails;
+
+                        db.Study_Resource.Add(newResource);
+                        db.SaveChanges();
+
+                        return RedirectToAction("resourceScreen", new { id = id });
+                    }// else
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
             {
-                int resourceId = resourceList.Count + 2;
-                Study_Resource newResource = new Study_Resource();
-                newResource.Study_Resource_ID = resourceId;
-                newResource.Resource_Name = name;
-                int theme = Convert.ToInt32(themeId);
-                newResource.Rating_ID = theme;
-
-                Stream str = resource.InputStream;
-                BinaryReader br = new BinaryReader(str);
-                Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
-                newResource.Resources = fileDetails;
-
-                db.Study_Resource.Add(newResource);
-                db.SaveChanges();
-
-                return RedirectToAction("resourceScreen", new { id = id });
-            }// else
+                return RedirectToAction("loginScreen");
+            }
+            
         }// add resource post
 
         public ActionResult deleteResource(int? loggedId, int? id)
         {
-            ViewData["loggedId"] = "" + loggedId;
-            Study_Resource delResource = db.Study_Resource.ToList().Find(p => p.Study_Resource_ID == id);
-            ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delResource.Rating_ID).Type_Description;
-            return View(delResource);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["loggedId"] = "" + loggedId;
+                    Study_Resource delResource = db.Study_Resource.ToList().Find(p => p.Study_Resource_ID == id);
+                    ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delResource.Rating_ID).Type_Description;
+                    return View(delResource);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// delete Resource
 
         public ActionResult deleteResourceConformation(int? loggedId, int? id)
         {
-            Study_Resource delResource = db.Study_Resource.Find(id);
-            db.Study_Resource.Remove(delResource);
-            db.SaveChanges();
-            Student_Resource delStuResource = db.Student_Resource.ToList().Find(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
-            if(delStuResource != null)
+            try
             {
-                db.Student_Resource.Remove(delStuResource);
-                db.SaveChanges();
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Study_Resource delResource = db.Study_Resource.Find(id);
+                    db.Study_Resource.Remove(delResource);
+                    db.SaveChanges();
+                    Student_Resource delStuResource = db.Student_Resource.ToList().Find(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
+                    if (delStuResource != null)
+                    {
+                        db.Student_Resource.Remove(delStuResource);
+                        db.SaveChanges();
+                    }
+                    return RedirectToAction("resourceScreen", new { id = loggedId });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
             }
-            return RedirectToAction("resourceScreen", new { id = loggedId });
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// delete conformation
 
         // GET: Study_Resource/Details/5

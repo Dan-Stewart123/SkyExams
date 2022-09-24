@@ -41,125 +41,266 @@ namespace SkyExams.Controllers
         [HttpGet]
         public ActionResult slotsScreen(int? id)
         {
-            Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
-            List <Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
-            ViewData["userId"] = "" + id;
-            return View(slotsList);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
+                    List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
+                    ViewData["userId"] = "" + id;
+                    return View(slotsList);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// slots screen
 
         [HttpGet]
         public ActionResult createSlot(int? id)
         {
-            Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
-            return View(tempIns);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
+                    return View(tempIns);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// create slot get
 
         [HttpPost]
         public ActionResult createSlot(int? id, DateTime slotTime)
         {
-            Instructor_Slots newSlot = new Instructor_Slots();
-            Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
-            newSlot.Instructor_ID = tempIns.Instructor_ID;
-            newSlot.Date_Time = slotTime;
-            newSlot.Date_Time_String = "" + slotTime;
-            newSlot.Booked = false;
-            db.Instructor_Slots.Add(newSlot);
-            db.SaveChanges();
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Instructor_Slots newSlot = new Instructor_Slots();
+                    Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
+                    newSlot.Instructor_ID = tempIns.Instructor_ID;
+                    newSlot.Date_Time = slotTime;
+                    newSlot.Date_Time_String = "" + slotTime;
+                    newSlot.Booked = false;
+                    db.Instructor_Slots.Add(newSlot);
+                    db.SaveChanges();
 
-            return RedirectToAction("slotsScreen", new { id = id });
+                    return RedirectToAction("slotsScreen", new { id = id });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// create slot post
 
         [HttpGet]
         public ActionResult deleteSlot(int? id, int? slotId)
         {
-            ViewData["uID"] = "" + id;
-            Instructor_Slots delSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
-            return View(delSlot);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["uID"] = "" + id;
+                    Instructor_Slots delSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
+                    return View(delSlot);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// delete slot get
 
         public ActionResult deleteSlotConformation(int? id, int? slotId)
         {
-            Instructor_Slots delSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
-            db.Instructor_Slots.Remove(delSlot);
-            db.SaveChanges();
-            Booking delBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
-            if (delBooking != null)
+            try
             {
-                db.Bookings.Remove(delBooking);
-                db.SaveChangesAsync();
-            }//if statement
-            return RedirectToAction("slotsScreen", new { id = id });
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Instructor_Slots delSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
+                    db.Instructor_Slots.Remove(delSlot);
+                    db.SaveChanges();
+                    Booking delBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
+                    if (delBooking != null)
+                    {
+                        db.Bookings.Remove(delBooking);
+                        db.SaveChangesAsync();
+                    }//if statement
+                    return RedirectToAction("slotsScreen", new { id = id });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// delete slot conformation
 
         [HttpGet]
         public ActionResult updateSlot(int? id, int? slotId)
         {
-            ViewData["uID"] = "" + id;
-            Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
-            return View(updateSlot);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["uID"] = "" + id;
+                    Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
+                    return View(updateSlot);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// update slot get
 
         [HttpPost]
         public ActionResult updateSlot(int? id, int?slotId, DateTime slotTime)
         {
-            Instructor_Slots tempSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
-            Instructor_Slots updateSlot = new Instructor_Slots();
-            updateSlot.Instructor_ID = tempSlot.Instructor_ID;
-            updateSlot.Date_Time = slotTime;
-            updateSlot.Date_Time_String = "" + slotTime;
-            updateSlot.Booked = false;
-
-            db.Instructor_Slots.Remove(tempSlot);
-            db.SaveChanges();
-
-            db.Instructor_Slots.Add(updateSlot);
-            db.SaveChanges();
-
-            Booking tempBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
-            Booking updateBooking = new Booking();
-            if (tempSlot.Booked == true)
+            try
             {
-                updateBooking.Student_ID = tempBooking.Student_ID;
-                updateBooking.Instructor_ID = tempBooking.Instructor_ID;
-                updateBooking.Slot_ID = updateSlot.Slot_ID;
-                updateBooking.Date_Time = Convert.ToDateTime(updateSlot.Date_Time);
-                updateSlot.Booked = true;
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Instructor_Slots tempSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
+                    Instructor_Slots updateSlot = new Instructor_Slots();
+                    updateSlot.Instructor_ID = tempSlot.Instructor_ID;
+                    updateSlot.Date_Time = slotTime;
+                    updateSlot.Date_Time_String = "" + slotTime;
+                    updateSlot.Booked = false;
 
-                db.Bookings.Remove(tempBooking);
-                db.SaveChanges();
+                    db.Instructor_Slots.Remove(tempSlot);
+                    db.SaveChanges();
 
-                db.Bookings.Add(updateBooking);
-                db.SaveChanges();
-            }// if statement
+                    db.Instructor_Slots.Add(updateSlot);
+                    db.SaveChanges();
 
-            return RedirectToAction("slotsScreen", new { id = id });
+                    Booking tempBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
+                    Booking updateBooking = new Booking();
+                    if (tempSlot.Booked == true)
+                    {
+                        updateBooking.Student_ID = tempBooking.Student_ID;
+                        updateBooking.Instructor_ID = tempBooking.Instructor_ID;
+                        updateBooking.Slot_ID = updateSlot.Slot_ID;
+                        updateBooking.Date_Time = Convert.ToDateTime(updateSlot.Date_Time);
+                        updateSlot.Booked = true;
+
+                        db.Bookings.Remove(tempBooking);
+                        db.SaveChanges();
+
+                        db.Bookings.Add(updateBooking);
+                        db.SaveChanges();
+                    }// if statement
+
+                    return RedirectToAction("slotsScreen", new { id = id });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// update slot post
 
         public ActionResult bookingsScreen(int? id)
         {
-            Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == id);
-            List<Booking> bookingsList = db.Bookings.ToList().FindAll(b => b.Student_ID == tempStu.Student_ID);
-            ViewData["uID"] = "" + id;
-            return View(bookingsList);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == id);
+                    List<Booking> bookingsList = db.Bookings.ToList().FindAll(b => b.Student_ID == tempStu.Student_ID);
+                    ViewData["uID"] = "" + id;
+                    return View(bookingsList);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// bookings screen
 
         public ActionResult viewSlots(int? id)
         {
-            Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
-            Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
-            List<Sys_User> instructors = db.Sys_User.ToList().FindAll(i => i.User_Role_ID == 2);
-            List<Plane_Type> types = db.Plane_Type.ToList();
-            List<SelectListItem> planeType = new List<SelectListItem>();
-            foreach(var p in types)
+            try
             {
-                SelectListItem temp = new SelectListItem();
-                temp.Value = "" + p.Plane_Type_ID;
-                temp.Text = p.Type_Description;
-                planeType.Add(temp);
-            }// for each
-            ViewBag.planes = planeType;
-            ViewData["uID"] = "" + id;
-            return View(instructors);
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
+                    Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
+                    List<Sys_User> instructors = db.Sys_User.ToList().FindAll(i => i.User_Role_ID == 2);
+                    List<Plane_Type> types = new List<Plane_Type>();
+                    List<SelectListItem> planeTypes = new List<SelectListItem>();
+                    List<Student_Exam> sExam = db.Student_Exam.ToList().FindAll(s => s.Student_ID == sForId.Student_ID);
+                    foreach (var e in sExam)
+                    {
+                        Plane_Type temp = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == e.Exam_ID);
+                        types.Add(temp);
+                    }// for each
+                    foreach (var p in types)
+                    {
+                        SelectListItem temp = new SelectListItem();
+                        temp.Value = "" + p.Plane_Type_ID;
+                        temp.Text = p.Type_Description;
+                        planeTypes.Add(temp);
+                    }// for each
+                    ViewBag.planes = planeTypes;
+                    ViewData["uID"] = "" + id;
+                    return View(instructors);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// view slots
 
         public JsonResult getSlots(int instructor)
@@ -171,138 +312,213 @@ namespace SkyExams.Controllers
 
         public ActionResult bookSlot(int? id, int? instructors, int? planes, int? FromJson)
         {
-            Instructor_Slots bookSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == FromJson);
-            Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
-            Booking newBooking = new Booking();
-            newBooking.Student_ID = sForId.Student_ID;
-            newBooking.Instructor_ID = bookSlot.Instructor_ID;
-            //newBooking.Slot_ID = bookSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
-            newBooking.Date_Time = Convert.ToDateTime(bookSlot.Date_Time);
-            newBooking.Plane_Type_ID = Convert.ToInt32(planes);
-
-            Instructor_Slots updateSlot = new Instructor_Slots();
-            updateSlot.Instructor_ID = bookSlot.Instructor_ID;
-            updateSlot.Date_Time = bookSlot.Date_Time;
-            updateSlot.Booked = true;
-            updateSlot.Date_Time_String = bookSlot.Date_Time_String;
-            db.Instructor_Slots.Remove(bookSlot);
-            db.SaveChanges();
-
-            db.Instructor_Slots.Add(updateSlot);
-            db.SaveChanges();
-
-            newBooking.Slot_ID = updateSlot.Slot_ID;
-            db.Bookings.Add(newBooking);
-            db.SaveChanges();
-
-            Sys_User stu = db.Sys_User.ToList().Find(s => s.SysUser_ID == sForId.SysUser_ID);
-
             try
             {
-                //create email
-                MimeMessage requestEmail = new MimeMessage();
-                requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
-                requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
-                requestEmail.Subject = "Booking Conformation";
-                requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + updateSlot.Date_Time + " has been booked by " + stu.FName + " " + stu.Surname };
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Instructor_Slots bookSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == FromJson);
+                    Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
+                    Booking newBooking = new Booking();
+                    newBooking.Student_ID = sForId.Student_ID;
+                    newBooking.Instructor_ID = bookSlot.Instructor_ID;
+                    //newBooking.Slot_ID = bookSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
+                    newBooking.Date_Time = Convert.ToDateTime(bookSlot.Date_Time);
+                    newBooking.Plane_Type_ID = Convert.ToInt32(planes);
 
-                //send email
-                SmtpClient client = new SmtpClient();
-                client.Connect("smtp.gmail.com", 465, true);
-                client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
-                client.Send(requestEmail);
-                client.Disconnect(true);
-                client.Dispose();
-            }// try
+                    Instructor_Slots updateSlot = new Instructor_Slots();
+                    updateSlot.Instructor_ID = bookSlot.Instructor_ID;
+                    updateSlot.Date_Time = bookSlot.Date_Time;
+                    updateSlot.Booked = true;
+                    updateSlot.Date_Time_String = bookSlot.Date_Time_String;
+                    db.Instructor_Slots.Remove(bookSlot);
+                    db.SaveChanges();
+
+                    db.Instructor_Slots.Add(updateSlot);
+                    db.SaveChanges();
+
+                    newBooking.Slot_ID = updateSlot.Slot_ID;
+                    db.Bookings.Add(newBooking);
+                    db.SaveChanges();
+
+                    Sys_User stu = db.Sys_User.ToList().Find(s => s.SysUser_ID == sForId.SysUser_ID);
+
+                    try
+                    {
+                        //create email
+                        MimeMessage requestEmail = new MimeMessage();
+                        requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
+                        requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
+                        requestEmail.Subject = "Booking Conformation";
+                        requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + updateSlot.Date_Time + " has been booked by " + stu.FName + " " + stu.Surname };
+
+                        //send email
+                        SmtpClient client = new SmtpClient();
+                        client.Connect("smtp.gmail.com", 465, true);
+                        client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                        client.Send(requestEmail);
+                        client.Disconnect(true);
+                        client.Dispose();
+                    }// try
+                    catch
+                    {
+                        return RedirectToAction("bookingsScreen", new { id = id });
+                    }// catch
+
+                    return RedirectToAction("bookingsScreen", new { id = id });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
             catch
             {
-                return RedirectToAction("bookingsScreen", new { id = id });
-            }// catch
-
-            return RedirectToAction("bookingsScreen", new { id = id });
+                return RedirectToAction("loginScreen");
+            }
+            
         }// book slot
 
         public ActionResult deleteBooking(int? id, int? bookingId)
         {
-            ViewData["uID"] = "" + id;
-            Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
-            Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == delBooking.Instructor_ID);
-            ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
-            return View(delBooking);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    ViewData["uID"] = "" + id;
+                    Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
+                    Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == delBooking.Instructor_ID);
+                    ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
+                    return View(delBooking);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// delete slot 
 
         public ActionResult deleteBookingConformation(int? id, int? bookingId)
         {
-            Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
-            db.Bookings.Remove(delBooking);
-            db.SaveChanges();
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
+                    db.Bookings.Remove(delBooking);
+                    db.SaveChanges();
 
-            Instructor_Slots bookSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == delBooking.Slot_ID);
-            Instructor_Slots updateSlot = new Instructor_Slots();
-            updateSlot.Instructor_ID = bookSlot.Instructor_ID;
-            updateSlot.Date_Time = bookSlot.Date_Time;
-            updateSlot.Date_Time_String = bookSlot.Date_Time_String;
-            updateSlot.Booked = false;
-            db.Instructor_Slots.Remove(bookSlot);
-            db.SaveChanges();
+                    Instructor_Slots bookSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == delBooking.Slot_ID);
+                    Instructor_Slots updateSlot = new Instructor_Slots();
+                    updateSlot.Instructor_ID = bookSlot.Instructor_ID;
+                    updateSlot.Date_Time = bookSlot.Date_Time;
+                    updateSlot.Date_Time_String = bookSlot.Date_Time_String;
+                    updateSlot.Booked = false;
+                    db.Instructor_Slots.Remove(bookSlot);
+                    db.SaveChanges();
 
-            db.Instructor_Slots.Add(updateSlot);
-            db.SaveChanges();
-            return RedirectToAction("bookingsScreen", new { id = id });
+                    db.Instructor_Slots.Add(updateSlot);
+                    db.SaveChanges();
+                    return RedirectToAction("bookingsScreen", new { id = id });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// delete booking conformation
 
         [HttpGet]
         public ActionResult updateBooking(int? id, int? bookingId)
         {
-            Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
-            Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
-            List<Instructor_Slots> slots = db.Instructor_Slots.ToList().FindAll(i => i.Instructor_ID == stuIns.Instructor_ID && i.Booked == false);
-            ViewData["uID"] = "" + id;
-            ViewData["bID"] = "" + bookingId;
-            Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == stuIns.Instructor_ID);
-            ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
-            return View(slots);
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
+                    Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
+                    List<Instructor_Slots> slots = db.Instructor_Slots.ToList().FindAll(i => i.Instructor_ID == stuIns.Instructor_ID && i.Booked == false);
+                    ViewData["uID"] = "" + id;
+                    ViewData["bID"] = "" + bookingId;
+                    Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == stuIns.Instructor_ID);
+                    ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
+                    return View(slots);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// update booking get
 
         [HttpGet]
         public ActionResult updateBookingConformation(int? id, int? bookingId, int? slotId)
         {
-            Booking tempBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
-            Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == slotId);
-            Instructor_Slots tempSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == tempBooking.Slot_ID);
-            Booking updateBooking = new Booking();
+            try
+            {
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Booking tempBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
+                    Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == slotId);
+                    Instructor_Slots tempSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == tempBooking.Slot_ID);
+                    Booking updateBooking = new Booking();
 
-            updateBooking.Student_ID = tempBooking.Student_ID;
-            updateBooking.Instructor_ID = tempBooking.Instructor_ID;
-            //updateBooking.Slot_ID = tempSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
-            updateBooking.Date_Time = Convert.ToDateTime(updateSlot.Date_Time);
-            updateBooking.Plane_Type_ID = tempBooking.Plane_Type_ID;
+                    updateBooking.Student_ID = tempBooking.Student_ID;
+                    updateBooking.Instructor_ID = tempBooking.Instructor_ID;
+                    //updateBooking.Slot_ID = tempSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
+                    updateBooking.Date_Time = Convert.ToDateTime(updateSlot.Date_Time);
+                    updateBooking.Plane_Type_ID = tempBooking.Plane_Type_ID;
 
-            tempSlot.Booked = false;
-            updateSlot.Booked = true;
-            Instructor_Slots nSlot = tempSlot;
-            Instructor_Slots nSlotUpdate = updateSlot;
+                    tempSlot.Booked = false;
+                    updateSlot.Booked = true;
+                    Instructor_Slots nSlot = tempSlot;
+                    Instructor_Slots nSlotUpdate = updateSlot;
 
-            db.Instructor_Slots.Remove(tempSlot);
-            db.SaveChanges();
+                    db.Instructor_Slots.Remove(tempSlot);
+                    db.SaveChanges();
 
-            db.Instructor_Slots.Add(nSlot);
-            db.SaveChanges();
+                    db.Instructor_Slots.Add(nSlot);
+                    db.SaveChanges();
 
-            db.Instructor_Slots.Remove(updateSlot);
-            db.SaveChanges();
+                    db.Instructor_Slots.Remove(updateSlot);
+                    db.SaveChanges();
 
-            db.Instructor_Slots.Add(nSlotUpdate);
-            db.SaveChanges();
+                    db.Instructor_Slots.Add(nSlotUpdate);
+                    db.SaveChanges();
 
-            db.Bookings.Remove(tempBooking);
-            db.SaveChanges();
+                    db.Bookings.Remove(tempBooking);
+                    db.SaveChanges();
 
-            updateBooking.Slot_ID = nSlotUpdate.Slot_ID;
-            db.Bookings.Add(updateBooking);
-            db.SaveChanges();
+                    updateBooking.Slot_ID = nSlotUpdate.Slot_ID;
+                    db.Bookings.Add(updateBooking);
+                    db.SaveChanges();
 
-            return RedirectToAction("bookingsScreen", new { id = id });
+                    return RedirectToAction("bookingsScreen", new { id = id });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// update booking post
 
         // GET: Bookings/Details/5
