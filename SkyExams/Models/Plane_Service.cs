@@ -14,8 +14,10 @@ namespace SkyExams.Models
     
     public partial class Plane_Service
     {
+        public int Plane_Service_ID { get; set; }
         public int Plane_ID { get; set; }
-        public Nullable<System.DateTime> Last_Service_Date { get; set; }
-        public string Service_Details { get; set; }
+        public System.DateTime Last_Service_Date { get; set; }
+        public string Reason_For_Service { get; set; }
+        public string Parts_Used { get; set; }
     }
 }

@@ -20,8 +20,8 @@ namespace SkyExams.ViewModels
             {
                 id = Convert.ToInt32(schedulerEvent.Event_ID),
                 text = schedulerEvent.text,
-                start_date = schedulerEvent.Start_Time.ToString("yyyy-MM-dd HH:mm"),
-                end_date = schedulerEvent.End_Time.ToString("yyyy-MM-dd HH:mm")
+                //start_date = schedulerEvent.DateTimeScheduled.ToString("yyyy-MM-dd HH:mm"),
+                
             };
         }// explicit operator
 
@@ -31,12 +31,10 @@ namespace SkyExams.ViewModels
             {
                 Event_ID = schedulerEvent.id,
                 text = schedulerEvent.text,
-                Start_Time = DateTime.Parse(
-                    schedulerEvent.start_date,
-                    System.Globalization.CultureInfo.InvariantCulture),
-                End_Time = DateTime.Parse(
-                    schedulerEvent.end_date,
-                    System.Globalization.CultureInfo.InvariantCulture)
+                //DateTimeScheduled = DateTime.Parse(
+                //    schedulerEvent.start_date,
+                //    System.Globalization.CultureInfo.InvariantCulture),
+               
             };
         }// scheduler event
     }

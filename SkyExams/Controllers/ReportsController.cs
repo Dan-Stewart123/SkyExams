@@ -22,28 +22,28 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User user = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                     return View(user);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// reports screen
 
         public ActionResult studentReport(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     List<Sys_User> students = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 1);
@@ -51,14 +51,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// student report
 
         public ActionResult generateStudentReport(int? loggedId, int? id)
@@ -111,7 +111,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     List<Country> countries = db.Countries.ToList();
@@ -119,14 +119,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// group report
 
         public ActionResult generateGroupReport(int? loggedId, int? country)
@@ -188,7 +188,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     List<Plane> planes = db.Planes.ToList();
@@ -196,14 +196,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// plane report
 
         public ActionResult generatePlaneReport(int? loggedId, int? id)
@@ -242,7 +242,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     List<Sys_User> instructors = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 2);
@@ -250,14 +250,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// instructor report
 
         public ActionResult generateInstructorReport(int? loggedId, int? id)
@@ -286,22 +286,21 @@ namespace SkyExams.Controllers
                     foreach (var p in db.Plane_Type.ToList())
                     {
                         List<Student_Instructor> stuIns = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == instructor.Instructor_ID);
-                        ExamAverageVM avg = new ExamAverageVM();
+                        ExamAverageVM avg = new ExamAverageVM();                      
                         avg.examId = p.Plane_Type_ID;
                         avg.examName = p.Type_Description;
                         int tot = 0;
-                        foreach (var s in stuIns)
+                        List<Student_Exam> examList = db.Student_Exam.ToList().FindAll(s => s.Exam_ID == p.Plane_Type_ID && s.Exam_Mark != 0);
+                        foreach(var se in examList)
                         {
-                            Exam tExam = db.Exams.ToList().Find(t => t.Plane_Type_ID == p.Plane_Type_ID);
-                            Student_Exam tempExam = db.Student_Exam.ToList().Find(e => e.Student_ID == s.Student_ID && e.Exam_ID == tExam.Exam_ID);
-                            if (tempExam != null)
+                            if (se != null)
                             {
-                                tot = tot + Convert.ToInt32(tempExam.Exam_Mark);
-                                int average = (tot / insReport.students);
+                                tot = tot + Convert.ToInt32(se.Exam_Mark);
+                                int average = (tot / examList.Count);
                                 avg.examAvg = average;
-                                avgs.Add(avg);
                             }// inner if statement
-                        }// inner foreach
+                        }// for each
+                        avgs.Add(avg);
 
                     }// for each
 
@@ -327,21 +326,21 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     return View();
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-           
+
         }// date select for exam report
 
         public ActionResult examReport(int? id, DateTime startDate)
@@ -399,21 +398,21 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     return View();
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// events report date select
 
         public ActionResult eventsReport(int? id, DateTime startDate)
@@ -422,7 +421,7 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    List<uEvent> events = db.uEvents.ToList().FindAll(u => u.End_Time >= startDate);
+                    List<uEvent> events = db.uEvents.ToList().FindAll(u => u.Start >= startDate);
                     ViewData["userID"] = "" + id;
                     ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
                     return View(events);

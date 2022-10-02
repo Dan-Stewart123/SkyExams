@@ -40,13 +40,14 @@
         <EntityTypeShape EntityType="SkyExamsModel.Student_Resource" Width="1.5" PointX="8.75" PointY="13.75" />
         <EntityTypeShape EntityType="SkyExamsModel.Study_Resource" Width="1.5" PointX="14.75" PointY="0.75" />
         <EntityTypeShape EntityType="SkyExamsModel.Sys_User" Width="1.5" PointX="14.75" PointY="3.75" />
-        <EntityTypeShape EntityType="SkyExamsModel.Title" Width="1.5" PointX="14.75" PointY="8.75" />
-        <EntityTypeShape EntityType="SkyExamsModel.uEvent" Width="1.5" PointX="14.75" PointY="11.75" />
-        <EntityTypeShape EntityType="SkyExamsModel.User_Event" Width="1.5" PointX="14.75" PointY="14.75" />
-        <EntityTypeShape EntityType="SkyExamsModel.User_Role" Width="1.5" PointX="2.75" PointY="15.75" />
-        <EntityTypeShape EntityType="SkyExamsModel.UserPassword" Width="1.5" PointX="10.75" PointY="15.75" />
-        <EntityTypeShape EntityType="SkyExamsModel.Verification_Code" Width="1.5" PointX="16.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SkyExamsModel.Zip_Code" Width="1.5" PointX="16.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Timer" Width="1.5" PointX="14.75" PointY="8.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Title" Width="1.5" PointX="14.75" PointY="11.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.uEvent" Width="1.5" PointX="14.75" PointY="14.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.User_Event" Width="1.5" PointX="2.75" PointY="15.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.User_Role" Width="1.5" PointX="10.75" PointY="15.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.UserPassword" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Verification_Code" Width="1.5" PointX="16.75" PointY="3.75" />
+        <EntityTypeShape EntityType="SkyExamsModel.Zip_Code" Width="1.5" PointX="4.75" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

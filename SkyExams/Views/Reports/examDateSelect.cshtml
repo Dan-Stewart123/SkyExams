@@ -20,13 +20,17 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" />
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
+    <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 
 <script>
-    function timer() {
-        window.location.href = '/Sys_User/loginScreen';
+    function checkInput() {
+        var slotTime = $("#slotTime").val();
+        if (slotTime != "") {
+            document.getElementById("submitButton").disabled = false;
+        }// no input
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = checkInput;
 </script>
 

@@ -94,9 +94,7 @@
     <br />
 </div>
 <div id="captureReg" style="display: none;">
-    <button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("captureRegistration", "Sys_User", new { id = Model.SysUser_ID })'">
-        Capture Registration
-    </button>
+    @Html.ActionLink("Download Excel Document", "ExportToExcel")
     <br />
     <br />
     <button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = Model.SysUser_ID })'">
