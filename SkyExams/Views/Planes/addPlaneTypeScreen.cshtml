@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "addPlaneTypeScreen";
     var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Create Plane Type</h2>
@@ -26,6 +27,13 @@
     <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
 
 }
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
+</script>
 
 
 

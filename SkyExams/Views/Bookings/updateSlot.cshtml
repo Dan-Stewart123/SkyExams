@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "updateSlot";
     var uID = ViewData["uID"];
+    var time = ViewData["time"];
 }
 
 <h2>Update Booking Slot</h2>
@@ -35,6 +36,11 @@
         }// no input
     }
     window.oninput = checkInput;
+
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
 </script>
 
 

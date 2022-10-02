@@ -47,6 +47,7 @@ namespace SkyExams.Controllers
                 {
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
                     List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userId"] = "" + id;
                     return View(slotsList);
                 }
@@ -70,6 +71,7 @@ namespace SkyExams.Controllers
                 if (id != null)
                 {
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["err"] = err;
                     return View(tempIns);
                 }
@@ -140,6 +142,7 @@ namespace SkyExams.Controllers
                 if (id != null || slotId != null)
                 {
                     ViewData["uID"] = "" + id;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Instructor_Slots delSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
                     return View(delSlot);
                 }
@@ -216,6 +219,7 @@ namespace SkyExams.Controllers
                 if (id != null || slotId != null)
                 {
                     ViewData["uID"] = "" + id;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
                     return View(updateSlot);
                 }
@@ -313,6 +317,7 @@ namespace SkyExams.Controllers
                 {
                     Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     List<Booking> bookingsList = db.Bookings.ToList().FindAll(b => b.Student_ID == tempStu.Student_ID);
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["uID"] = "" + id;
                     return View(bookingsList);
                 }
@@ -354,6 +359,7 @@ namespace SkyExams.Controllers
                     }// for each
                     ViewBag.planes = planeTypes;
                     ViewData["uID"] = "" + id;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(instructors);
                 }
                 else
@@ -448,6 +454,7 @@ namespace SkyExams.Controllers
                 if (id != null || bookingId != null)
                 {
                     ViewData["uID"] = "" + id;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == delBooking.Instructor_ID);
                     ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
@@ -535,6 +542,7 @@ namespace SkyExams.Controllers
                     List<Instructor_Slots> slots = db.Instructor_Slots.ToList().FindAll(i => i.Instructor_ID == stuIns.Instructor_ID && i.Booked == false);
                     ViewData["uID"] = "" + id;
                     ViewData["bID"] = "" + bookingId;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == stuIns.Instructor_ID);
                     ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
                     return View(slots);
