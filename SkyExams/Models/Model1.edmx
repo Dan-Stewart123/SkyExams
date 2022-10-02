@@ -16,7 +16,7 @@
           <Key>
             <PropertyRef Name="Answer_ID" />
           </Key>
-          <Property Name="Answer_ID" Type="int" Nullable="false" />
+          <Property Name="Answer_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ANS" Type="varchar" MaxLength="255" />
           <Property Name="Question_ID" Type="int" Nullable="false" />
           <Property Name="Correct_Answer" Type="bit" Nullable="false" />
@@ -36,21 +36,21 @@
           <Key>
             <PropertyRef Name="City_ID" />
           </Key>
-          <Property Name="City_ID" Type="int" Nullable="false" />
+          <Property Name="City_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="City_Name" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
             <PropertyRef Name="Country_ID" />
           </Key>
-          <Property Name="Country_ID" Type="int" Nullable="false" />
+          <Property Name="Country_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Country_Name" Type="varchar" MaxLength="60" />
         </EntityType>
         <EntityType Name="Employment_Status">
           <Key>
             <PropertyRef Name="Employment_ID" />
           </Key>
-          <Property Name="Employment_ID" Type="int" Nullable="false" />
+          <Property Name="Employment_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmpStatus" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="Event_Type">
@@ -64,14 +64,14 @@
           <Key>
             <PropertyRef Name="Location_ID" />
           </Key>
-          <Property Name="Location_ID" Type="int" Nullable="false" />
+          <Property Name="Location_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Event_Location" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Exam">
           <Key>
             <PropertyRef Name="Exam_ID" />
           </Key>
-          <Property Name="Exam_ID" Type="int" Nullable="false" />
+          <Property Name="Exam_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Plane_Type_ID" Type="int" />
         </EntityType>
         <EntityType Name="Exam_Average">
@@ -96,7 +96,7 @@
             <PropertyRef Name="Instructor_ID" />
             <PropertyRef Name="Rating_ID" />
           </Key>
-          <Property Name="Instructor_ID" Type="int" Nullable="false" />
+          <Property Name="Instructor_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Rating_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Instructor_Slots">
@@ -113,7 +113,7 @@
           <Key>
             <PropertyRef Name="Lesson_Plan_ID" />
           </Key>
-          <Property Name="Lesson_Plan_ID" Type="int" Nullable="false" />
+          <Property Name="Lesson_Plan_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Instructor_ID" Type="int" Nullable="false" />
           <Property Name="LP_Name" Type="varchar" MaxLength="255" />
           <Property Name="LP_Description" Type="varbinary(max)" />
@@ -148,11 +148,13 @@
         </EntityType>
         <EntityType Name="Plane_Service">
           <Key>
-            <PropertyRef Name="Plane_ID" />
+            <PropertyRef Name="Plane_Service_ID" />
           </Key>
+          <Property Name="Plane_Service_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Plane_ID" Type="int" Nullable="false" />
-          <Property Name="Last_Service_Date" Type="datetime" />
-          <Property Name="Service_Details" Type="varchar" MaxLength="255" />
+          <Property Name="Last_Service_Date" Type="datetime" Nullable="false" />
+          <Property Name="Reason_For_Service" Type="varchar(max)" Nullable="false" />
+          <Property Name="Parts_Used" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Plane_Type">
           <Key>
@@ -174,14 +176,14 @@
           <Key>
             <PropertyRef Name="Question_Rating_ID" />
           </Key>
-          <Property Name="Question_Rating_ID" Type="int" Nullable="false" />
+          <Property Name="Question_Rating_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Ques_Rating" Type="varchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="Questions">
           <Key>
             <PropertyRef Name="Question_ID" />
           </Key>
-          <Property Name="Question_ID" Type="int" Nullable="false" />
+          <Property Name="Question_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Question" Type="varchar" MaxLength="255" />
           <Property Name="Section_ID" Type="int" Nullable="false" />
           <Property Name="Question_Rating_ID" Type="int" Nullable="false" />
@@ -190,7 +192,7 @@
           <Key>
             <PropertyRef Name="Rating_ID" />
           </Key>
-          <Property Name="Rating_ID" Type="int" Nullable="false" />
+          <Property Name="Rating_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Rating_Description" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Registration_Sheet">
@@ -201,9 +203,11 @@
           <Property Name="Sys_User_ID" Type="int" Nullable="false" />
           <Property Name="First_Name" Type="varchar(max)" Nullable="false" />
           <Property Name="Surname" Type="varchar(max)" Nullable="false" />
+          <Property Name="Licence_No" Type="int" Nullable="false" />
+          <Property Name="Date_Written" Type="datetime" Nullable="false" />
           <Property Name="Plane_Type_ID" Type="int" Nullable="false" />
           <Property Name="Type_Desctription" Type="varchar(max)" Nullable="false" />
-          <Property Name="Paid" Type="bit" Nullable="false" />
+          <Property Name="Mark" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Save_Exam">
           <Key>
@@ -218,7 +222,7 @@
           <Key>
             <PropertyRef Name="Section_ID" />
           </Key>
-          <Property Name="Section_ID" Type="int" Nullable="false" />
+          <Property Name="Section_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Section" Type="varchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="SkyExams">
@@ -286,7 +290,7 @@
           <Key>
             <PropertyRef Name="Study_Resource_ID" />
           </Key>
-          <Property Name="Study_Resource_ID" Type="int" Nullable="false" />
+          <Property Name="Study_Resource_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Resource_Name" Type="varchar" MaxLength="25" />
           <Property Name="Resources" Type="varbinary(max)" />
           <Property Name="Rating_ID" Type="int" Nullable="false" />
@@ -311,11 +315,18 @@
           <Property Name="Employment_ID" Type="int" Nullable="false" />
           <Property Name="User_Name" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Timer">
+          <Key>
+            <PropertyRef Name="Timer_ID" />
+          </Key>
+          <Property Name="Timer_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Timer_Value" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Title">
           <Key>
             <PropertyRef Name="Title_ID" />
           </Key>
-          <Property Name="Title_ID" Type="int" Nullable="false" />
+          <Property Name="Title_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TitleDesc" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="uEvent">
@@ -323,10 +334,11 @@
             <PropertyRef Name="Event_ID" />
           </Key>
           <Property Name="Event_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Start_Time" Type="datetime" Nullable="false" />
-          <Property Name="End_Time" Type="datetime" Nullable="false" />
+          <Property Name="Start" Type="datetime" Nullable="false" />
+          <Property Name="End" Type="datetime" Nullable="false" />
           <Property Name="text" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Event_Type_ID" Type="int" Nullable="false" />
+          <Property Name="Location_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User_Event">
           <Key>
@@ -340,7 +352,7 @@
           <Key>
             <PropertyRef Name="User_Role_ID" />
           </Key>
-          <Property Name="User_Role_ID" Type="int" Nullable="false" />
+          <Property Name="User_Role_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoleDesc" Type="varchar" MaxLength="225" />
         </EntityType>
         <EntityType Name="UserPassword">
@@ -355,14 +367,14 @@
           <Key>
             <PropertyRef Name="Verif_Code_ID" />
           </Key>
-          <Property Name="Verif_Code_ID" Type="int" Nullable="false" />
+          <Property Name="Verif_Code_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Privelages" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Zip_Code">
           <Key>
             <PropertyRef Name="Zip_ID" />
           </Key>
-          <Property Name="Zip_ID" Type="int" Nullable="false" />
+          <Property Name="Zip_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Code" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityContainer Name="SkyExamsModelStoreContainer">
@@ -401,6 +413,7 @@
           <EntitySet Name="Student_Resource" EntityType="Self.Student_Resource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Study_Resource" EntityType="Self.Study_Resource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sys_User" EntityType="Self.Sys_User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Timer" EntityType="Self.Timer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Title" EntityType="Self.Title" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="uEvent" EntityType="Self.uEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Event" EntityType="Self.User_Event" Schema="dbo" store:Type="Tables" />
@@ -449,6 +462,7 @@
           <EntitySet Name="Student_Resource" EntityType="SkyExamsModel.Student_Resource" />
           <EntitySet Name="Study_Resource" EntityType="SkyExamsModel.Study_Resource" />
           <EntitySet Name="Sys_User" EntityType="SkyExamsModel.Sys_User" />
+          <EntitySet Name="Timers" EntityType="SkyExamsModel.Timer" />
           <EntitySet Name="Titles" EntityType="SkyExamsModel.Title" />
           <EntitySet Name="uEvents" EntityType="SkyExamsModel.uEvent" />
           <EntitySet Name="User_Event" EntityType="SkyExamsModel.User_Event" />
@@ -468,7 +482,7 @@
           <Key>
             <PropertyRef Name="Answer_ID" />
           </Key>
-          <Property Name="Answer_ID" Type="Int32" Nullable="false" />
+          <Property Name="Answer_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ANS" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Question_ID" Type="Int32" Nullable="false" />
           <Property Name="Correct_Answer" Type="Boolean" Nullable="false" />
@@ -488,21 +502,21 @@
           <Key>
             <PropertyRef Name="City_ID" />
           </Key>
-          <Property Name="City_ID" Type="Int32" Nullable="false" />
+          <Property Name="City_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="City_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
             <PropertyRef Name="Country_ID" />
           </Key>
-          <Property Name="Country_ID" Type="Int32" Nullable="false" />
+          <Property Name="Country_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Country_Name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Employment_Status">
           <Key>
             <PropertyRef Name="Employment_ID" />
           </Key>
-          <Property Name="Employment_ID" Type="Int32" Nullable="false" />
+          <Property Name="Employment_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmpStatus" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Event_Type">
@@ -516,14 +530,14 @@
           <Key>
             <PropertyRef Name="Location_ID" />
           </Key>
-          <Property Name="Location_ID" Type="Int32" Nullable="false" />
+          <Property Name="Location_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Event_Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Exam">
           <Key>
             <PropertyRef Name="Exam_ID" />
           </Key>
-          <Property Name="Exam_ID" Type="Int32" Nullable="false" />
+          <Property Name="Exam_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Plane_Type_ID" Type="Int32" />
         </EntityType>
         <EntityType Name="Exam_Average">
@@ -548,7 +562,7 @@
             <PropertyRef Name="Instructor_ID" />
             <PropertyRef Name="Rating_ID" />
           </Key>
-          <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
+          <Property Name="Instructor_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Rating_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Instructor_Slots">
@@ -565,7 +579,7 @@
           <Key>
             <PropertyRef Name="Lesson_Plan_ID" />
           </Key>
-          <Property Name="Lesson_Plan_ID" Type="Int32" Nullable="false" />
+          <Property Name="Lesson_Plan_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Instructor_ID" Type="Int32" Nullable="false" />
           <Property Name="LP_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="LP_Description" Type="Binary" MaxLength="Max" FixedLength="false" />
@@ -600,11 +614,13 @@
         </EntityType>
         <EntityType Name="Plane_Service">
           <Key>
-            <PropertyRef Name="Plane_ID" />
+            <PropertyRef Name="Plane_Service_ID" />
           </Key>
+          <Property Name="Plane_Service_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Plane_ID" Type="Int32" Nullable="false" />
-          <Property Name="Last_Service_Date" Type="DateTime" Precision="3" />
-          <Property Name="Service_Details" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Last_Service_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Reason_For_Service" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Parts_Used" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Plane_Type">
           <Key>
@@ -626,14 +642,14 @@
           <Key>
             <PropertyRef Name="Question_Rating_ID" />
           </Key>
-          <Property Name="Question_Rating_ID" Type="Int32" Nullable="false" />
+          <Property Name="Question_Rating_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Ques_Rating" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
             <PropertyRef Name="Question_ID" />
           </Key>
-          <Property Name="Question_ID" Type="Int32" Nullable="false" />
+          <Property Name="Question_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Question1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Section_ID" Type="Int32" Nullable="false" />
           <Property Name="Question_Rating_ID" Type="Int32" Nullable="false" />
@@ -642,7 +658,7 @@
           <Key>
             <PropertyRef Name="Rating_ID" />
           </Key>
-          <Property Name="Rating_ID" Type="Int32" Nullable="false" />
+          <Property Name="Rating_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Rating_Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Registration_Sheet">
@@ -653,9 +669,11 @@
           <Property Name="Sys_User_ID" Type="Int32" Nullable="false" />
           <Property Name="First_Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Surname" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Licence_No" Type="Int32" Nullable="false" />
+          <Property Name="Date_Written" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Plane_Type_ID" Type="Int32" Nullable="false" />
           <Property Name="Type_Desctription" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="Mark" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Save_Exam">
           <Key>
@@ -670,7 +688,7 @@
           <Key>
             <PropertyRef Name="Section_ID" />
           </Key>
-          <Property Name="Section_ID" Type="Int32" Nullable="false" />
+          <Property Name="Section_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Section1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SkyExam">
@@ -738,7 +756,7 @@
           <Key>
             <PropertyRef Name="Study_Resource_ID" />
           </Key>
-          <Property Name="Study_Resource_ID" Type="Int32" Nullable="false" />
+          <Property Name="Study_Resource_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Resource_Name" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="Resources" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="Rating_ID" Type="Int32" Nullable="false" />
@@ -763,11 +781,18 @@
           <Property Name="Employment_ID" Type="Int32" Nullable="false" />
           <Property Name="User_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Timer">
+          <Key>
+            <PropertyRef Name="Timer_ID" />
+          </Key>
+          <Property Name="Timer_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Timer_Value" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Title">
           <Key>
             <PropertyRef Name="Title_ID" />
           </Key>
-          <Property Name="Title_ID" Type="Int32" Nullable="false" />
+          <Property Name="Title_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TitleDesc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="uEvent">
@@ -775,10 +800,11 @@
             <PropertyRef Name="Event_ID" />
           </Key>
           <Property Name="Event_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Start_Time" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="End_Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="End" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Event_Type_ID" Type="Int32" Nullable="false" />
+          <Property Name="Location_ID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="User_Event">
           <Key>
@@ -792,7 +818,7 @@
           <Key>
             <PropertyRef Name="User_Role_ID" />
           </Key>
-          <Property Name="User_Role_ID" Type="Int32" Nullable="false" />
+          <Property Name="User_Role_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleDesc" Type="String" MaxLength="225" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UserPassword">
@@ -807,14 +833,14 @@
           <Key>
             <PropertyRef Name="Verif_Code_ID" />
           </Key>
-          <Property Name="Verif_Code_ID" Type="Int32" Nullable="false" />
+          <Property Name="Verif_Code_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Privelages" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Zip_Code">
           <Key>
             <PropertyRef Name="Zip_ID" />
           </Key>
-          <Property Name="Zip_ID" Type="Int32" Nullable="false" />
+          <Property Name="Zip_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
@@ -982,9 +1008,11 @@
           <EntitySetMapping Name="Plane_Service">
             <EntityTypeMapping TypeName="SkyExamsModel.Plane_Service">
               <MappingFragment StoreEntitySet="Plane_Service">
-                <ScalarProperty Name="Service_Details" ColumnName="Service_Details" />
+                <ScalarProperty Name="Parts_Used" ColumnName="Parts_Used" />
+                <ScalarProperty Name="Reason_For_Service" ColumnName="Reason_For_Service" />
                 <ScalarProperty Name="Last_Service_Date" ColumnName="Last_Service_Date" />
                 <ScalarProperty Name="Plane_ID" ColumnName="Plane_ID" />
+                <ScalarProperty Name="Plane_Service_ID" ColumnName="Plane_Service_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1035,9 +1063,11 @@
           <EntitySetMapping Name="Registration_Sheet">
             <EntityTypeMapping TypeName="SkyExamsModel.Registration_Sheet">
               <MappingFragment StoreEntitySet="Registration_Sheet">
-                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="Mark" ColumnName="Mark" />
                 <ScalarProperty Name="Type_Desctription" ColumnName="Type_Desctription" />
                 <ScalarProperty Name="Plane_Type_ID" ColumnName="Plane_Type_ID" />
+                <ScalarProperty Name="Date_Written" ColumnName="Date_Written" />
+                <ScalarProperty Name="Licence_No" ColumnName="Licence_No" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="First_Name" ColumnName="First_Name" />
                 <ScalarProperty Name="Sys_User_ID" ColumnName="Sys_User_ID" />
@@ -1157,6 +1187,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Timers">
+            <EntityTypeMapping TypeName="SkyExamsModel.Timer">
+              <MappingFragment StoreEntitySet="Timer">
+                <ScalarProperty Name="Timer_Value" ColumnName="Timer_Value" />
+                <ScalarProperty Name="Timer_ID" ColumnName="Timer_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Titles">
             <EntityTypeMapping TypeName="SkyExamsModel.Title">
               <MappingFragment StoreEntitySet="Title">
@@ -1168,10 +1206,11 @@
           <EntitySetMapping Name="uEvents">
             <EntityTypeMapping TypeName="SkyExamsModel.uEvent">
               <MappingFragment StoreEntitySet="uEvent">
+                <ScalarProperty Name="Location_ID" ColumnName="Location_ID" />
                 <ScalarProperty Name="Event_Type_ID" ColumnName="Event_Type_ID" />
                 <ScalarProperty Name="text" ColumnName="text" />
-                <ScalarProperty Name="End_Time" ColumnName="End_Time" />
-                <ScalarProperty Name="Start_Time" ColumnName="Start_Time" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
                 <ScalarProperty Name="Event_ID" ColumnName="Event_ID" />
               </MappingFragment>
             </EntityTypeMapping>

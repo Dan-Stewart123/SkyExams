@@ -4,14 +4,14 @@
     var error = ViewData["err"];
 }
 
-<h2>Registration Conformation</h2>
+<h2>Registration Confirmation</h2>
 <p>Your registration code will be emailed to you shortly, do not close this page.</p>
 
 <label style="color:red">@error</label>
 
 @using (Html.BeginForm("registrationConformationScreen", "Sys_User", FormMethod.Post))
 {
-    <label class="col-md-4">@Html.Label("User Name:")</label>
+    <label class="col-md-4">@Html.Label("Username:")</label>
     <input type="text" id="uName" name="uName">
     <br />
     <br />
@@ -67,6 +67,9 @@
         if (temp == '101' || temp == '102') {
             document.getElementById("licenceInput").style.display = "block";
             document.getElementById("submitButton").style.display = "block";
+        }
+        if (temp == "") {
+            window.alert("Please enter your code");
         }
         else {
             document.getElementById("submitButton").style.display = "block";
