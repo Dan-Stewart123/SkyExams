@@ -1,12 +1,16 @@
 ﻿@model SkyExams.Models.Sys_User
 @{
     ViewBag.Title = "updateAccount";
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Update Account</h2>
 <p>Please provide all of the following information:</p>
 <br />
 <p>(All fields are required)</p>
+<br />
+<label style="color:red">@error</label>
 @using (Html.BeginForm("updateAccount", "Sys_User", FormMethod.Post))
 {
     <div style="display:none;">
@@ -313,34 +317,19 @@
     </select>
     <br />
     <br />
-    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = Model.SysUser_ID })'">
         Cancel
     </button>
-    <input type="submit" class="btn btn-primary", value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" class="btn btn-primary" , value="Submit" id="submitButton"  />
 }
 
 <script>
-    function checkInput() {
-        var name = $("#firstName").val();
-        var surname = $("#lastName").val();
-        var uNmae = $("#uName").val();
-        var title = $("#title").val();
-        var phone = $("#cellNo").val();
-        var email = $("#email").val();
-        var address = $("#pAddress").val();
-        var country = $("#country").val();
-        var city = $("#city").val();
-        var zip = $("#zip").val();
-        var dob = $("#dob").val();
-        var empStatus = $("#empStatus").val();
-        if (name != "" && surname != "" && uNmae != "" && title != "" && phone != "" && email != "" && address != "" && country != "" && city != "" && zip != "" && dob != "" && empStatus != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = checkInput;
-
+    window.oninput = setTimeout(timer, @time);
 </script>
+
 
 
 

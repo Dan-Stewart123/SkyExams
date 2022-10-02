@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "viewSlots";
     var uID = ViewData["uID"];
+    var time = ViewData["time"];
 }
 
 <h2>Booking slots</h2>
@@ -62,6 +63,11 @@
             error: function (data) { }
         });
     }
+
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
 </script>
 
 

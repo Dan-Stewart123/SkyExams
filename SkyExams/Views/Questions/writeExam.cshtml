@@ -4,6 +4,7 @@
     ViewBag.Title = "writeExam";
     var uID = ViewData["userId"];
     var rID = ViewData["ratingId"];
+    var time = ViewData["time"];
     var name = ViewData["userName"];
     int count = 1, countR = 0;
 }
@@ -92,6 +93,10 @@
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
     <script type="text/javascript">
+        function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+        window.oninput = setTimeout(timer, @time);
 
             $('#SubmitQuiz').on('click', async function submit() {
 

@@ -3,13 +3,14 @@
     ViewBag.Title = "generatePlaneReport";
     var uID = ViewData["userID"];
     var name = ViewData["userName"];
+    var time = ViewData["time"];
 }
 
 <h2>Generate Plane Report</h2>
 <br />
 <dl class="dl-horizontal" id="report">
     <dd class="col-md-4">
-        <b>Plane Report</b>
+        <h2>Plane Report</h2>
     </dd>
 
     <dd>
@@ -56,14 +57,17 @@
     <dd>
         @foreach (var item in Model.services)
         {
-            <ul>
-                <li>
-                    @Html.DisplayFor(modelItem => item.Service_Details)
-                </li>
-                <li>
-                    @Html.DisplayFor(modelItem => item.Last_Service_Date)
-                </li>
-            </ul>
+        <ul>
+            <li>
+                @Html.DisplayFor(modelItem => item.Reason_For_Service)
+            </li>
+            <li>
+                @Html.DisplayFor(modelItem => item.Parts_Used)
+            </li>
+            <li>
+                @Html.DisplayFor(modelItem => item.Last_Service_Date)
+            </li>
+        </ul>
         }
     </dd>
     <img src="~/Content/SkyExamsEdited-removebg-preview (1).png" width="150px" height="75px" title="title" alt="additional title" />
@@ -71,7 +75,7 @@
     <br />
     @DateTime.Now.Year / @DateTime.Now.Month / @DateTime.Now.Day
 </dl>
-<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("planeReport", "Reports", new { id = uID })'">
     Back
 </button>
 <button type="button" class="btn btn-primary" id="generate">
@@ -115,6 +119,10 @@
                 }, margins
             );
         });
+        function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
     </script>
 }
 

@@ -3,6 +3,7 @@
     var uID = ViewData["userID"];
     var type = ViewData["planeType"];
     var userRole = ViewData["userRole"];
+    var time = ViewData["time"];
 }
 
 <h2>Lesson Plans</h2>
@@ -64,6 +65,6 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>
 

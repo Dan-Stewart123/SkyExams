@@ -25,25 +25,26 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> planeTypes = db.Plane_Type.ToList();
 
                     return View(planeTypes);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// returns lesson plan screen
 
         public FileContentResult getImg(int id)
@@ -58,11 +59,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || topicId != null)
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User user = db.Sys_User.Find(id);
                     ViewData["userRole"] = "" + user.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     int userRole = Convert.ToInt32(user.User_Role_ID);
                     List<Lesson_Plan> planList = new List<Lesson_Plan>();
                     if (userRole == 1)
@@ -95,14 +97,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// theme screen
 
         [HttpGet]
@@ -113,26 +115,28 @@ namespace SkyExams.Controllers
             return File(file, "application/pdf");
         }// download file
 
-        public ActionResult addPlan(int? id, int? topicId)
+        public ActionResult addPlan(int? id, int? topicId, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || topicId != null)
                 {
                     ViewData["topicID"] = "" + topicId;
+                    ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(user);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// add resource screen get
 
         [HttpPost]
@@ -145,13 +149,14 @@ namespace SkyExams.Controllers
                     List<Lesson_Plan> planList = db.Lesson_Plan.ToList();
                     if (name == "" || plan == null)
                     {
-                        return RedirectToAction("addPlan", new { id = id, topicId = topicId });
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("addPlan", new { id = id, topicId = topicId, err = temp });
                     }// if fields are empty
                     else
                     {
-                        int resourceId = planList.Count + 3;
+                        //int resourceId = planList.Count + 3;
                         Lesson_Plan newPlan = new Lesson_Plan();
-                        newPlan.Lesson_Plan_ID = resourceId;
+                        //newPlan.Lesson_Plan_ID = resourceId;
                         newPlan.LP_Name = name;
                         int theme = Convert.ToInt32(topicId);
                         newPlan.Rating_ID = theme;
@@ -163,8 +168,18 @@ namespace SkyExams.Controllers
                         Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
                         newPlan.LP_Description = fileDetails;
 
-                        db.Lesson_Plan.Add(newPlan);
-                        db.SaveChanges();
+                        string ext = Path.GetExtension(plan.FileName).ToUpper();
+                        if (ext == ".PDF")
+                        {
+                            db.Lesson_Plan.Add(newPlan);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            string temp = "Hint: Upload a PDF.";
+                            return RedirectToAction("addPlan", new { id = id, topicId = topicId, err = temp });
+                        }
+
                         Instructor tempInstructor = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
                         List<Student_Instructor> studentInstructor = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == tempInstructor.Instructor_ID);
                         foreach (Student_Instructor temp in studentInstructor)
@@ -196,23 +211,24 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     Lesson_Plan delPlan = db.Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == id);
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlan.Rating_ID).Type_Description;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(delPlan);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// delete Resource
 
         public ActionResult deletePlanConformation(int? loggedId, int? id)
@@ -224,11 +240,14 @@ namespace SkyExams.Controllers
                     Lesson_Plan delPlan = db.Lesson_Plan.Find(id);
                     db.Lesson_Plan.Remove(delPlan);
                     db.SaveChanges();
-                    Student_Lesson_Plan delStuPlan = db.Student_Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == delPlan.Lesson_Plan_ID);
+                    List <Student_Lesson_Plan> delStuPlan = db.Student_Lesson_Plan.ToList().FindAll(p => p.Lesson_Plan_ID == delPlan.Lesson_Plan_ID);
                     if (delStuPlan != null)
                     {
-                        db.Student_Lesson_Plan.Remove(delStuPlan);
-                        db.SaveChanges();
+                        foreach(var temp in delStuPlan)
+                        {
+                            db.Student_Lesson_Plan.Remove(temp);
+                            db.SaveChanges();
+                        }
                     }
                     return RedirectToAction("planScreen", new { id = loggedId });
                 }

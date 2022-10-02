@@ -2,50 +2,337 @@
 
 @{
     ViewBag.Title = "Index";
+    var user = ViewData["userId"];
+    var role = ViewData["role"];
 }
+<br />
+<br />
+<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = user })'">
+    Home
+</button>
+<br />
+<br />
+<label>The time of the event is displayed, click on the event to view more details.</label>
 
-<h2>Index</h2>
+<div id="calendar"></div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Start_Time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.End_Time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Location_ID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Event_Type_ID)
-        </th>
-        <th></th>
-    </tr>
+<div id="SaveDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Save Event</h4>
+            </div>
+            <div class="modal-body">
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Start_Time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.End_Time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Location_ID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Event_Type_ID)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Event_ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Event_ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Event_ID })
-        </td>
-    </tr>
+                <form class="form-horizontal">
+                    <input type="hidden" id="hidden_int_saveDialogEventID" value="0" />
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="text_saveDialog_Subject" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Start</label>
+                        <div class="input-group date" id="dtpStart">
+                            <input type="text" id="text_saveDialog_Start" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>End</label>
+                        <div class="input-group date" id="dtpEnd">
+                            <input type="text" id="text_saveDialog_End" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Event Location</label>
+                        <select id="selection_SaveDialog_Location" class="form-control">
+                            <option value="">Default</option>
+                            <option value="1">Runway</option>
+                            <option value="2">FTS</option>
+                            <option value="3">Grand Central</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Event Type</label>
+                        <select id="selection_SaveDialog_Type" class="form-control">
+                            <option value="">Default</option>
+                            <option value="1">Demonstration</option>
+                            <option value="2">Welcome</option>
+                            <option value="3">Group Lecture</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="btnSave" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="EditSummary_Dialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span id="EditSummaryDialog_Subject"></span></h4>
+            </div>
+            <div class="modal-body">
+                <button id="btnDelete" class="btn btn-default btn-sm pull-right" style="display:none;">
+                    <span class="glyphicon glyphicon-remove"></span> Delete Event
+                </button>
+
+                <p id="pDescription"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close Window</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.print.css" rel="stylesheet" media="print" />
+
+
+@section EventCalendarFunctions{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            var events = [];
+            var selectedEvent = null;
+            ReadFromDatabase_and_fillCalendar();
+
+            // these provide datetimepicker to choose date and time values in add/edit dialog.
+            $('#dtpStart,#dtpEnd').datetimepicker({
+                format: 'MM-DD-YYYY HH:mm'
+            });
+
+            // FUNCTION DECLARATIONS //
+            // i) function declarations
+            function ReadFromDatabase_and_fillCalendar() {
+                $.ajax({
+                    type: "GET",
+                    url: "/uEvents/GetEvents",
+                    success: function (data) {
+                        $.each(data, function (i, v) {
+                            // the fields should be according to -> https://fullcalendar.io/docs/v3/event-object
+                            events.push({
+                                id: v.Event_ID, // unique identifier of the event; so that we can delete selectedEvent.eventID
+                                text: v.text, // custom field (Non-standard Field)
+                                start: moment(v.Start),
+                                end: moment(v.End),
+                                location: v.Location_ID,
+                                Type: v.Event_Type_ID
+                            });
+                        })
+
+                        GenerateCalender(events);
+                    },
+                    error: function (error) {
+                        alert('failed');
+                    }
+                })
+            }
+
+            function GenerateCalender(events) {
+                $('#calendar').fullCalendar('destroy');
+                $('#calendar').fullCalendar({
+                    editable: true,
+                    selectable: true,
+                    contentHeight: 400,
+                    timeFormat: 'h(:mm)',
+                    columnFormat: 'dddd', // full weekday names like Monday,Tuesday
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay,agenda'
+                    },
+                    eventLimit: true,
+                    eventColor: '#378006',
+                    events: events,
+                    // https://fullcalendar.io/docs/v3/eventClick
+                    // triggered when we click on an existing event in a day box
+                    eventClick: function (calEvent, jsEvent, view) {
+
+                        selectedEvent = calEvent // assign event to document-ready global selectedEvent variable to use in delete and edits
+                        $('#EditSummary_Dialog #EditSummaryDialog_Subject').text = selectedEvent.title;
+
+                        var $description = $('<div/>');
+
+                        $description.append($('<p/>').html('<b>Description:</b>' + selectedEvent.text));
+                        $('#EditSummary_Dialog #pDescription').empty().html($description);
+
+                        $description.append($('<p/>').html('<b>Start:</b>' + selectedEvent.start.format("MM-DD-YYYY HH:mm")));
+
+                        $description.append($('<p/>').html('<b>End:</b>' + selectedEvent.end.format("MM-DD-YYYY HH:mm")));
+
+
+                        $('#EditSummary_Dialog').modal();
+                    },
+
+                    //triggered when we click on a day box
+                    // the selected event is empty; the user is going to fill it
+                    // Start and End values covers whole day initially (user can change it)
+                    //Start and End are moment objects already in this select function
+                    // https://fullcalendar.io/docs/v3/select-callback
+                    select: function (start, end) {
+                        selectedEvent = {
+                            id: 0,
+                            title: '',
+                            description: '',
+                            start: start,
+                            end: end,
+                            //location: Location,
+                            /*type: Type */
+                        };
+                        openAddEditDialog();
+                        $('#calendar').fullCalendar('unselect'); // clear selection to detect next selections correctly
+                        selectedEvent = null;
+                    },
+                })
+            }
+            //function for submitting event data to the server.
+            var userRole = @Html.Raw(Json.Encode(ViewData["role"]));
+            if (userRole == '2' || userRole == '3' || userRole == '4') {
+                $('#btnDelete').show();
+                function SaveEvent(data) {
+                    $.ajax({
+                        error: function (req, err) { console.log('my message'); },
+                        type: "POST",
+                        url: '/uEvents/SaveEvent',
+                        data: data,
+                        success: function (data) {
+                            if (data.status) {
+                                //Refresh the page
+                                location.reload();
+                                $('#SaveDialog').modal('hide');
+                            }
+                        },
+                        error: function () {
+                            alert('Failed');
+                        }
+                    })
+                }
+
+                function openAddEditDialog() {
+                    if (selectedEvent != null) {
+                        $('#hidden_int_saveDialogEventID').val(selectedEvent.id);
+                        //$('#text_saveDialog_Subject').val(selectedEvent.title);
+                        $('#text_saveDialog_Start').val(moment(selectedEvent.start).format("MM-DD-YYYY HH:mm"));
+                        $('#text_saveDialog_End').val(moment(selectedEvent.end).format("MM-DD-YYYY HH:mm"));
+                        //$('#text_saveDialog_Subject').val(selectedEvent.text);
+                        //$('#selection_SaveDialog_EventColor').val(selectedEvent.color);
+                        
+                    }
+                    $('#EditSummary_Dialog').modal('hide'); //hide summary dialog
+                    $('#SaveDialog').modal(); // show save dialog for saving the event to db
+                }
+
+                // ii) Button Function Declarations
+
+                // if clicked on this; then we already chose an event
+                $('#btnEdit').click(function () {
+                    //Open modal dialog for edit event
+                    openAddEditDialog();
+                    selectedEvent = null;
+                })
+
+                // if clicked on this; then we already chose an event
+                $('#btnDelete').click(function () {
+                    if (selectedEvent != null && confirm('Are you sure?')) {
+
+                        // the only necessary field is EventID in this json object
+                        var data = {
+                            Event_ID: selectedEvent.Event_ID,
+                            //Subject: selectedEvent.title,
+                            Start: moment(selectedEvent.start).format("MM-DD-YYYY HH:mm"),
+                            End: moment(selectedEvent.end).format("MM-DD-YYYY HH:mm"),
+                            text: selectedEvent.text,
+                            //location: selectedEvent.Location,
+                            /*Type: selectedEvent.Type*/
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: '/uEvents/DeleteEvent',
+                            data: data,
+                            success: function (data) {
+                                if (data.status) {
+                                    //Refresh the page
+                                    location.reload();
+                                    $('#EditSummary_Dialog').modal('hide');
+                                }
+                            },
+                            error: function () {
+                                alert('Failed');
+                            }
+                        })
+                    }
+                    selectedEvent = null;
+                })
+
+
+                $('#btnSave').click(function () {
+                    //Validation for required fields (NOT NULL in db)
+                    if ($('#text_saveDialog_Subject').val() == "") {
+                        alert('Subject required');
+                        return;
+                    }
+                    if ($('#text_saveDialog_Start').val() == "") {
+                        alert('Start date required');
+                        return;
+                    }
+                    if ($('#text_saveDialog_End').val() == "") {
+                        alert('End date required');
+                        return;
+                    }
+
+
+                    //parse and convert to ticks for serialization (for c# to understand)
+                    var startDate = moment($('#text_saveDialog_Start').val(), "MM-DD-YYYY HH:mm").toDate();
+                    var endDate = moment($('#text_saveDialog_End').val(), "MM-DD-YYYY HH:mm").toDate();
+                    if (startDate > endDate) {
+                        alert('Start date cannot be larger than End date!');
+                        return;
+                    }
+
+
+                    var data = {
+                        Event_ID: $('#hidden_int_saveDialogEventID').val(),
+                        //Subject: $('#text_saveDialog_Subject').val().trim(),
+                        Start: $('#text_saveDialog_Start').val().trim(),
+                        End: $('#text_saveDialog_End').val().trim(),
+                        text: $('#text_saveDialog_Subject').val(),
+                        Location_ID: $('#selection_SaveDialog_Location').val(),
+                        Event_Type_ID: $('#selection_SaveDialog_Type').val()
+                    }
+                    SaveEvent(data); // call function for submit data to the server
+                    console.log(data);
+
+                })
+            }
+
+            // FUNCTION DECLARATIONS ENDED //
+
+        })
+    </script>
 }
-
-</table>

@@ -5,11 +5,13 @@
     var uID = ViewData["userId"];
     var rID = ViewData["ratingId"];
     var ex = ViewData["Exam"];
+    var message = ViewData["message"];
+    var time = ViewData["time"];
 }
 
 <h2>Questions:</h2>
 <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("createQuestion", "Questions", new { id = uID, ratingId = rID })'">
-    Create Question and Answer
+    Create Question and Answers
 </button>
 <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("addLoadSheet", "Questions", new { id = uID, ratingId = rID })'">
     Add Load Sheet
@@ -17,6 +19,8 @@
 <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deleteLoadSheet", "Questions", new { id = uID, ratingId = rID })'">
     Delete Load Sheet
 </button>
+<br />
+<label>@message</label>
 <br />
 <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("exams", "Questions", new { id = uID })'">
     Back
@@ -69,7 +73,7 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>
 
 

@@ -2,11 +2,14 @@
 @{
     ViewBag.Title = "addResource";
     var tID = ViewData["themeID"];
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Add Resource</h2>
 <p>Please enter the following information:</p>
 <br />
+<label style="color:red">@error</label>
 <br />
 @using (Html.BeginForm("addResource", "Study_Resource", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -25,18 +28,13 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("themeScreen", "Study_Resource", new { id = Model.SysUser_ID, typeId = tID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
 }
 
 <script>
-    function checkInput() {
-        var name = $("#name").val();
-        var resource = $("#resource").val();
-        if (name != "" && resource != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = checkInput;
-
+    window.oninput = setTimeout(timer, @time);
 </script>
+

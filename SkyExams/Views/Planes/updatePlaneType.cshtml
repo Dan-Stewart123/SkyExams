@@ -3,9 +3,14 @@
 @{
     ViewBag.Title = "updatePlaneType";
     var uID = ViewData["loggedId"];
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Update Plane Type</h2>
+<br />
+<label style="color:red">@error</label>
+<br />
 @using (Html.BeginForm("updatePlaneType", "Planes", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div style="display:none;">
@@ -23,20 +28,15 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("planesScreen", "Planes", new { id = uID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
 }
 
 <script>
-    function checkInput() {
-        var name = $("#name").val();
-        var pic = $("#pic").val();
-        if (name != "" && pic != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = checkInput;
-
+    window.oninput = setTimeout(timer, @time);
 </script>
+
 
 

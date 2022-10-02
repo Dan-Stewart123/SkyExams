@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "lessonPlanHelp";
     var help = ViewData["help"];
+    var time = ViewData["time"];
 }
 
 <h2>Lesson Plan Help</h2>
@@ -18,7 +19,7 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>
 
 

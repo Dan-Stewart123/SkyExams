@@ -97,6 +97,9 @@
     <Reference Include="Namotion.Reflection, Version=2.0.10.0, Culture=neutral, PublicKeyToken=c2f9c3bdfae56102, processorArchitecture=MSIL">
       <HintPath>..\packages\Namotion.Reflection.2.0.10\lib\net45\Namotion.Reflection.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NJsonSchema, Version=10.7.2.0, Culture=neutral, PublicKeyToken=c2f9c3bdfae56102, processorArchitecture=MSIL">
       <HintPath>..\packages\NJsonSchema.10.7.2\lib\net45\NJsonSchema.dll</HintPath>
     </Reference>
@@ -187,9 +190,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -217,7 +217,6 @@
     <Compile Include="Controllers\PlanesController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
-    <Compile Include="Controllers\SchedulerController.cs" />
     <Compile Include="Controllers\Study_ResourceController.cs" />
     <Compile Include="Controllers\Sys_UserController.cs" />
     <Compile Include="Controllers\uEventsController.cs" />
@@ -344,6 +343,9 @@
     <Compile Include="Models\Sys_User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Timer.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Title.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -375,7 +377,6 @@
     <Compile Include="ViewModels\planeVM.cs" />
     <Compile Include="ViewModels\QuestionVM.cs" />
     <Compile Include="ViewModels\StudentVM.cs" />
-    <Compile Include="ViewModels\WebAPIEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\140.JPEG" />
@@ -385,6 +386,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Cessna172.JPEG" />
     <Content Include="Content\fts_logo.jpeg" />
+    <Content Include="Content\fts_video.mp4" />
     <Content Include="Content\homeImage.jpeg" />
     <Content Include="Content\rg.JPEG" />
     <Content Include="Content\SkyExamsEdited-removebg-preview %281%29.png" />
@@ -414,6 +416,8 @@
     </Content>
     <Content Include="libman.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\fullcalendar.js" />
+    <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -554,6 +558,7 @@
     <Content Include="Views\Help\consultationHelp.cshtml" />
     <Content Include="Views\Reports\eventsDateSelect.cshtml" />
     <Content Include="Views\Reports\eventsReport.cshtml" />
+    <Content Include="Views\Sys_User\TimerView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
