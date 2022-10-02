@@ -558,6 +558,7 @@
     <Content Include="Views\Help\consultationHelp.cshtml" />
     <Content Include="Views\Reports\eventsDateSelect.cshtml" />
     <Content Include="Views\Reports\eventsReport.cshtml" />
+    <Content Include="Views\Sys_User\TimerView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

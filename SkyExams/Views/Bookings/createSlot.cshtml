@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "createSlot";
     var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Create Booking Slot</h2>
@@ -33,6 +34,11 @@
         }// no input
     }
     window.oninput = checkInput;
+
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
 </script>
 
 

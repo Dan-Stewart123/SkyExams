@@ -5,6 +5,7 @@
     var uID = ViewData["userId"];
     var uName = ViewData["userName"];
     var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Student Hours</h2>
@@ -41,5 +42,5 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>

@@ -12,6 +12,7 @@
     var f2Id = ViewData["false2Id"];
     var f2 = ViewData["false2"];
     var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Update Question and Answer</h2>
@@ -65,6 +66,13 @@
     <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
     <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
+</script>
 
 
 

@@ -31,6 +31,7 @@ namespace SkyExams.Controllers
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> planeTypes = db.Plane_Type.ToList();
 
                     if (forRole.User_Role_ID == 1)
@@ -80,6 +81,7 @@ namespace SkyExams.Controllers
                 {
                     List<Student_Exam> stuExam = db.Student_Exam.ToList().FindAll(e => e.Exam_ID == ratingId);
                     int stuId = db.Students.ToList().Find(s => s.SysUser_ID == id).Student_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     foreach (var se in stuExam)
                     {
                         if (stuId == se.Student_ID)
@@ -127,6 +129,7 @@ namespace SkyExams.Controllers
                     ViewData["ratingId"] = "" + ratingId;
                     ViewData["Exam"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == ratingId).Type_Description;
                     ViewData["message"] = message;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Question> questionList = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
                     return View(questionList);
                 }
@@ -150,6 +153,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question_Rating_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["question"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question1;
                     List<Answer> answerList = db.Answers.ToList().FindAll(a => a.Question_ID == questionId);
                     return View(answerList);
@@ -176,6 +180,7 @@ namespace SkyExams.Controllers
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = "" + ratingId;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(db.Sections.ToList());
                 }
                 else
@@ -263,6 +268,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["ratingId"] = "" + ratingId;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                     return View(tempUser);
                 }
@@ -391,6 +397,7 @@ namespace SkyExams.Controllers
                     ViewData["ratingId"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question_Rating_ID;
                     ViewData["questionId"] = "" + questionId;
                     ViewData["question"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question1;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(db.Answers.ToList().FindAll(a => a.Question_ID == questionId));
                 }
                 else
@@ -454,6 +461,7 @@ namespace SkyExams.Controllers
                     ViewData["false2Id"] = db.Answers.ToList().Find(a => a.Answer_ID == correctAns.Answer_ID + 2).Answer_ID;
                     ViewData["false2"] = db.Answers.ToList().Find(a => a.Answer_ID == correctAns.Answer_ID + 2).ANS;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(db.Sections.ToList());
                 }
                 else
@@ -553,6 +561,7 @@ namespace SkyExams.Controllers
                     {
                         ViewData["userId"] = "" + id;
                         ViewData["ratingId"] = "" + ratingId;
+                        ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                         Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                         ViewData["userName"] = tempUser.FName + " " + tempUser.Surname;
                         List<QuestionVM> questions = new List<QuestionVM>();
