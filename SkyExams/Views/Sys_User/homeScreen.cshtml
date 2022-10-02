@@ -27,7 +27,7 @@
 <button type="button" id="consult" class="btn btn-info" onclick="location.href='@Url.Action("studentCheck", "Bookings", new { id = Model.SysUser_ID })'">
     Exam Consultations
 </button>
-<button type="button" id="consult" class="btn btn-info" onclick="location.href='@Url.Action("viewEvents", "uEvents", new { id = Model.SysUser_ID })'">
+<button type="button" id="consult" class="btn btn-info" onclick="location.href='@Url.Action("Index", "uEvents", new { id = Model.SysUser_ID })'">
     Events
 </button>
 <button type="button" id="consult" class="btn btn-link" onclick="location.href='@Url.Action("studentCheck", "Help", new { id = Model.SysUser_ID })'">
