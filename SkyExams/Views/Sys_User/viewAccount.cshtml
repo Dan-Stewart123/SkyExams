@@ -2,7 +2,8 @@
 
 @{
     ViewBag.Title = "Account";
-    var time = ViewData["time"];
+    
+    var restoreMessage = ViewData["msg"];
 }
 
 <h2>Account Details</h2>
@@ -103,9 +104,11 @@
     </button>
     <br />
     <br />
-    <button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("TimerView", "Sys_User", new { id = Model.SysUser_ID })'">
-        Adjust Timer
+
+    <button type="button" id="btnBackup" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("BtnBackup_Click", "Sys_User", new { loggedId = Model.SysUser_ID })'">
+        Backup database
     </button>
+
     <br />
     <br />
 </div>

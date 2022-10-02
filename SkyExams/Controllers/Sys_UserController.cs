@@ -25,6 +25,7 @@ namespace SkyExams.Controllers
     public class Sys_UserController : Controller
     {
         private SkyExamsEntities db = new SkyExamsEntities();
+        private masterEntities db2 = new masterEntities();
         private Sys_User user = new Sys_User();
 
         // GET: Sys_User
@@ -412,14 +413,14 @@ namespace SkyExams.Controllers
             }
         }// finalise registration with codes
 
-        public ActionResult viewAccount(int? id)
+        public ActionResult viewAccount(int? id, string msg)
         {
             try
             {
                 if (id != null)
                 {
                     Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    ViewData["msg"] = msg;
                     return View(viewUser);
                 }
                 else
@@ -433,6 +434,38 @@ namespace SkyExams.Controllers
             }
 
         }// view account function
+
+        public ActionResult BtnBackup_Click(int loggedId)
+        {
+            int obj = db2.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, "skyexamsBackup");
+
+            if (obj != 0)
+            {
+                string temp = "Backup successfully created.";
+                return RedirectToAction("viewAccount", new { id = loggedId, msg = temp });
+            }
+            else
+            {
+                return RedirectToAction("loginScreen");
+            }
+        }//Backup database function
+
+        public ActionResult BtnRestore_Click(int loggedId)
+        {
+
+            var obj = db2.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, "skyExamsRestore");
+
+            if (obj != 0)
+            {
+                string temp = "Restore successfully executed.";
+                return RedirectToAction("viewAccount", new { id = loggedId, msg = temp });
+            }
+            else
+            {
+                return RedirectToAction("loginScreen");
+            }
+
+        }//Restore database function
 
         public FileContentResult getImg(int id)
         {
