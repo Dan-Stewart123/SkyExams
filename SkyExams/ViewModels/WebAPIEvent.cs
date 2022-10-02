@@ -25,19 +25,19 @@
             };
         }// explicit operator
 
-        public static explicit operator uEvent(WebAPIEvent schedulerEvent)
-        {
-            return new uEvent
-            {
-                Event_ID = schedulerEvent.id,
-                text = schedulerEvent.text,
-                Start_Time = DateTime.Parse(
-                    schedulerEvent.start_date,
-                    System.Globalization.CultureInfo.InvariantCulture),
-                End_Time = DateTime.Parse(
-                    schedulerEvent.end_date,
-                    System.Globalization.CultureInfo.InvariantCulture)
-            };
-        }// scheduler event
-    }
-}
+//        public static explicit operator uEvent(WebAPIEvent schedulerEvent)
+//        {
+//            return new uEvent
+//            {
+//                Event_ID = schedulerEvent.id,
+//                text = schedulerEvent.text,
+//                DateTimeScheduled = DateTime.Parse(
+//                    schedulerEvent.start_date,
+//                    System.Globalization.CultureInfo.InvariantCulture),
+//                //End_Time = DateTime.Parse(
+//                //    schedulerEvent.end_date,
+//                //    System.Globalization.CultureInfo.InvariantCulture)
+//            };
+//        }// scheduler event
+//    }
+//}

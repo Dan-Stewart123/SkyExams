@@ -1306,7 +1306,7 @@ namespace SkyExams.Controllers
             var regSheet = from Registration_Sheet in db.Registration_Sheet select Registration_Sheet;
             foreach (var sheet in regSheet)
             {
-                dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Type_Desctription, sheet.Paid);
+                //dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Type_Desctription, sheet.Paid);
             }
 
             using (XLWorkbook wb = new XLWorkbook())
