@@ -377,7 +377,6 @@
     <Compile Include="ViewModels\planeVM.cs" />
     <Compile Include="ViewModels\QuestionVM.cs" />
     <Compile Include="ViewModels\StudentVM.cs" />
-    <Compile Include="ViewModels\WebAPIEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\140.JPEG" />
