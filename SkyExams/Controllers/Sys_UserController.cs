@@ -37,11 +37,26 @@ namespace SkyExams.Controllers
         [HttpGet]
         public ActionResult TimerView(int? id, string err)
         {
-            Timer t = db.Timers.ToList().Find(time => time.Timer_ID == 1);
-            ViewData["userId"] = id;
-            ViewData["error"] = err;
-            ViewData["time"] = db.Timers.ToList().Find(ti => ti.Timer_ID == 1).Timer_Value * 60000;
-            return View(t);
+            try
+            {
+                if (id != null)
+                {
+                    Timer t = db.Timers.ToList().Find(time => time.Timer_ID == 1);
+                    ViewData["userId"] = id;
+                    ViewData["error"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(ti => ti.Timer_ID == 1).Timer_Value * 60000;
+                    return View(t);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen", "Sys_User");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen", "Sys_User");
+            }
+          
         }// timer get
 
         [HttpPost]
@@ -421,6 +436,7 @@ namespace SkyExams.Controllers
                 {
                     Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["msg"] = msg;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(viewUser);
                 }
                 else
