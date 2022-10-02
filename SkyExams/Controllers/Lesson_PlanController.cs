@@ -30,6 +30,7 @@ namespace SkyExams.Controllers
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> planeTypes = db.Plane_Type.ToList();
 
                     return View(planeTypes);
@@ -63,6 +64,7 @@ namespace SkyExams.Controllers
                     ViewData["userID"] = "" + id;
                     Sys_User user = db.Sys_User.Find(id);
                     ViewData["userRole"] = "" + user.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     int userRole = Convert.ToInt32(user.User_Role_ID);
                     List<Lesson_Plan> planList = new List<Lesson_Plan>();
                     if (userRole == 1)
@@ -121,6 +123,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["topicID"] = "" + topicId;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(user);
                 }
@@ -171,6 +174,11 @@ namespace SkyExams.Controllers
                             db.Lesson_Plan.Add(newPlan);
                             db.SaveChanges();
                         }
+                        else
+                        {
+                            string temp = "Hint: Upload a PDF.";
+                            return RedirectToAction("addPlan", new { id = id, topicId = topicId, err = temp });
+                        }
 
                         Instructor tempInstructor = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
                         List<Student_Instructor> studentInstructor = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == tempInstructor.Instructor_ID);
@@ -208,6 +216,7 @@ namespace SkyExams.Controllers
                     ViewData["loggedId"] = "" + loggedId;
                     Lesson_Plan delPlan = db.Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == id);
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlan.Rating_ID).Type_Description;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(delPlan);
                 }
                 else

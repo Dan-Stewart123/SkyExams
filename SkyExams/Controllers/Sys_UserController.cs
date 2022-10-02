@@ -18,6 +18,7 @@ using NJsonSchema.Annotations;
 using GroupDocs.Conversion.Options.Convert;
 using GroupDocs.Conversion;
 using ClosedXML.Excel;
+using Timer = SkyExams.Models.Timer;
 
 namespace SkyExams.Controllers
 {
@@ -30,6 +31,42 @@ namespace SkyExams.Controllers
         public ActionResult Index()
         {
             return View(db.Sys_User.ToList());
+        }
+
+        [HttpGet]
+        public ActionResult TimerView(int? id, string err)
+        {
+            Timer t = db.Timers.ToList().Find(time => time.Timer_ID == 1);
+            ViewData["userId"] = id;
+            ViewData["error"] = err;
+            ViewData["time"] = db.Timers.ToList().Find(ti => ti.Timer_ID == 1).Timer_Value * 60000;
+            return View(t);
+        }// timer get
+
+        [HttpPost]
+        public ActionResult TimerView(int? id, int? time)
+        {
+            if(time == null || time < 1)
+            {
+                string temp = "Please complete all the required fields";
+                return RedirectToAction("TimerView", new { id = id, err = temp });
+            }// if statement
+            else
+            {
+                Timer t = db.Timers.ToList().Find(ti => ti.Timer_ID == 1);
+                Timer newTime = new Timer();
+                newTime = t;
+                newTime.Timer_Value = Convert.ToInt32(time);
+                db.Entry(newTime).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("viewAccount", new { id = id });
+            }// else
+
+        }// timer post
+
+        public int getTimer()
+        {
+            return db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value;
         }
 
         public ActionResult loginScreen()
@@ -382,6 +419,7 @@ namespace SkyExams.Controllers
                 if (id != null)
                 {
                     Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(viewUser);
                 }
                 else
@@ -419,6 +457,7 @@ namespace SkyExams.Controllers
                 if (id != null)
                 {
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(viewUser);
                 }
@@ -441,6 +480,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["userID"] = "" + id;
                     ViewData["role"] = list;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
                     List<Sys_User> sUsers = new List<Sys_User>();
@@ -491,6 +531,7 @@ namespace SkyExams.Controllers
             {
                 if (id != null)
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["err"] = err;
                     Sys_User updateUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(updateUser);
@@ -633,6 +674,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["userID"] = "" + loggedId;
                     ViewData["studentID"] = "" + id;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(db.Study_Resource.ToList());
                 }
                 else
@@ -690,6 +732,7 @@ namespace SkyExams.Controllers
                 if (loggedId != null || id != null)
                 {
                     ViewData["userID"] = "" + loggedId;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["studentID"] = "" + id;
                     return View(db.Plane_Type.ToList());
                 }
@@ -749,6 +792,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["userID"] = "" + loggedId;
                     ViewData["studentID"] = "" + id;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Sys_User> instructors = db.Sys_User.ToList().FindAll(i => i.User_Role_ID == 2);
                     return View(instructors);
                 }
@@ -820,6 +864,7 @@ namespace SkyExams.Controllers
                 if (id != null)
                 {
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User passwordUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(passwordUser);
                 }
@@ -921,6 +966,7 @@ namespace SkyExams.Controllers
                 if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User delUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["role"] = db.User_Role.ToList().Find(u => u.User_Role_ID == delUser.User_Role_ID).RoleDesc.ToLower();
                     return View(delUser);
@@ -1044,6 +1090,7 @@ namespace SkyExams.Controllers
                 if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User updateRole = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                     ViewData["role"] = db.User_Role.ToList().Find(u => u.User_Role_ID == updateRole.User_Role_ID).RoleDesc.ToLower();
                     return View(updateRole);
@@ -1167,6 +1214,7 @@ namespace SkyExams.Controllers
                     ViewData["userId"] = "" + id;
                     ViewData["userName"] = stuHours.FName + " " + stuHours.Surname;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Student stu = db.Students.ToList().Find(s => s.SysUser_ID == stuHours.SysUser_ID);
                     return View(stu);
                 }
@@ -1271,14 +1319,14 @@ namespace SkyExams.Controllers
                 {
                     Registration_Sheet regSheet = new Registration_Sheet();
 
-                    //regSheet.Sys_User_ID = Convert.ToInt32(id);
-                    //regSheet.First_Name = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName;
-                    //regSheet.Surname = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
-                    //regSheet.Plane_Type_ID = plane;
-                    //regSheet.Type_Desctription = db.Plane_Type.ToList().Find(s => s.Plane_Type_ID == plane).Type_Description;
+                    regSheet.Sys_User_ID = Convert.ToInt32(id);
+                    regSheet.First_Name = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName;
+                    regSheet.Surname = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
+                    regSheet.Plane_Type_ID = plane;
+                    regSheet.Type_Desctription = db.Plane_Type.ToList().Find(s => s.Plane_Type_ID == plane).Type_Description;
                     //regSheet.Paid = true;
-                    //db.Registration_Sheet.Add(regSheet);
-                    //db.SaveChanges();
+                    db.Registration_Sheet.Add(regSheet);
+                    db.SaveChanges();
 
                     return RedirectToAction("viewAccount", new { id = loggedId });
                 }
@@ -1306,7 +1354,7 @@ namespace SkyExams.Controllers
             var regSheet = from Registration_Sheet in db.Registration_Sheet select Registration_Sheet;
             foreach (var sheet in regSheet)
             {
-                dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Licence_No, sheet.Date_Written, sheet.Type_Desctription, sheet.Mark);
+                //dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Type_Desctription, sheet.Paid);
             }
 
             using (XLWorkbook wb = new XLWorkbook())

@@ -3,6 +3,7 @@
     ViewBag.Title = "generatePlaneReport";
     var uID = ViewData["userID"];
     var name = ViewData["userName"];
+    var time = ViewData["time"];
 }
 
 <h2>Generate Plane Report</h2>
@@ -118,6 +119,10 @@
                 }, margins
             );
         });
+        function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
     </script>
 }
 

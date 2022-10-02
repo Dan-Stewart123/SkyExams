@@ -3,6 +3,7 @@
     ViewBag.Title = "eventsReport";
     var uID = ViewData["userID"];
     var name = ViewData["userName"];
+    var time = ViewData["time"];
 }
 
 <h2>Events Report</h2>
@@ -92,6 +93,11 @@
                 }, margins
             );
         });
+
+        function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
     </script>
 }
 

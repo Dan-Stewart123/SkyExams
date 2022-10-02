@@ -24,6 +24,7 @@ namespace SkyExams.Controllers
             {
                 if (id != null)
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User user = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                     return View(user);
                 }
@@ -45,6 +46,7 @@ namespace SkyExams.Controllers
             {
                 if (id != null)
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
                     List<Sys_User> students = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 1);
                     return View(students);
@@ -67,6 +69,7 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User user = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                     Student stu = db.Students.ToList().Find(s => s.SysUser_ID == user.SysUser_ID);
                     StudentVM reportStu = new StudentVM();
@@ -113,6 +116,7 @@ namespace SkyExams.Controllers
             {
                 if (id != null)
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
                     List<Country> countries = db.Countries.ToList();
                     return View(countries);
@@ -135,6 +139,7 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     groupStudentVM groupReport = new groupStudentVM();
                     int totH = 0;
                     List<StudentVM> studentList = new List<StudentVM>();
@@ -191,6 +196,7 @@ namespace SkyExams.Controllers
                 if (id != null)
                 {
                     ViewData["userID"] = "" + id;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane> planes = db.Planes.ToList();
                     return View(planes);
                 }
@@ -212,6 +218,7 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + loggedId;
                     ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
                     Plane tempPlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
@@ -244,6 +251,7 @@ namespace SkyExams.Controllers
             {
                 if (id != null)
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
                     List<Sys_User> instructors = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 2);
                     return View(instructors);
@@ -266,6 +274,7 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     InstructorVM insReport = new InstructorVM();
                     Sys_User tempIns = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                     Instructor instructor = db.Instructors.ToList().Find(i => i.SysUser_ID == tempIns.SysUser_ID);
@@ -328,6 +337,7 @@ namespace SkyExams.Controllers
             {
                 if (id != null)
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
                     return View();
                 }
@@ -349,6 +359,7 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<ExamAverageVM> averages = new List<ExamAverageVM>();
                     List<Exam> exams = db.Exams.ToList();
                     foreach (var e in exams)
@@ -400,6 +411,7 @@ namespace SkyExams.Controllers
             {
                 if (id != null)
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
                     return View();
                 }
@@ -421,6 +433,7 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<uEvent> events = db.uEvents.ToList().FindAll(u => u.Start >= startDate);
                     ViewData["userID"] = "" + id;
                     ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
