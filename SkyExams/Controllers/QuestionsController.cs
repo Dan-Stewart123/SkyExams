@@ -790,8 +790,12 @@ namespace SkyExams.Controllers
                     newSheet.Surname = tempUser.Surname;
                     newSheet.Licence_No = tempStu.Licence_No;
                     newSheet.Plane_Type_ID = (int)ratingId;
+                    newSheet.Date_Written = DateTime.Now;
                     newSheet.Type_Desctription = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == Convert.ToInt32(ratingId)).Type_Description;
                     newSheet.Mark = finalGrade;
+
+                    db.Registration_Sheet.Add(newSheet);
+                    db.SaveChanges();
 
                     return Json(new { result = finalResultQuiz }, JsonRequestBehavior.AllowGet);
                 }
