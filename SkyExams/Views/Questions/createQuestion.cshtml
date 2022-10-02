@@ -4,10 +4,13 @@
     ViewBag.Title = "createQuestion";
     var uID = ViewData["userId"];
     var rID = ViewData["ratingId"];
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Create Question and Answer</h2>
 <br />
+<label style="color:red">@error</label>
 <br />
 @using (Html.BeginForm("createQuestion", "Questions", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -41,23 +44,15 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
 }
 
 <script>
-    function checkInput() {
-        var question = $("#question").val();
-        var sec = $("#sec").val();
-        var correct = $("#correct").val();
-        var false1 = $("#false1").val();
-        var false2 = $("#false2").val();
-        if (question != "" && sec != "" && correct != "" && false1 != "" && false2 != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = checkInput;
-
+    window.oninput = setTimeout(timer, @time);
 </script>
+
 
 

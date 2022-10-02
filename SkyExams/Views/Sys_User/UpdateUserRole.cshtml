@@ -4,9 +4,11 @@
     ViewBag.Title = "UpdateUserRole";
     var uID = ViewData["loggedId"];
     var updateID = Model.SysUser_ID;
+    var role = ViewData["role"];
+    var time = ViewData["time"];
 }
 
-<h2>UpdateUserRole</h2>
+<h2>Update User Role</h2>
 <br />
 <br />
 <dl class="dl-horizontal">
@@ -58,7 +60,7 @@
     </select>
     <br />
     <br />
-    <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("searchScreen", "Sys_User", new { id = uID })'">
+    <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("searchResultsScreen", "Sys_User", new { id = uID, firstName = Model.FName, surname = Model.Surname, list = role })'">
         Back
     </button>
     <button id="check" class="btn btn-primary" onclick="verifyCode()" type="button">Check</button>
@@ -111,5 +113,5 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>

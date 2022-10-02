@@ -4,6 +4,7 @@
     ViewBag.Title = "addStudentExam";
     var userId = ViewData["userID"];
     var studentId = ViewData["studentID"];
+    var time = ViewData["time"];
 }
 
 <h2>Add Student to an Exam</h2>
@@ -34,5 +35,5 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>

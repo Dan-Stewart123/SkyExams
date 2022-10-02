@@ -3,13 +3,14 @@
     ViewBag.Title = "generateGroupReport";
     var uID = ViewData["userID"];
     var name = ViewData["userName"];
+    var time = ViewData["time"];
 }
 
 <h2>Generate Group Student Report</h2>
 <br />
 <dl class="dl-horizontal" id="report">
     <dd class="col-md-4">
-        <b>Group Student Report</b>
+        <h2>Group Student Report</h2>
     </dd>
 
     <dd>
@@ -82,7 +83,7 @@
     <br />
     @DateTime.Now.Year / @DateTime.Now.Month / @DateTime.Now.Day
 </dl>
-<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("groupReport", "Reports", new { id = uID })'">
     Back
 </button>
 <button type="button" class="btn btn-primary" id="generate">
@@ -126,6 +127,11 @@
                 }, margins
             );
         });
+
+        function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
     </script>
 }
 

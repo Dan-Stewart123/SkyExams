@@ -2,11 +2,14 @@
 @{
     ViewBag.Title = "addPlan";
     var tID = ViewData["topicID"];
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Add Lesson Plan</h2>
 <p>Please enter the following information:</p>
 <br />
+<label style="color:red">@error</label>
 <br />
 @using (Html.BeginForm("addPlan", "Lesson_Plan", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -25,19 +28,16 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("topicScreen", "Lesson_Plan", new { id = Model.SysUser_ID, topicId = tID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
+    
 }
 
 <script>
-    function checkInput() {
-        var name = $("#name").val();
-        var plan = $("#plan").val();
-        if (name != "" && plan != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = checkInput;
-
+    window.oninput = setTimeout(timer, @time);
 </script>
+
+
 

@@ -4,6 +4,7 @@
     var uID = ViewData["userID"];
     var role = ViewData["role"];
     var userRole = ViewData["userRole"];
+    var time = ViewData["time"];
 }
 
 <h2>Search Results</h2>
@@ -58,9 +59,13 @@
                 <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("addStudentResource", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Add resources
                 </button>
+                <br />
+                <br />
                 <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("addStudentExam", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Add Student to an Exam
                 </button>
+                <br />
+                <br />
                 <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("addStudentInstructor", "Sys_User", new { loggedId = uID, id = item.SysUser_ID })'">
                     Assign Student an Instructor
                 </button>
@@ -71,7 +76,7 @@
 </table>
 <br />
 <br />
-<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("searchScreen", "Sys_User", new { id = uID })'">
     Back
 </button>
 <script>
@@ -102,6 +107,6 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>
 

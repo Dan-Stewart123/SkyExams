@@ -2,11 +2,14 @@
 @{
     ViewBag.Title = "addPlaneScreen";
     var uID = ViewData["userID"];
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Add New Plane</h2>
 <p>Please complete the following fields</p>
-
+<br />
+<label style="color:red">@error</label>
 @using (Html.BeginForm("addPlaneScreen", "Planes", FormMethod.Post))
 {
     <div style="display:none;">
@@ -36,22 +39,16 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("PlanesScreen", "Planes", new { id = uID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
+   
 }
 
 <script>
-    function checkInput() {
-        var type = $("#type").val();
-        var desc = $("#description").val();
-        var sign = $("#sign").val();
-        var flown = $("#hoursFlown").val();
-        var service = $("#serviceHours").val();
-        if (type != "" && desc != "" && sign != "" && flown != "" && service != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = checkInput;
-
+    window.oninput = setTimeout(timer, @time);
 </script>
+
+
 

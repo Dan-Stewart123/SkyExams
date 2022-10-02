@@ -6,212 +6,135 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-//using DHTMLX.Common;
-//using DHTMLX.Scheduler;
-//using DHTMLX.Scheduler.Data;
 using SkyExams.Models;
+using SkyExams.ViewModels;
 
-namespace SkyExams.Controllers
+
+namespace SkyExams.Controllers 
 {
-
-    public class CalendarActionResponseModel
-    {
-        public String Status;
-        public Int64 Source_id;
-        public Int64 Target_id;
-
-        public CalendarActionResponseModel(String status, Int64 source_id, Int64 target_id)
-        {
-            Status = status;
-            Source_id = source_id;
-            Target_id = target_id;
-        }
-    }
-
 
     public class uEventsController : Controller
     {
         private SkyExamsEntities db = new SkyExamsEntities();
 
-        public ActionResult viewEvents(int? id)
+        public ActionResult Index(int? id)
         {
-            ViewData["userId"] = "" + id;
-
-            return View();
-
-        }// view events
-
-        //public ContentResult Data()
-        //{
-        //    try
-        //    {
-        //        var details = db.uEvents.ToList();
-
-
-
-        //        return new SchedulerAjaxData(details);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-        //}// get events from db
-
-        //public ContentResult Save(int? id, FormCollection actionValues)
-        //{
-
-        //    var action = new DataAction(actionValues);
-
-        //    try
-        //    {
-        //        var changedEvent = (uEvent)DHXEventsHelper.Bind(typeof(uEvent), actionValues);
-
-
-
-        //        switch (action.Type)
-        //        {
-        //            case DataActionTypes.Insert:
-        //                uEvent EV = new uEvent();
-        //                EV.Event_ID = changedEvent.Event_ID;
-        //                EV.Start_Time = changedEvent.Start_Time;
-        //                EV.End_Time = changedEvent.End_Time;
-        //                EV.text = changedEvent.text;
-        //                EV.Event_Type_ID = 1;
-        //                db.uEvents.Add(EV);
-        //                db.SaveChanges();
-
-
-        //                break;
-        //            case DataActionTypes.Delete:
-        //                var details = db.uEvents.Where(x => x.Event_ID == id).FirstOrDefault();
-        //                db.uEvents.Remove(details);
-        //                db.SaveChanges();
-
-        //                break;
-        //            default:// "update"    
-        //                var data = db.uEvents.Where(x => x.Event_ID == id).FirstOrDefault();
-        //                data.Start_Time = changedEvent.Start_Time;
-        //                data.End_Time = changedEvent.End_Time;
-        //                data.text = changedEvent.text;
-        //                data.Event_Type_ID = 1;
-        //                db.SaveChanges();
-
-
-        //                break;
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        action.Type = DataActionTypes.Error;
-        //    }
-        //    return (ContentResult)new AjaxSaveResponse(action);
-        //}
-
-
-
-
-
-        // GET: uEvents
-        public ActionResult Index()
-        {
-            return View(db.uEvents.ToList());
-        }
-
-        // GET: uEvents/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id != null)
+                {
+                    Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == Convert.ToInt32(id));
+                    ViewData["userId"] = "" + tempUser.SysUser_ID;
+                    ViewData["role"] = "" + tempUser.User_Role_ID;
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen", "Sys_User");
+                }
             }
-            uEvent uEvent = db.uEvents.Find(id);
-            if (uEvent == null)
+            catch
             {
-                return HttpNotFound();
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            return View(uEvent);
+
         }
 
-        // GET: uEvents/Create
-        public ActionResult Create()
+        public JsonResult GetEvents()
         {
-            return View();
+            using (var ecm = new SkyExamsEntities())
+            {
+                //System.Diagnostics.Debug.WriteLine("get events");         
+                var events = ecm.uEvents.ToList();
+                /*foreach(var singleEvent in events)
+                {
+                    System.Diagnostics.Debug.WriteLine(singleEvent.EventID);
+                    System.Diagnostics.Debug.WriteLine(singleEvent.Subject);
+                    System.Diagnostics.Debug.WriteLine(singleEvent.Description);
+                    System.Diagnostics.Debug.WriteLine(singleEvent.Start);
+                    System.Diagnostics.Debug.WriteLine(singleEvent.End);
+                }*/
+                return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
         }
 
-        // POST: uEvents/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // create or update for CRUD
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Event_ID,Start_Time,End_Time,Location_ID,Event_Type_ID")] uEvent uEvent)
+        public JsonResult SaveEvent(uEvent t)
         {
-            if (ModelState.IsValid)
+            var status = false;
+            try
             {
-                db.uEvents.Add(uEvent);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                using (SkyExamsEntities ecm = new SkyExamsEntities())
+                {
+                    //System.Diagnostics.Debug.WriteLine("event id is: " + e.EventID);
+                    // if >0, then this entry is already in our db
+                    if (t.Event_ID > 0) // 0 is the default, which is not allowed in our db
+                    {
+                        //Update the event
+                        var entry = ecm.uEvents.Where(e => e.Event_ID == t.Event_ID).FirstOrDefault();
+                        if (entry != null)
+                        {
+                            entry.text = t.text;
+                            entry.Start = t.Start;
+                            entry.End = t.End;
+                            entry.Event_Type_ID = t.Event_Type_ID;
+                            entry.Location_ID = t.Location_ID;
+                        }
+                        // else, something unexpected occured.
+                    }
+                    else
+                    {
+                        t.Event_ID = 1;
+                        // if table is not empty
+                        if (ecm.uEvents.Any())
+                        {
+                            t.Event_ID = ecm.uEvents.Max(e => e.Event_ID) + 1;
+                        }
+
+                        ecm.uEvents.Add(t);
+
+                        /* System.Diagnostics.Debug.WriteLine("start is: " + e.Start.ToString());
+                         System.Diagnostics.Debug.WriteLine("end is: " + e.End.ToString());*/
+                    }
+
+                    ecm.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex) //Catch Other Exception
+            {
+                System.Diagnostics.Debug.WriteLine("Exception message is: " + ex.ToString());
             }
 
-            return View(uEvent);
+            return new JsonResult { Data = new { status = status } };
         }
 
-        // GET: uEvents/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            uEvent uEvent = db.uEvents.Find(id);
-            if (uEvent == null)
-            {
-                return HttpNotFound();
-            }
-            return View(uEvent);
-        }
-
-        // POST: uEvents/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // delete for CRUD
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Event_ID,Start_Time,End_Time,Location_ID,Event_Type_ID")] uEvent uEvent)
+        public JsonResult DeleteEvent(uEvent t)
         {
-            if (ModelState.IsValid)
+            var status = false;
+            //System.Diagnostics.Debug.WriteLine("event ID to delete is: "+ e.EventID);
+            try
             {
-                db.Entry(uEvent).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                using (var ecm = new SkyExamsEntities())
+                {
+                    var entry = ecm.uEvents.Where(e => e.Start == t.Start && e.End == t.End && e.text == t.text).FirstOrDefault();
+                    if (entry != null)
+                    {
+                        ecm.uEvents.Remove(entry);
+                        ecm.SaveChanges();
+                        status = true;
+                    }
+                }
             }
-            return View(uEvent);
-        }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Delete exception message is: " + ex.ToString());
+            }
 
-        // GET: uEvents/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            uEvent uEvent = db.uEvents.Find(id);
-            if (uEvent == null)
-            {
-                return HttpNotFound();
-            }
-            return View(uEvent);
-        }
-
-        // POST: uEvents/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            uEvent uEvent = db.uEvents.Find(id);
-            db.uEvents.Remove(uEvent);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return new JsonResult { Data = new { status = status } };
         }
 
         protected override void Dispose(bool disposing)

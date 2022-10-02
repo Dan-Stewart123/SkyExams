@@ -6,6 +6,7 @@
     var rId = ViewData["ratingId"];
     var qId = ViewData["questionId"];
     var quest = ViewData["question"];
+    var time = ViewData["time"];
 }
 
 <h2>Delete Question:</h2>
@@ -47,6 +48,6 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>
 

@@ -3,6 +3,7 @@
     ViewBag.Title = "deletePlane";
     var uID = ViewData["loggedId"];
     var type = ViewData["planeType"];
+    var time = ViewData["time"];
 }
 
 <h2>Delete Plane</h2>
@@ -53,8 +54,8 @@
 </button>
 
 <script>
-    function timer() {
+   function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>

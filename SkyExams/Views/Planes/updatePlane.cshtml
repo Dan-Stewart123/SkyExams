@@ -2,11 +2,14 @@
 @{
     ViewBag.Title = "updatePlane";
     var uID = ViewData["loggedId"];
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Update Plane</h2>
 <p>Please complete the following fields</p>
-
+<br />
+<label style="color:red">@error</label>
 @using (Html.BeginForm("updatePlane", "Planes", FormMethod.Post))
 {
     <div style="display:none;">
@@ -30,23 +33,17 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
+    
 }
 
 <script>
-    function checkInput() {
-        var type = $("#type").val();
-        var desc = $("#description").val();
-        var sign = $("#sign").val();
-        var flown = $("#hoursFlown").val();
-        var service = $("#serviceHours").val();
-        if (type != "" && desc != "" && sign != "" && flown != "" && service != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = checkInput;
-
+    window.oninput = setTimeout(timer, @time);
 </script>
+
+
 
 

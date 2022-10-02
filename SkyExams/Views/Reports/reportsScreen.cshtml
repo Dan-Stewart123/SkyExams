@@ -1,6 +1,7 @@
 ﻿@model SkyExams.Models.Sys_User
 @{
     ViewBag.Title = "reportsScreen";
+    var time = ViewData["time"];
 }
 
 <h2>Reports Screen</h2>
@@ -18,20 +19,20 @@
     Events Report
 </button>
 <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("instructorReport", "Reports", new { id = Model.SysUser_ID })'">
-    Insrtuctor Report
+    Insructor Report
 </button>
 <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("examDateSelect", "Reports", new { id = Model.SysUser_ID })'">
     Exam Report
 </button>
 <br />
-<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
-    Home
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = Model.SysUser_ID })'">
+    Back
 </button>
 
 <script>
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>
 

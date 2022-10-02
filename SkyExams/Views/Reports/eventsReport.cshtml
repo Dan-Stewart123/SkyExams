@@ -3,12 +3,13 @@
     ViewBag.Title = "eventsReport";
     var uID = ViewData["userID"];
     var name = ViewData["userName"];
+    var time = ViewData["time"];
 }
 
 <h2>Events Report</h2>
 <dl class="dl-horizontal" id="report">
     <dd class="col-md-4">
-        <b>Events Report</b>
+        <h2>Events Report</h2>
     </dd>
 
     <dd>
@@ -30,7 +31,7 @@
         </dd>
 
         <dd>
-            @s.Start_Time
+            @s.Start
         </dd>
 
         <dd class="col-md-4">
@@ -38,7 +39,7 @@
         </dd>
 
         <dd>
-            @s.End_Time
+            @s.End
         </dd>
         
     }
@@ -48,7 +49,7 @@
     <br />
     @DateTime.Now.Year / @DateTime.Now.Month / @DateTime.Now.Day
 </dl>
-<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("eventsDateSelect", "Reports", new { id = uID })'">
     Back
 </button>
 <button type="button" class="btn btn-primary" id="generate">
@@ -92,6 +93,11 @@
                 }, margins
             );
         });
+
+        function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
     </script>
 }
 

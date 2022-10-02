@@ -1,11 +1,14 @@
 ﻿@model SkyExams.Models.Instructor
 @{
     ViewBag.Title = "createSlot";
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Create Booking Slot</h2>
 <p>Please enter the following information:</p>
 <br />
+<label style="color:red">@error</label>
 <br />
 @using (Html.BeginForm("createSlot", "Bookings", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -31,6 +34,11 @@
         }// no input
     }
     window.oninput = checkInput;
+
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
 </script>
 
 

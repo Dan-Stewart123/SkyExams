@@ -4,11 +4,15 @@
     ViewBag.Title = "Student Hours";
     var uID = ViewData["userId"];
     var uName = ViewData["userName"];
+    var error = ViewData["err"];
+    var time = ViewData["time"];
 }
 
 <h2>Student Hours</h2>
 
 <p>Please complete the following fields</p>
+<br />
+<label style="color:red">@error</label>
 
 @using (Html.BeginForm("StudentHours", "Sys_User", FormMethod.Post))
 {
@@ -18,8 +22,9 @@
     <div style="display:none;">
         <input type="text" id="id" name="id" value="@Model.Student_ID">
     </div>
+    <label>Hint: Add the number of hours flown to the number in the text box to get your total hours flown.</label>
     <div>
-        <label>@uName</label>     
+        <label>@uName</label>
         <br />
         <label>@Model.Licence_No</label>
     </div>
@@ -30,12 +35,12 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = uID})'">
         Cancel
     </button>
-    <input type="submit" class="btn btn-primary", value="Submit" id="submitButton" />
+    <input type="submit" class="btn btn-primary" , value="Submit" id="submitButton" />
 }
 
 <script>
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>

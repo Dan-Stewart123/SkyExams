@@ -29,25 +29,26 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> planeTypes = db.Plane_Type.ToList();
 
                     return View(planeTypes);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// returns plane screen
 
         public FileContentResult getImg(int id)
@@ -58,26 +59,28 @@ namespace SkyExams.Controllers
                 : null;
         }
 
-        public ActionResult addPlaneScreen(int? id)
+        public ActionResult addPlaneScreen(int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
+                    ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> typeList = db.Plane_Type.ToList();
                     return View(typeList);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// get for add plane screen
 
         [HttpPost]
@@ -89,14 +92,15 @@ namespace SkyExams.Controllers
                 {
                     if (type == "" || description == "" || sign == "" || hoursFlown == 0 || serviceHours == 0)
                     {
-                        return RedirectToAction("addPlaneScreen", new { id = id });
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("addPlaneScreen", new { id = id, err = temp });
                     }// checks fields arent empty
                     else
                     {
                         Plane newPlane = new Plane();
                         List<Plane> planeList = new List<Plane>();
-                        int planeID = planeList.Count() + 2;
-                        newPlane.Plane_ID = planeID;
+                        //int planeID = planeList.Count() + 2;
+                        //newPlane.Plane_ID = planeID;
                         newPlane.Call_Sign = sign;
                         newPlane.Hours_Flown = hoursFlown;
                         newPlane.Hours_Until_Service = serviceHours;
@@ -126,50 +130,52 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || typeId != null)
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
                     List<Plane> planeList = new List<Plane>();
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == typeId).Type_Description;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == typeId);
                     return View(planeList);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// plane type screen
 
         public ActionResult deletePlane(int? loggedId, int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     //ViewData["planeType"] = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     Plane delPlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlane.Plane_Type_ID).Type_Description;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(delPlane);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// delete plane
 
         public ActionResult deletePlaneConformation(int? loggedId, int? id)
@@ -183,6 +189,12 @@ namespace SkyExams.Controllers
                     int planeID = delPlane.Plane_ID;
                     db.Planes.Remove(delPlane);
                     db.SaveChanges();
+
+                    foreach (var ps in db.Plane_Service.ToList().FindAll(p => p.Plane_ID == id))
+                    {
+                        db.Plane_Service.Remove(ps);
+                        db.SaveChanges();
+                    }// for each
 
                     return RedirectToAction("planeTypeScreen", new { id = loggedId, typeId = planeType });
                 }
@@ -198,26 +210,28 @@ namespace SkyExams.Controllers
             
         }// delete plane conformation
 
-        public ActionResult updatePlane(int? loggedId, int? id)
+        public ActionResult updatePlane(int? loggedId, int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     Plane updatePlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
+                    ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(updatePlane);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// update plane get
 
         [HttpPost]
@@ -231,12 +245,13 @@ namespace SkyExams.Controllers
                     Plane plane = db.Planes.Find(pID);
                     if (description == "" || sign == "" || hoursFlown == 0 || serviceHours == 0)
                     {
-                        return RedirectToAction("updatePlane");
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("updatePlane", new { loggedId = userId, id = id, err = temp });
                     }// checks if all fields are complete 
                     else
                     {
                         Plane updatePlane = new Plane();
-                        updatePlane.Plane_ID = plane.Plane_ID;
+                        //updatePlane.Plane_ID = plane.Plane_ID;
                         updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
                         updatePlane.Call_Sign = sign;
                         updatePlane.Hours_Flown = hoursFlown;
@@ -250,6 +265,19 @@ namespace SkyExams.Controllers
 
                         db.Planes.Add(updatePlane);
                         db.SaveChanges();
+
+                        foreach (var ps in db.Plane_Service.ToList().FindAll(p => p.Plane_ID == Convert.ToInt32(id)))
+                        {
+                            Plane_Service updatePS = new Plane_Service();
+                            updatePS = ps;
+                            updatePS.Plane_ID = db.Planes.ToList().Find(p => p.Call_Sign == updatePlane.Call_Sign).Plane_ID;
+
+                            db.Plane_Service.Remove(ps);
+                            db.SaveChanges();
+
+                            db.Plane_Service.Add(updatePS);
+                            db.SaveChanges();
+                        }// for each
 
                         int uID = Convert.ToInt32(userId);
                         return RedirectToAction("planeTypeScreen", new { id = uID, typeId = updatePlane.Plane_Type_ID });
@@ -267,26 +295,28 @@ namespace SkyExams.Controllers
             
         }// update plane post
 
-        public ActionResult updatePlaneHours(int? loggedId, int? id)
+        public ActionResult updatePlaneHours(int? loggedId, int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
+                    ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Plane updatePlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     return View(updatePlane);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// update plane hours get
 
         [HttpPost]
@@ -298,20 +328,22 @@ namespace SkyExams.Controllers
                 {
                     int pID = Convert.ToInt32(id);
                     Plane plane = db.Planes.Find(pID);
-                    if (hoursFlown == 0)
+                    if (hoursFlown == null)
                     {
-                        return RedirectToAction("updatePlane");
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("updatePlaneHours", new { loggedId = userId, id = id, err = temp });
                     }// checks if all fields are complete 
                     else
                     {
                         Plane updatePlane = new Plane();
-                        updatePlane.Plane_ID = plane.Plane_ID;
+                        //updatePlane.Plane_ID = plane.Plane_ID;
                         updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
                         updatePlane.Call_Sign = plane.Call_Sign;
                         updatePlane.Hours_Flown = hoursFlown;
                         updatePlane.Hours_Until_Service = plane.Hours_Until_Service;
                         updatePlane.Description = plane.Description;
                         updatePlane.In_Service = plane.In_Service;
+
 
                         if (updatePlane.Hours_Flown <= 10)
                         {
@@ -339,6 +371,19 @@ namespace SkyExams.Controllers
                         db.Planes.Add(updatePlane);
                         db.SaveChanges();
 
+                        foreach (var ps in db.Plane_Service.ToList().FindAll(p => p.Plane_ID == Convert.ToInt32(id)))
+                        {
+                            Plane_Service updatePS = new Plane_Service();
+                            updatePS = ps;
+                            updatePS.Plane_ID = db.Planes.ToList().Find(p => p.Call_Sign == updatePlane.Call_Sign).Plane_ID;
+
+                            db.Plane_Service.Remove(ps);
+                            db.SaveChanges();
+
+                            db.Plane_Service.Add(updatePS);
+                            db.SaveChanges();
+                        }// for each
+
                         int uID = Convert.ToInt32(userId);
                         return RedirectToAction("planeTypeScreen", new { id = uID, typeId = updatePlane.Plane_Type_ID });
                     }// else
@@ -359,7 +404,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     Plane checkPlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     if (checkPlane.In_Service == false)
@@ -373,14 +418,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// service check
 
         public ActionResult bookPlaneOut(int? loggedId, int? id)
@@ -392,7 +437,7 @@ namespace SkyExams.Controllers
                     Plane plane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     Plane updatePlane = new Plane();
 
-                    updatePlane.Plane_ID = plane.Plane_ID;
+                    //updatePlane.Plane_ID = plane.Plane_ID;
                     updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
                     updatePlane.Call_Sign = plane.Call_Sign;
                     updatePlane.Hours_Flown = plane.Hours_Flown;
@@ -407,44 +452,60 @@ namespace SkyExams.Controllers
                     db.Planes.Add(updatePlane);
                     db.SaveChanges();
 
+                    foreach (var ps in db.Plane_Service.ToList().FindAll(p => p.Plane_ID == id))
+                    {
+                        Plane_Service updatePS = new Plane_Service();
+                        updatePS = ps;
+                        updatePS.Plane_ID = db.Planes.ToList().Find(p => p.Call_Sign == updatePlane.Call_Sign).Plane_ID;
+
+                        db.Plane_Service.Remove(ps);
+                        db.SaveChanges();
+
+                        db.Plane_Service.Add(updatePS);
+                        db.SaveChanges();
+                    }// for each
+
                     return RedirectToAction("planeTypeScreen", new { id = loggedId, typeId = updatePlane.Plane_Type_ID });
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// book out plane
 
-        public ActionResult captureServiceDetails(int? loggedId, int? id)
+        [HttpGet]
+        public ActionResult captureServiceDetails(int? loggedId, int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
+                    ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Plane updatePlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     return View(updatePlane);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// capture service details
 
         [HttpPost]
-        public ActionResult captureServiceDetails(int? loggedId, int? id, string details)
+        public ActionResult captureServiceDetailsConf(int? loggedId, int? id, string details, string parts)
         {
             try
             {
@@ -454,13 +515,14 @@ namespace SkyExams.Controllers
                     Plane updatePlane = new Plane();
                     if (details == "")
                     {
-                        return RedirectToAction("captureServiceDetails", new { loggedId = loggedId, id = plane.Plane_ID });
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("captureServiceDetails", new { loggedId = loggedId, id = plane.Plane_ID, err = temp });
                     }// if statement
                     else
                     {
 
 
-                        updatePlane.Plane_ID = plane.Plane_ID;
+                        //updatePlane.Plane_ID = plane.Plane_ID;
                         updatePlane.Plane_Type_ID = plane.Plane_Type_ID;
                         updatePlane.Call_Sign = plane.Call_Sign;
                         updatePlane.Hours_Flown = plane.Hours_Flown;
@@ -469,16 +531,30 @@ namespace SkyExams.Controllers
                         updatePlane.In_Service = false;
 
 
-                        db.Planes.Remove(plane);
+                        db.Planes.Remove(plane);// fix plane id for report to get all services, test test test
                         db.SaveChanges();
 
                         db.Planes.Add(updatePlane);
                         db.SaveChanges();
 
+                        foreach (var ps in db.Plane_Service.ToList().FindAll(p => p.Plane_ID == id))
+                        {
+                            Plane_Service updatePS = new Plane_Service();
+                            updatePS = ps;
+                            updatePS.Plane_ID = db.Planes.ToList().Find(p => p.Call_Sign == updatePlane.Call_Sign).Plane_ID;
+
+                            db.Plane_Service.Remove(ps);
+                            db.SaveChanges();
+
+                            db.Plane_Service.Add(updatePS);
+                            db.SaveChanges();
+                        }// for each
+
                         Plane_Service newService = new Plane_Service();
                         newService.Plane_ID = updatePlane.Plane_ID;
                         newService.Last_Service_Date = DateTime.Now;
-                        newService.Service_Details = details;
+                        newService.Reason_For_Service = details;
+                        newService.Parts_Used = parts;
 
                         db.Plane_Service.Add(newService);
                         db.SaveChanges();
@@ -500,25 +576,27 @@ namespace SkyExams.Controllers
         }// capture service details post
 
         [HttpGet]
-        public ActionResult addPlaneTypeScreen(int? id)
+        public ActionResult addPlaneTypeScreen(int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User user = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                    ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(user);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// add plane type get
 
         [HttpPost]
@@ -528,39 +606,47 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    Plane_Type newPlaneType = new Plane_Type();
-                    newPlaneType.Type_Description = name;
+                    if(name == "" || pic == null)
+                    {
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("addPlaneTypeScreen", new { id = id, err = temp });
+                    }
+                    else
+                    {
+                        Plane_Type newPlaneType = new Plane_Type();
+                        newPlaneType.Type_Description = name;
 
-                    byte[] imageBytes = null;
-                    BinaryReader reader = new BinaryReader(pic.InputStream);
-                    imageBytes = reader.ReadBytes((int)pic.ContentLength);
-                    newPlaneType.Plane_Image = imageBytes;
+                        byte[] imageBytes = null;
+                        BinaryReader reader = new BinaryReader(pic.InputStream);
+                        imageBytes = reader.ReadBytes((int)pic.ContentLength);
+                        newPlaneType.Plane_Image = imageBytes;
 
-                    db.Plane_Type.Add(newPlaneType);
-                    db.SaveChanges();
+                        db.Plane_Type.Add(newPlaneType);
+                        db.SaveChanges();
 
-                    Exam newExam = new Exam();
-                    newExam.Exam_ID = newPlaneType.Plane_Type_ID;
-                    newExam.Plane_Type_ID = newPlaneType.Plane_Type_ID;
+                        Exam newExam = new Exam();
+                        //newExam.Exam_ID = newPlaneType.Plane_Type_ID;
+                        newExam.Plane_Type_ID = newPlaneType.Plane_Type_ID;
 
-                    db.Exams.Add(newExam);
-                    db.SaveChanges();
+                        db.Exams.Add(newExam);
+                        db.SaveChanges();
 
-                    Rating newRating = new Rating();
-                    newRating.Rating_ID = newPlaneType.Plane_Type_ID;
-                    newRating.Rating_Description = name;
+                        Rating newRating = new Rating();
+                        //newRating.Rating_ID = newPlaneType.Plane_Type_ID;
+                        newRating.Rating_Description = name;
 
-                    db.Ratings.Add(newRating);
-                    db.SaveChanges();
+                        db.Ratings.Add(newRating);
+                        db.SaveChanges();
 
-                    Question_Rating newQR = new Question_Rating();
-                    newQR.Question_Rating_ID = newPlaneType.Plane_Type_ID;
-                    newQR.Ques_Rating = name;
+                        Question_Rating newQR = new Question_Rating();
+                        //newQR.Question_Rating_ID = newPlaneType.Plane_Type_ID;
+                        newQR.Ques_Rating = name;
 
-                    db.Question_Rating.Add(newQR);
-                    db.SaveChanges();
+                        db.Question_Rating.Add(newQR);
+                        db.SaveChanges();
 
-                    return RedirectToAction("planesScreen", new { id = id });
+                        return RedirectToAction("planesScreen", new { id = id });
+                    }
                 }
                 else
                 {
@@ -579,22 +665,23 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Plane_Type delPlane = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == id);
                     return View(delPlane);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// delete plane type get
 
         public ActionResult deletePlaneTypeConformation(int? loggedId, int? id)
@@ -731,26 +818,28 @@ namespace SkyExams.Controllers
         }// delete plane type post
 
         [HttpGet]
-        public ActionResult updatePlaneType(int? loggedId, int? id)
+        public ActionResult updatePlaneType(int? loggedId, int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
+                    ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Plane_Type plane_Type = db.Plane_Type.Find(id);
                     return View(plane_Type);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// update plane type get
 
         [HttpPost]
@@ -760,19 +849,27 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    Plane_Type updatePType = new Plane_Type();
-                    updatePType.Plane_Type_ID = Convert.ToInt32(id);
-                    updatePType.Type_Description = name;
+                    if (name == "" || pic == null)
+                    {
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("updatePlaneType", new { loggedId = loggedId, id = id, err = temp });
+                    }
+                    else
+                    {
+                        Plane_Type updatePType = new Plane_Type();
+                        updatePType.Plane_Type_ID = Convert.ToInt32(id);
+                        updatePType.Type_Description = name;
 
-                    byte[] imageBytes = null;
-                    BinaryReader reader = new BinaryReader(pic.InputStream);
-                    imageBytes = reader.ReadBytes((int)pic.ContentLength);
-                    updatePType.Plane_Image = imageBytes;
+                        byte[] imageBytes = null;
+                        BinaryReader reader = new BinaryReader(pic.InputStream);
+                        imageBytes = reader.ReadBytes((int)pic.ContentLength);
+                        updatePType.Plane_Image = imageBytes;
 
-                    db.Entry(updatePType).State = EntityState.Modified;
-                    db.SaveChanges();
+                        db.Entry(updatePType).State = EntityState.Modified;
+                        db.SaveChanges();
 
-                    return RedirectToAction("planesScreen", new { id = loggedId });
+                        return RedirectToAction("planesScreen", new { id = loggedId });
+                    }
                 }
                 else
                 {
