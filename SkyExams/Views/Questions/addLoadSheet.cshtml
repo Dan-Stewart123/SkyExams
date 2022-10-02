@@ -2,11 +2,13 @@
 @{
     ViewBag.Title = "addLoadSheet";
     var rID = ViewData["ratingId"];
+    var error = ViewData["err"];
 }
 
 <h2>Add Load Sheet</h2>
 <p>Please enter the following information:</p>
 <br />
+<label style="color:red">@error</label>
 <br />
 @using (Html.BeginForm("addLoadSheet", "Questions", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -23,17 +25,6 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = Model.SysUser_ID, ratingId = rID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
 }
 
-<script>
-    function checkInput() {
-        var loadSheet = $("#loadSheet").val();
-        if (loadSheet != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
-    }
-    window.oninput = checkInput;
-
-</script>

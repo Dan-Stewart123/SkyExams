@@ -9,7 +9,7 @@
 <br />
 <dl class="dl-horizontal" id="report">
     <dd class="col-md-4">
-        <b>Student Report</b>
+        <h2>Student Report</h2>
     </dd>
 
     <dd>
@@ -73,7 +73,7 @@
     <br />
     @DateTime.Now.Year / @DateTime.Now.Month / @DateTime.Now.Day
 </dl>
-<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("reportsScreen", "Reports", new { id = uID })'">
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("studentReport", "Reports", new { id = uID })'">
     Back
 </button>
 <button type="button" class="btn btn-primary" id="generate">

@@ -43,7 +43,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
                     List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
@@ -52,36 +52,37 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// slots screen
 
         [HttpGet]
-        public ActionResult createSlot(int? id)
+        public ActionResult createSlot(int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
+                    ViewData["err"] = err;
                     return View(tempIns);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// create slot get
 
         [HttpPost]
@@ -91,15 +92,32 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
+                    if(slotTime == null)
+                    {
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("createSlot", new { id = id, err = temp });
+                    }
                     Instructor_Slots newSlot = new Instructor_Slots();
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
                     newSlot.Instructor_ID = tempIns.Instructor_ID;
                     newSlot.Date_Time = slotTime;
                     newSlot.Date_Time_String = "" + slotTime;
                     newSlot.Booked = false;
-                    db.Instructor_Slots.Add(newSlot);
-                    db.SaveChanges();
-
+                    List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
+                    bool check = false;
+                    foreach(var slots in slotsList)
+                    {
+                        if(slots.Date_Time == newSlot.Date_Time)
+                        {
+                            check = true;
+                        }// if statement
+                    }// for each
+                    if(check == false)
+                    {
+                        db.Instructor_Slots.Add(newSlot);
+                        db.SaveChanges();
+                    }// if statement
+                    
                     return RedirectToAction("slotsScreen", new { id = id });
                 }
                 else
@@ -119,7 +137,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || slotId != null)
                 {
                     ViewData["uID"] = "" + id;
                     Instructor_Slots delSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
@@ -127,14 +145,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// delete slot get
 
         public ActionResult deleteSlotConformation(int? id, int? slotId)
@@ -149,8 +167,32 @@ namespace SkyExams.Controllers
                     Booking delBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
                     if (delBooking != null)
                     {
+                        Student tempStu = db.Students.ToList().Find(s => s.Student_ID == delBooking.Student_ID);
+                        Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == tempStu.SysUser_ID);
                         db.Bookings.Remove(delBooking);
-                        db.SaveChangesAsync();
+                        db.SaveChangesAsync();                      
+
+                        try
+                        {
+                            //create email
+                            MimeMessage requestEmail = new MimeMessage();
+                            requestEmail.From.Add(new MailboxAddress("Booking Cancellation", "skyexams.fts@gmail.com"));
+                            requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to student
+                            requestEmail.Subject = "Booking Cancellation";
+                            requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + delSlot.Date_Time + " has been cancelled by  your instructor" };
+
+                            //send email
+                            SmtpClient client = new SmtpClient();
+                            client.Connect("smtp.gmail.com", 465, true);
+                            client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                            client.Send(requestEmail);
+                            client.Disconnect(true);
+                            client.Dispose();
+                        }// try
+                        catch
+                        {
+                            return RedirectToAction("bookingsScreen", new { id = id });
+                        }// catch
                     }//if statement
                     return RedirectToAction("slotsScreen", new { id = id });
                 }
@@ -171,7 +213,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || slotId != null)
                 {
                     ViewData["uID"] = "" + id;
                     Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
@@ -179,14 +221,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// update slot get
 
         [HttpPost]
@@ -224,6 +266,29 @@ namespace SkyExams.Controllers
 
                         db.Bookings.Add(updateBooking);
                         db.SaveChanges();
+
+                        try
+                        {
+                            //create email
+                            MimeMessage requestEmail = new MimeMessage();
+                            requestEmail.From.Add(new MailboxAddress("Booking Change", "skyexams.fts@gmail.com"));
+                            requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to student
+                            requestEmail.Subject = "Booking Change";
+                            requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + tempSlot.Date_Time + " has been changed to " + updateSlot.Date_Time + " by  your instructor" };
+
+                            //send email
+                            SmtpClient client = new SmtpClient();
+                            client.Connect("smtp.gmail.com", 465, true);
+                            client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                            client.Send(requestEmail);
+                            client.Disconnect(true);
+                            client.Dispose();
+                        }// try
+                        catch
+                        {
+                            return RedirectToAction("bookingsScreen", new { id = id });
+                        }// catch
+
                     }// if statement
 
                     return RedirectToAction("slotsScreen", new { id = id });
@@ -244,7 +309,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     List<Booking> bookingsList = db.Bookings.ToList().FindAll(b => b.Student_ID == tempStu.Student_ID);
@@ -253,21 +318,21 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// bookings screen
 
         public ActionResult viewSlots(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
@@ -293,14 +358,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// view slots
 
         public JsonResult getSlots(int instructor)
@@ -330,10 +395,8 @@ namespace SkyExams.Controllers
                     updateSlot.Date_Time = bookSlot.Date_Time;
                     updateSlot.Booked = true;
                     updateSlot.Date_Time_String = bookSlot.Date_Time_String;
-                    db.Instructor_Slots.Remove(bookSlot);
-                    db.SaveChanges();
-
-                    db.Instructor_Slots.Add(updateSlot);
+                    
+                    db.Entry(updateSlot).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
                     newBooking.Slot_ID = updateSlot.Slot_ID;
@@ -368,21 +431,21 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// book slot
 
         public ActionResult deleteBooking(int? id, int? bookingId)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || bookingId != null)
                 {
                     ViewData["uID"] = "" + id;
                     Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
@@ -392,14 +455,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// delete slot 
 
         public ActionResult deleteBookingConformation(int? id, int? bookingId)
@@ -423,6 +486,29 @@ namespace SkyExams.Controllers
 
                     db.Instructor_Slots.Add(updateSlot);
                     db.SaveChanges();
+
+                    try
+                    {
+                        //create email
+                        MimeMessage requestEmail = new MimeMessage();
+                        requestEmail.From.Add(new MailboxAddress("Booking Cancellation", "skyexams.fts@gmail.com"));
+                        requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
+                        requestEmail.Subject = "Booking Cancellation";
+                        requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + bookSlot.Date_Time + " has been cancelled by the student" };
+
+                        //send email
+                        SmtpClient client = new SmtpClient();
+                        client.Connect("smtp.gmail.com", 465, true);
+                        client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                        client.Send(requestEmail);
+                        client.Disconnect(true);
+                        client.Dispose();
+                    }// try
+                    catch
+                    {
+                        return RedirectToAction("bookingsScreen", new { id = id });
+                    }// catch
+
                     return RedirectToAction("bookingsScreen", new { id = id });
                 }
                 else
@@ -442,7 +528,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || bookingId != null)
                 {
                     Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
@@ -455,14 +541,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// update booking get
 
         [HttpGet]
@@ -470,7 +556,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || bookingId != null || slotId != null)
                 {
                     Booking tempBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
                     Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == slotId);
@@ -507,18 +593,40 @@ namespace SkyExams.Controllers
                     db.Bookings.Add(updateBooking);
                     db.SaveChanges();
 
+                    try
+                    {
+                        //create email
+                        MimeMessage requestEmail = new MimeMessage();
+                        requestEmail.From.Add(new MailboxAddress("Booking Change", "skyexams.fts@gmail.com"));
+                        requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
+                        requestEmail.Subject = "Booking Change";
+                        requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + tempSlot.Date_Time + " has been changed to " + updateSlot.Date_Time + "  by the student" };
+
+                        //send email
+                        SmtpClient client = new SmtpClient();
+                        client.Connect("smtp.gmail.com", 465, true);
+                        client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                        client.Send(requestEmail);
+                        client.Disconnect(true);
+                        client.Dispose();
+                    }// try
+                    catch
+                    {
+                        return RedirectToAction("bookingsScreen", new { id = id });
+                    }// catch
+
                     return RedirectToAction("bookingsScreen", new { id = id });
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// update booking post
 
         // GET: Bookings/Details/5

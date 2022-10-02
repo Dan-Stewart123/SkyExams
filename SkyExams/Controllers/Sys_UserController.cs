@@ -69,12 +69,26 @@ namespace SkyExams.Controllers
                         }// searches passwords
                     }// matches username to db username
                 }// searches users
-                ViewData["err"] = "Username or password is incorrect";
+                if (userName == "")
+                {
+                    ViewData["err"] = "Please enter your username";
+                }// if username null
+                else
+                {
+                    ViewData["err"] = "Username or password is incorrect";
+                }// else
                 return View();
             }
             else
             {
-                ViewData["err"] = "Please complete all the required fields";
+                if (password == "")
+                {
+                    ViewData["err"] = "Please enter your password";
+                }// password null
+                else
+                {
+                    ViewData["err"] = "Please complete all the required fields";
+                }//else
                 return View();
             }
             // verify username and password here, if correct then display home screen, else login screen with a pop up
@@ -121,6 +135,12 @@ namespace SkyExams.Controllers
             }// checks that passwords match
             else
             {
+                System.TimeSpan dobDiff = DateTime.Now.Subtract(Convert.ToDateTime(dob));
+                if (dobDiff.TotalDays < 5478)
+                {
+                    ViewData["err"] = "You are not old enough to be registered on this system";
+                    return View();
+                }// checks user is old enough
                 DateTime DOB = DateTime.Parse(dob);
                 user.FName = firstName;
                 user.Surname = lastName;
@@ -136,7 +156,7 @@ namespace SkyExams.Controllers
                 if(countryIndex == -1)
                 {
                     Country newCountry = new Country();
-                    newCountry.Country_ID = cList.Count() + 1;
+                    //newCountry.Country_ID = cList.Count() + 1;
                     newCountry.Country_Name = country;
                     cList.Add(newCountry);
                     user.Country_ID = newCountry.Country_ID;
@@ -154,7 +174,7 @@ namespace SkyExams.Controllers
                 if (cityIndex == -1)
                 {
                     City newCity = new City();
-                    newCity.City_ID = cityList.Count() + 1;
+                    //newCity.City_ID = cityList.Count() + 1;
                     newCity.City_Name = city;
                     cityList.Add(newCity);
                     user.City_ID = newCity.City_ID;
@@ -190,7 +210,7 @@ namespace SkyExams.Controllers
                 if (zipIndex == -1)
                 {
                     Zip_Code newZip = new Zip_Code();
-                    newZip.Zip_ID = zList.Count() + 1;
+                    //newZip.Zip_ID = zList.Count() + 1;
                     newZip.Code = zip;
                     zList.Add(newZip);
                     user.ZIP_ID = newZip.Zip_ID;
@@ -216,20 +236,28 @@ namespace SkyExams.Controllers
                 db.Sys_User.Add(user);
                 db.SaveChanges();
 
-                //create email
-                MimeMessage requestEmail = new MimeMessage();
-                requestEmail.From.Add(new MailboxAddress("New user", "skyexams.fts@gmail.com"));
-                requestEmail.To.Add(MailboxAddress.Parse("skyexams.fts@gmail.com"));
-                requestEmail.Subject = "New user request";
-                requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be registered on the system: User name: " + firstName + " " + lastName + " email address: " + email };
+                try
+                {
+                    //create email
+                    MimeMessage requestEmail = new MimeMessage();
+                    requestEmail.From.Add(new MailboxAddress("New user", "skyexams.fts@gmail.com"));
+                    requestEmail.To.Add(MailboxAddress.Parse("skyexams.fts@gmail.com"));
+                    requestEmail.Subject = "New user request";
+                    requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be registered on the system: User name: " + firstName + " " + lastName + " email address: " + email };
 
-                //send email
-                SmtpClient client = new SmtpClient();
-                client.Connect("smtp.gmail.com", 465, true);
-                client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
-                client.Send(requestEmail);
-                client.Disconnect(true);
-                client.Dispose();
+                    //send email
+                    SmtpClient client = new SmtpClient();
+                    client.Connect("smtp.gmail.com", 465, true);
+                    client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                    client.Send(requestEmail);
+                    client.Disconnect(true);
+                    client.Dispose();
+                }// try
+                catch
+                {
+                    ViewData["err"] = "Email failed to send.";
+                    return View();
+                }
                 return RedirectToAction("registrationConformationScreen");
             }// adds user, emails admin
             
@@ -351,7 +379,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(viewUser);
@@ -384,12 +412,13 @@ namespace SkyExams.Controllers
             }// catch
         }// get profile image
 
-        public ActionResult searchScreen(int? id)
+        public ActionResult searchScreen(int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
+                    ViewData["err"] = err;
                     Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(viewUser);
                 }
@@ -417,7 +446,8 @@ namespace SkyExams.Controllers
                     List<Sys_User> sUsers = new List<Sys_User>();
                     if (firstName == "" && lastName == "")
                     {
-                        return RedirectToAction("searchScreen", new { id = id });
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("searchScreen", new { id = id, err = temp });
                     }// if fields are empty
                     else
                     {
@@ -455,12 +485,13 @@ namespace SkyExams.Controllers
             }
         }// displays search results
 
-        public ActionResult updateAccount(int? id)
+        public ActionResult updateAccount(int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
+                    ViewData["err"] = err;
                     Sys_User updateUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(updateUser);
                 }
@@ -487,7 +518,8 @@ namespace SkyExams.Controllers
                     Sys_User sys_User = db.Sys_User.ToList().Find(u => u.SysUser_ID == idUser);
                     if (firstName == "" || lastName == "" || uName == "" || title == "" || cellNo == "" || email == "" || pAddress == "" || country == "" || city == "" || zip == "" || dob == "" || empStatus == "")
                     {
-                        return RedirectToAction("updateAccount", new { id = idUser });
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("updateAccount", new { id = idUser, err = temp });
                     }// checks that fileds are not empty
                     else
                     {
@@ -508,7 +540,7 @@ namespace SkyExams.Controllers
                         if (countryIndex == -1)
                         {
                             Country newCountry = new Country();
-                            newCountry.Country_ID = cList.Count() + 1;
+                            //newCountry.Country_ID = cList.Count() + 1;
                             newCountry.Country_Name = country;
                             cList.Add(newCountry);
                             updateUser.Country_ID = newCountry.Country_ID;
@@ -526,7 +558,7 @@ namespace SkyExams.Controllers
                         if (cityIndex == -1)
                         {
                             City newCity = new City();
-                            newCity.City_ID = cityList.Count() + 1;
+                            //newCity.City_ID = cityList.Count() + 1;
                             newCity.City_Name = city;
                             cityList.Add(newCity);
                             updateUser.City_ID = newCity.City_ID;
@@ -562,7 +594,7 @@ namespace SkyExams.Controllers
                         if (zipIndex == -1)
                         {
                             Zip_Code newZip = new Zip_Code();
-                            newZip.Zip_ID = zList.Count() + 1;
+                            //newZip.Zip_ID = zList.Count() + 1;
                             newZip.Code = zip;
                             zList.Add(newZip);
                             updateUser.ZIP_ID = newZip.Zip_ID;
@@ -577,7 +609,7 @@ namespace SkyExams.Controllers
                         db.Entry(updateUser).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
 
-                        return RedirectToAction("homeScreen", new { id = idUser });
+                        return RedirectToAction("viewAccount", new { id = idUser });
                     }// adds user, emails admin
                 }
                 else
@@ -597,7 +629,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["userID"] = "" + loggedId;
                     ViewData["studentID"] = "" + id;
@@ -630,7 +662,8 @@ namespace SkyExams.Controllers
                         newStudentResource.Study_Resource_ID = resourceId;
                         db.Student_Resource.Add(newStudentResource);
                         db.SaveChanges();
-                        return RedirectToAction("searchScreen", new { id = loggedId });
+                        Sys_User temp = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                        return RedirectToAction("searchResultsScreen", new { id = loggedId, firstName = temp.FName, surname = temp.Surname, list = "student" });
                     }// try
                     catch (Exception ex)
                     {
@@ -654,7 +687,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["userID"] = "" + loggedId;
                     ViewData["studentID"] = "" + id;
@@ -689,7 +722,8 @@ namespace SkyExams.Controllers
                         newStudentExam.Completed = false;
                         db.Student_Exam.Add(newStudentExam);
                         db.SaveChanges();
-                        return RedirectToAction("searchScreen", new { id = loggedId });
+                        Sys_User temp = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                        return RedirectToAction("searchResultsScreen", new { id = loggedId, firstName = temp.FName, surname = temp.Surname, list = "student" });
                     }// try
                     catch (Exception ex)
                     {
@@ -711,7 +745,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["userID"] = "" + loggedId;
                     ViewData["studentID"] = "" + id;
@@ -759,7 +793,8 @@ namespace SkyExams.Controllers
                             db.Student_Lesson_Plan.Add(sLessonPlan);
                             db.SaveChangesAsync();
                         }// for each
-                        return RedirectToAction("searchScreen", new { id = loggedId });
+                        Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                        return RedirectToAction("searchResultsScreen", new { id = loggedId, firstName = tempUser.FName, surname = tempUser.Surname, list = "student" });
                     }// try
                     catch (Exception ex)
                     {
@@ -778,12 +813,13 @@ namespace SkyExams.Controllers
             
         }// add student instructor post
 
-        public ActionResult resetPassword(int? id)
+        public ActionResult resetPassword(int? id, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
+                    ViewData["err"] = err;
                     Sys_User passwordUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(passwordUser);
                 }
@@ -808,7 +844,8 @@ namespace SkyExams.Controllers
                 {
                     if (oldPass == "" || newPass == "" || confPass == "")
                     {
-                        return View(db.Sys_User.ToList().Find(u => u.SysUser_ID == id));
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("resetPassword", new { id = id, err = temp });
                     }// if fields are empty
                     if (newPass != confPass)
                     {
@@ -881,10 +918,11 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     Sys_User delUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    ViewData["role"] = db.User_Role.ToList().Find(u => u.User_Role_ID == delUser.User_Role_ID).RoleDesc.ToLower();
                     return View(delUser);
                 }
                 else
@@ -899,7 +937,7 @@ namespace SkyExams.Controllers
             
         }// delete get
 
-        public ActionResult deleteConformation(int? loggedId, int? id)// fix up student and instructor deletes
+        public ActionResult deleteConformation(int? loggedId, int? id)
         {
             try
             {
@@ -925,17 +963,23 @@ namespace SkyExams.Controllers
                             db.Student_Instructor.Remove(delStudentInstructor);
                             db.SaveChanges();
                         }// if not null
-                        Student_Resource delStuResource = db.Student_Resource.ToList().Find(s => s.Student_ID == id);
+                        List <Student_Resource> delStuResource = db.Student_Resource.ToList().FindAll(s => s.Student_ID == id);
                         if (delStuResource != null)
                         {
-                            db.Student_Resource.Remove(delStuResource);
-                            db.SaveChanges();
+                            foreach(var r in delStuResource)
+                            {
+                                db.Student_Resource.Remove(r);
+                                db.SaveChanges();
+                            }// for each
                         }// if not null
-                        Student_Lesson_Plan delStuPlan = db.Student_Lesson_Plan.ToList().Find(s => s.Student_ID == id);
+                        List <Student_Lesson_Plan> delStuPlan = db.Student_Lesson_Plan.ToList().FindAll(s => s.Student_ID == id);
                         if (delStuPlan != null)
                         {
-                            db.Student_Lesson_Plan.Remove(delStuPlan);
-                            db.SaveChanges();
+                            foreach(var l in delStuPlan)
+                            {
+                                db.Student_Lesson_Plan.Remove(l);
+                                db.SaveChanges();
+                            }// for each
                         }// if not null
                     }// students
                     if (sys_User.User_Role_ID == 2)
@@ -978,7 +1022,7 @@ namespace SkyExams.Controllers
                         db.Managers.Remove(delManager);
                         db.SaveChanges();
                     }// manager
-                    return RedirectToAction("homeScreen", new { id = loggedId });
+                    return RedirectToAction("searchScreen", new { id = loggedId });
                 }
                 else
                 {
@@ -997,10 +1041,11 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     Sys_User updateRole = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                    ViewData["role"] = db.User_Role.ToList().Find(u => u.User_Role_ID == updateRole.User_Role_ID).RoleDesc.ToLower();
                     return View(updateRole);
                 }
                 else
@@ -1112,30 +1157,64 @@ namespace SkyExams.Controllers
         }//update user role post
                 
         [HttpGet]
-        public ActionResult StudentHours(int? id)
+        public ActionResult StudentHours(int? id, string err)
         {
-            Sys_User stuHours = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
-            ViewData["userId"] = "" + id;
-            ViewData["userName"] = stuHours.FName + " " + stuHours.Surname;
-            Student stu = db.Students.ToList().Find(s => s.SysUser_ID == stuHours.SysUser_ID);
-            return View(stu);
+            try
+            {
+                if (id != null)
+                {
+                    Sys_User stuHours = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                    ViewData["userId"] = "" + id;
+                    ViewData["userName"] = stuHours.FName + " " + stuHours.Surname;
+                    ViewData["err"] = err;
+                    Student stu = db.Students.ToList().Find(s => s.SysUser_ID == stuHours.SysUser_ID);
+                    return View(stu);
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }//Update student hours Get
 
         [HttpPost]
         public ActionResult StudentHours(int? userId, int? id, int? hoursFlown)
         {
-            Student stu = db.Students.ToList().Find(s => s.SysUser_ID == id);
-            Student updateHours = stu;
-            if(hoursFlown != null)
+            try
             {
-                updateHours.Hours_Flown = hoursFlown;
-                db.Students.Remove(stu);
-                db.SaveChanges();
-                db.Students.Add(updateHours);
-                db.SaveChanges();
-            }
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                {
+                    Student stu = db.Students.ToList().Find(s => s.SysUser_ID == id);
+                    Student updateHours = stu;
+                    if (hoursFlown != null)
+                    {
+                        updateHours.Hours_Flown = hoursFlown;
+                        db.Entry(updateHours).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("StudentHours", new { id = id, err = temp });
+                    }
 
-            return RedirectToAction("viewAccount", new { id = userId });
+                    return RedirectToAction("viewAccount", new { id = userId });
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen");
+            }
+            
         }// update student hours post
 
         [HttpGet]
@@ -1143,7 +1222,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userId"] = "" + id;
                     return View(db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 1));
@@ -1165,7 +1244,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["userId"] = "" + loggedId;
                     ViewData["studentId"] = "" + id;
@@ -1192,14 +1271,14 @@ namespace SkyExams.Controllers
                 {
                     Registration_Sheet regSheet = new Registration_Sheet();
 
-                    regSheet.Sys_User_ID = Convert.ToInt32(id);
-                    regSheet.First_Name = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName;
-                    regSheet.Surname = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
-                    regSheet.Plane_Type_ID = plane;
-                    regSheet.Type_Desctription = db.Plane_Type.ToList().Find(s => s.Plane_Type_ID == plane).Type_Description;
-                    regSheet.Paid = true;
-                    db.Registration_Sheet.Add(regSheet);
-                    db.SaveChanges();
+                    //regSheet.Sys_User_ID = Convert.ToInt32(id);
+                    //regSheet.First_Name = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName;
+                    //regSheet.Surname = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
+                    //regSheet.Plane_Type_ID = plane;
+                    //regSheet.Type_Desctription = db.Plane_Type.ToList().Find(s => s.Plane_Type_ID == plane).Type_Description;
+                    //regSheet.Paid = true;
+                    //db.Registration_Sheet.Add(regSheet);
+                    //db.SaveChanges();
 
                     return RedirectToAction("viewAccount", new { id = loggedId });
                 }
@@ -1218,14 +1297,16 @@ namespace SkyExams.Controllers
         public FileResult ExportToExcel()
         {
             DataTable dt = new DataTable("Grid");
-            dt.Columns.AddRange(new DataColumn[4] { new DataColumn("First Name"),
+            dt.Columns.AddRange(new DataColumn[6] { new DataColumn("First Name"),
                                                      new DataColumn("Surname"),
-                                                     new DataColumn("Rating"),
-                                                     new DataColumn("Paid")});
+                                                     new DataColumn("Licence Number"),
+                                                     new DataColumn("Date Written"),
+                                                     new DataColumn("Exam"),
+                                                     new DataColumn("Exam Mark")});
             var regSheet = from Registration_Sheet in db.Registration_Sheet select Registration_Sheet;
             foreach (var sheet in regSheet)
             {
-                dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Type_Desctription, sheet.Paid);
+                dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Licence_No, sheet.Date_Written, sheet.Type_Desctription, sheet.Mark);
             }
 
             using (XLWorkbook wb = new XLWorkbook())

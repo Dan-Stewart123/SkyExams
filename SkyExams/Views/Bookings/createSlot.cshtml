@@ -1,11 +1,13 @@
 ﻿@model SkyExams.Models.Instructor
 @{
     ViewBag.Title = "createSlot";
+    var error = ViewData["err"];
 }
 
 <h2>Create Booking Slot</h2>
 <p>Please enter the following information:</p>
 <br />
+<label style="color:red">@error</label>
 <br />
 @using (Html.BeginForm("createSlot", "Bookings", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {

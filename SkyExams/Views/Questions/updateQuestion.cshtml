@@ -11,10 +11,12 @@
     var f1 = ViewData["false1"];
     var f2Id = ViewData["false2Id"];
     var f2 = ViewData["false2"];
+    var error = ViewData["err"];
 }
 
 <h2>Update Question and Answer</h2>
 <br />
+<label style="color:red">@error</label>
 <br />
 @using (Html.BeginForm("updateQuestion", "Questions", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -60,23 +62,9 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("questionsScreen", "Questions", new { id = uID, ratingId = rID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton"  />
     <label>Hint: Complete all the fields for the submit button to enable.</label>
 }
 
-<script>
-    function checkInput() {
-        var question = $("#question").val();
-        var sec = $("#sec").val();
-        var correct = $("#correct").val();
-        var false1 = $("#false1").val();
-        var false2 = $("#false2").val();
-        if (question != "" && sec != "" && correct != "" && false1 != "" && false2 != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
-    }
-    window.oninput = checkInput;
-
-</script>
 
 

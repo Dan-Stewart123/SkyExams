@@ -1,6 +1,7 @@
 ﻿@model SkyExams.Models.Sys_User
 @{
     ViewBag.Title = "searchScreen";
+    var error = ViewData["err"];
 }
 
 <h2>Search</h2>
@@ -10,6 +11,7 @@
         Help
     </button>
 </div>
+<label style="color:red">@error</label>
 <br />
 <p>Select a user profile to search:</p>
 <br />
@@ -37,18 +39,6 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = Model.SysUser_ID })'">
         Cancel
     </button>
-    <input type="submit" class="btn btn-primary", value="Search" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" class="btn btn-primary", value="Search" id="submitButton" />
 }
-<script>
-    function checkInput() {
-        var list = $("#list").val();
-        var name = $("#firstName").val();
-        var surname = $("#lastName").val();
-        if (list != "" && name != "" || surname != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
-    }
-    window.oninput = checkInput;
-</script>
 

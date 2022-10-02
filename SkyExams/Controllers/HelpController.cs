@@ -36,47 +36,47 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     return View(db.Sys_User.ToList().Find(s => s.SysUser_ID == id));
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// student help
 
         public ActionResult helpScreen(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     return View(db.Sys_User.ToList().Find(s => s.SysUser_ID == id));
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// general help
 
         public ActionResult viewAccountHelp(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     int role = (int)temp.User_Role_ID;
@@ -94,21 +94,21 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// view account help
 
         public ActionResult searchHelp(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     int role = (int)temp.User_Role_ID;
@@ -124,21 +124,21 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// search help
 
         public ActionResult planesHelp(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     int role = (int)temp.User_Role_ID;
@@ -154,21 +154,21 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// planes help
 
         public ActionResult lessonPlanHelp(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     int role = (int)temp.User_Role_ID;
@@ -184,21 +184,21 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// lesson plan help
 
         public ActionResult studyResourceHelp(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     int role = (int)temp.User_Role_ID;
@@ -214,21 +214,21 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// study resource help
 
         public ActionResult examHelp(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     int role = (int)temp.User_Role_ID;
@@ -244,21 +244,21 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// exam help
 
         public ActionResult consultationHelp(int? id)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     int role = (int)temp.User_Role_ID;
@@ -274,14 +274,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// consultation help
 
         // GET: Help

@@ -18,8 +18,10 @@ namespace SkyExams.Models
         public int Sys_User_ID { get; set; }
         public string First_Name { get; set; }
         public string Surname { get; set; }
+        public int Licence_No { get; set; }
+        public System.DateTime Date_Written { get; set; }
         public int Plane_Type_ID { get; set; }
         public string Type_Desctription { get; set; }
-        public bool Paid { get; set; }
+        public int Mark { get; set; }
     }
 }
