@@ -4,11 +4,14 @@
     ViewBag.Title = "Student Hours";
     var uID = ViewData["userId"];
     var uName = ViewData["userName"];
+    var error = ViewData["err"];
 }
 
 <h2>Student Hours</h2>
 
 <p>Please complete the following fields</p>
+<br />
+<label style="color:red">@error</label>
 
 @using (Html.BeginForm("StudentHours", "Sys_User", FormMethod.Post))
 {
@@ -19,7 +22,7 @@
         <input type="text" id="id" name="id" value="@Model.Student_ID">
     </div>
     <div>
-        <label>@uName</label>     
+        <label>@uName</label>
         <br />
         <label>@Model.Licence_No</label>
     </div>
@@ -30,7 +33,7 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = uID})'">
         Cancel
     </button>
-    <input type="submit" class="btn btn-primary", value="Submit" id="submitButton" />
+    <input type="submit" class="btn btn-primary" , value="Submit" id="submitButton" />
 }
 
 <script>

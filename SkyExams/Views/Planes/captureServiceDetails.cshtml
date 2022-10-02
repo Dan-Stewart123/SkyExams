@@ -2,13 +2,15 @@
 @{
     ViewBag.Title = "captureServiceDetails";
     var uID = ViewData["loggedId"];
+    var error = ViewData["err"];
 }
 
 
 <h2>Capture Service Details</h2>
 <p>Please complete the following fields</p>
-
-@using (Html.BeginForm("captureServiceDetails", "Planes", FormMethod.Post))
+<br />
+<label style="color:red">@error</label>
+@using (Html.BeginForm("captureServiceDetailsConf", "Planes", FormMethod.Post))
 {
     <div style="display:none;">
         <input type="text" id="loggedId" name="loggedId" value="@uID">
@@ -16,24 +18,15 @@
     <div style="display:none;">
         <input type="text" id="id" name="id" value="@Model.Plane_ID">
     </div>
-    <label class="col-md-3">@Html.Label("Service Details:")</label>
+    <label class="col-md-3">@Html.Label("Reason For Service:")</label>
     <input class="col-md-3" type="text" id="details" name="details">
+    <label class="col-md-3">@Html.Label("Parts Used:")</label>
+    <input class="col-md-3" type="text" id="parts" name="parts" style="height:200px">
     <br />
     <br />
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" />
 }
 
-<script>
-    function checkInput() {
-        var details = $("#details").val();
-        if (details != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
-    }
-    window.oninput = checkInput;
-
-</script>

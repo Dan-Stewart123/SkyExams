@@ -2,11 +2,13 @@
 @{
     ViewBag.Title = "updatePlaneHours";
     var uID = ViewData["loggedId"];
+    var error = ViewData["err"];
 }
 
 <h2>Update Plane Hours</h2>
 <p>Please complete the following fields</p>
-
+<br />
+<label style="color:red">@error</label>
 @using (Html.BeginForm("updatePlaneHours", "Planes", FormMethod.Post))
 {
     <div style="display:none;">
@@ -22,17 +24,7 @@
     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("planeTypeScreen", "Planes", new { id = uID, typeId = Model.Plane_Type_ID })'">
         Cancel
     </button>
-    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" disabled />
-    <label>Hint: Complete all the fields for the submit button to enable.</label>
+    <input type="submit" , class="btn btn-primary" value="Submit" id="submitButton" />
 }
 
-<script>
-    function checkInput() {
-        var flown = $("#hoursFlown").val();
-        if (flown != "") {
-            document.getElementById("submitButton").disabled = false;
-        }// no input
-    }
-    window.oninput = checkInput;
 
-</script>

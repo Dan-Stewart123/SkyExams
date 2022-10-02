@@ -60,6 +60,7 @@ namespace SkyExams.Models
         public virtual DbSet<Student_Resource> Student_Resource { get; set; }
         public virtual DbSet<Study_Resource> Study_Resource { get; set; }
         public virtual DbSet<Sys_User> Sys_User { get; set; }
+        public virtual DbSet<Timer> Timers { get; set; }
         public virtual DbSet<Title> Titles { get; set; }
         public virtual DbSet<uEvent> uEvents { get; set; }
         public virtual DbSet<User_Event> User_Event { get; set; }

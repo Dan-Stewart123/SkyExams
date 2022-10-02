@@ -344,6 +344,9 @@
     <Compile Include="Models\Sys_User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Timer.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Title.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -385,6 +388,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Cessna172.JPEG" />
     <Content Include="Content\fts_logo.jpeg" />
+    <Content Include="Content\fts_video.mp4" />
     <Content Include="Content\homeImage.jpeg" />
     <Content Include="Content\rg.JPEG" />
     <Content Include="Content\SkyExamsEdited-removebg-preview %281%29.png" />

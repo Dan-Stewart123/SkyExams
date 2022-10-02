@@ -26,7 +26,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -54,12 +54,12 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// exam screen
@@ -76,7 +76,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || ratingId != null)
                 {
                     List<Student_Exam> stuExam = db.Student_Exam.ToList().FindAll(e => e.Exam_ID == ratingId);
                     int stuId = db.Students.ToList().Find(s => s.SysUser_ID == id).Student_ID;
@@ -93,12 +93,12 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }
@@ -117,26 +117,27 @@ namespace SkyExams.Controllers
             }
         }// student check
 
-        public ActionResult questionsScreen(int? id, int? ratingId)
+        public ActionResult questionsScreen(int? id, int? ratingId, string message)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || ratingId != null)
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = "" + ratingId;
                     ViewData["Exam"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == ratingId).Type_Description;
+                    ViewData["message"] = message;
                     List<Question> questionList = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
                     return View(questionList);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// questions screen
@@ -145,7 +146,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || questionId != null)
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question_Rating_ID;
@@ -155,35 +156,37 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// answer screen
 
         [HttpGet]
-        public ActionResult createQuestion(int? id, int? ratingId)
+        public ActionResult createQuestion(int? id, int? ratingId, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || ratingId != null)
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = "" + ratingId;
+                    ViewData["err"] = err;
                     return View(db.Sections.ToList());
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
-            catch
+            catch(NullReferenceException e)
             {
-                return RedirectToAction("loginScreen");
+                ViewData["err"] = e;
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// create question get
@@ -197,14 +200,15 @@ namespace SkyExams.Controllers
                 {
                     if (question == "" || correct == "" || false1 == "" || false2 == "")
                     {
-                        return RedirectToAction("createQuestion", new { id = id, ratingId = ratingId });
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("createQuestion", new { id = id, ratingId = ratingId, err = temp });
                     }// if statement
                     else
                     {
-                        int qID = db.Questions.ToList().Count + 2;
-                        int aID = db.Answers.ToList().Count + 2;
+                        //int qID = db.Questions.ToList().Count + 2;
+                        //int aID = db.Answers.ToList().Count + 2;
                         Question newQ = new Question();
-                        newQ.Question_ID = qID;
+                        //newQ.Question_ID = qID;
                         newQ.Question1 = question;
                         newQ.Section_ID = sec;
                         newQ.Question_Rating_ID = Convert.ToInt32(ratingId);
@@ -212,7 +216,7 @@ namespace SkyExams.Controllers
                         db.SaveChanges();
 
                         Answer correctAns = new Answer();
-                        correctAns.Answer_ID = aID;
+                        //correctAns.Answer_ID = aID;
                         correctAns.ANS = correct;
                         correctAns.Question_ID = newQ.Question_ID;
                         correctAns.Correct_Answer = true;
@@ -220,7 +224,7 @@ namespace SkyExams.Controllers
                         db.SaveChanges();
 
                         Answer falseAns1 = new Answer();
-                        falseAns1.Answer_ID = aID + 1;
+                        //falseAns1.Answer_ID = aID + 1;
                         falseAns1.ANS = false1;
                         falseAns1.Question_ID = newQ.Question_ID;
                         falseAns1.Correct_Answer = false;
@@ -228,7 +232,7 @@ namespace SkyExams.Controllers
                         db.SaveChanges();
 
                         Answer falseAns2 = new Answer();
-                        falseAns2.Answer_ID = aID + 2;
+                        //falseAns2.Answer_ID = aID + 2;
                         falseAns2.ANS = false2;
                         falseAns2.Question_ID = newQ.Question_ID;
                         falseAns2.Correct_Answer = false;
@@ -251,24 +255,25 @@ namespace SkyExams.Controllers
         }// create question post
 
         [HttpGet]
-        public ActionResult addLoadSheet(int? id, int? ratingId)
+        public ActionResult addLoadSheet(int? id, int? ratingId, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || ratingId != null)
                 {
                     ViewData["ratingId"] = "" + ratingId;
+                    ViewData["err"] = err;
                     Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                     return View(tempUser);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// add load sheet get
@@ -282,7 +287,8 @@ namespace SkyExams.Controllers
                 {
                     if (loadSheet == null)
                     {
-                        return RedirectToAction("addLoadSheet", new { id = id, ratingId = ratingId });
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("addLoadSheet", new { id = id, ratingId = ratingId, err = temp });
                     }// if fields are empty
                     else
                     {
@@ -350,24 +356,26 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || ratingId != null)
                 {
                     Load_Sheet delSheet = db.Load_Sheet.ToList().Find(l => l.Exam_ID == ratingId);
+                    string temp = "No loadsheet found.";
                     if(delSheet != null)
                     {
                         db.Load_Sheet.Remove(delSheet);
                         db.SaveChanges();
+                        temp = "Loadsheet deleted successfully.";
                     }// if statement
-                    return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
+                    return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId, message = temp });
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// delete load sheet
@@ -377,7 +385,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || questionId != null)
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question_Rating_ID;
@@ -387,12 +395,12 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// delete question get
@@ -427,11 +435,11 @@ namespace SkyExams.Controllers
         }// delete question conformation
 
         [HttpGet]
-        public ActionResult updateQuestion(int? id, int? questionId)
+        public ActionResult updateQuestion(int? id, int? questionId, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || questionId != null)
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["questionId"] = "" + questionId;
@@ -445,16 +453,17 @@ namespace SkyExams.Controllers
                     ViewData["false1"] = db.Answers.ToList().Find(a => a.Answer_ID == correctAns.Answer_ID + 1).ANS;
                     ViewData["false2Id"] = db.Answers.ToList().Find(a => a.Answer_ID == correctAns.Answer_ID + 2).Answer_ID;
                     ViewData["false2"] = db.Answers.ToList().Find(a => a.Answer_ID == correctAns.Answer_ID + 2).ANS;
+                    ViewData["err"] = err;
                     return View(db.Sections.ToList());
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// update question get
@@ -466,49 +475,57 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    Question oldQuestion = db.Questions.ToList().Find(q => q.Question_ID == questionId);
-                    Question newQuestion = new Question();
-                    newQuestion.Question_ID = oldQuestion.Question_ID;
-                    newQuestion.Question1 = question;
-                    newQuestion.Section_ID = sec;
-                    newQuestion.Question_Rating_ID = Convert.ToInt32(ratingId);
-                    db.Questions.Remove(oldQuestion);
-                    db.SaveChanges();
-                    db.Questions.Add(newQuestion);
-                    db.SaveChanges();
+                    if (question == "" || correct == "" || false1 == "" || false2 == "")
+                    {
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("updateQuestion", new { id = id, ratingId = ratingId, err = temp });
+                    }// if statement
+                    else
+                    {
+                        Question oldQuestion = db.Questions.ToList().Find(q => q.Question_ID == questionId);
+                        Question newQuestion = new Question();
+                        //newQuestion.Question_ID = oldQuestion.Question_ID;
+                        newQuestion.Question1 = question;
+                        newQuestion.Section_ID = sec;
+                        newQuestion.Question_Rating_ID = Convert.ToInt32(ratingId);
+                        db.Questions.Remove(oldQuestion);
+                        db.SaveChanges();
+                        db.Questions.Add(newQuestion);
+                        db.SaveChanges();
 
-                    Answer oldCorrect = db.Answers.ToList().Find(a => a.Answer_ID == correctAnsId);
-                    Answer newCorrect = new Answer();
-                    newCorrect.Answer_ID = oldCorrect.Answer_ID;
-                    newCorrect.ANS = correct;
-                    newCorrect.Question_ID = newQuestion.Question_ID;
-                    newCorrect.Correct_Answer = true;
-                    db.Answers.Remove(oldCorrect);
-                    db.SaveChanges();
-                    db.Answers.Add(newCorrect);
-                    db.SaveChanges();
+                        Answer oldCorrect = db.Answers.ToList().Find(a => a.Answer_ID == correctAnsId);
+                        Answer newCorrect = new Answer();
+                        //newCorrect.Answer_ID = oldCorrect.Answer_ID;
+                        newCorrect.ANS = correct;
+                        newCorrect.Question_ID = newQuestion.Question_ID;
+                        newCorrect.Correct_Answer = true;
+                        db.Answers.Remove(oldCorrect);
+                        db.SaveChanges();
+                        db.Answers.Add(newCorrect);
+                        db.SaveChanges();
 
-                    Answer oldFalse1 = db.Answers.ToList().Find(a => a.Answer_ID == false1Id);
-                    Answer newFalse1 = new Answer();
-                    newFalse1.Answer_ID = oldFalse1.Answer_ID;
-                    newFalse1.ANS = false1;
-                    newFalse1.Question_ID = newQuestion.Question_ID;
-                    newFalse1.Correct_Answer = false;
-                    db.Answers.Remove(oldFalse1);
-                    db.SaveChanges();
-                    db.Answers.Add(newFalse1);
-                    db.SaveChanges();
+                        Answer oldFalse1 = db.Answers.ToList().Find(a => a.Answer_ID == false1Id);
+                        Answer newFalse1 = new Answer();
+                        //newFalse1.Answer_ID = oldFalse1.Answer_ID;
+                        newFalse1.ANS = false1;
+                        newFalse1.Question_ID = newQuestion.Question_ID;
+                        newFalse1.Correct_Answer = false;
+                        db.Answers.Remove(oldFalse1);
+                        db.SaveChanges();
+                        db.Answers.Add(newFalse1);
+                        db.SaveChanges();
 
-                    Answer oldFalse2 = db.Answers.ToList().Find(a => a.Answer_ID == false2Id);
-                    Answer newFalse2 = new Answer();
-                    newFalse2.Answer_ID = oldFalse2.Answer_ID;
-                    newFalse2.ANS = false2;
-                    newFalse2.Question_ID = newQuestion.Question_ID;
-                    newFalse2.Correct_Answer = false;
-                    db.Answers.Remove(oldFalse2);
-                    db.SaveChanges();
-                    db.Answers.Add(newFalse2);
-                    db.SaveChanges();
+                        Answer oldFalse2 = db.Answers.ToList().Find(a => a.Answer_ID == false2Id);
+                        Answer newFalse2 = new Answer();
+                        //newFalse2.Answer_ID = oldFalse2.Answer_ID;
+                        newFalse2.ANS = false2;
+                        newFalse2.Question_ID = newQuestion.Question_ID;
+                        newFalse2.Correct_Answer = false;
+                        db.Answers.Remove(oldFalse2);
+                        db.SaveChanges();
+                        db.Answers.Add(newFalse2);
+                        db.SaveChanges();
+                    }
 
                     return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
                 }
@@ -529,7 +546,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || ratingId != null)
                 {
                     Student_Exam stuExam = db.Student_Exam.ToList().Find(s => s.Student_ID == id && s.Exam_ID == ratingId);
                     if (stuExam.Started == true && stuExam.Completed == false)
@@ -663,12 +680,12 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
             
@@ -755,6 +772,18 @@ namespace SkyExams.Controllers
                     db.Exam_Average.Add(newAverage);
                     db.SaveChanges();
 
+                    Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == Convert.ToInt32(id));
+                    Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == tempUser.SysUser_ID);
+
+                    Registration_Sheet newSheet = new Registration_Sheet();
+                    newSheet.Sys_User_ID = (int)id;
+                    newSheet.First_Name = tempUser.FName;
+                    newSheet.Surname = tempUser.Surname;
+                    newSheet.Licence_No = tempStu.Licence_No;
+                    newSheet.Plane_Type_ID = (int)ratingId;
+                    newSheet.Type_Desctription = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == Convert.ToInt32(ratingId)).Type_Description;
+                    newSheet.Mark = finalGrade;
+
                     return Json(new { result = finalResultQuiz }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -787,7 +816,7 @@ namespace SkyExams.Controllers
                             try
                             {
                                 Save_Exam tempSave = new Save_Exam();
-                                tempSave.Save_Exam_ID = sExam[count].Save_Exam_ID + 1;
+                                //tempSave.Save_Exam_ID = sExam[count].Save_Exam_ID + 1;
                                 tempSave.QuestionID = ans.QuestionID;
                                 tempSave.AnswerID = ans.AnswerID;
                                 tempSave.Student_Exam_ID = stuExam.Stu_Exam;
@@ -800,7 +829,7 @@ namespace SkyExams.Controllers
                             catch
                             {
                                 Save_Exam tempSave = new Save_Exam();
-                                tempSave.Save_Exam_ID = sExam.Count + 3;
+                                //tempSave.Save_Exam_ID = sExam.Count + 3;
                                 tempSave.QuestionID = ans.QuestionID;
                                 tempSave.AnswerID = ans.AnswerID;
                                 tempSave.Student_Exam_ID = stuExam.Stu_Exam;

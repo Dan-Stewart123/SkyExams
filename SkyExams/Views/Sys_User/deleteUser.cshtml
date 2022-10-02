@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "deleteUser";
     var uID = ViewData["loggedId"];
+    var role = ViewData["role"];
 }
 
 
@@ -71,8 +72,8 @@
     </dd>
 
 </dl>
-<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("homeScreen", "Sys_User", new { id = uID })'">
-    Home
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("searchResultsScreen", "Sys_User", new { id = uID, firstName = Model.FName, surname = Model.Surname, list = role })'">
+    Back
 </button>
 <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deleteConformation", "Sys_User", new { loggedId = uID, id = Model.SysUser_ID })'">
     Delete

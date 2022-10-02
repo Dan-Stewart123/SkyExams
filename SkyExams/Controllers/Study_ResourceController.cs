@@ -24,7 +24,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null)
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -35,14 +35,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// returns resource screen
 
         public FileContentResult getImg(int id)
@@ -57,7 +57,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || typeId != null)
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User user = db.Sys_User.Find(id);
@@ -95,14 +95,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// theme screen
 
         [HttpGet]
@@ -113,26 +113,27 @@ namespace SkyExams.Controllers
             return File(file, "application/pdf");
         }// download file
 
-        public ActionResult addResource(int? id, int? themeId)
+        public ActionResult addResource(int? id, int? themeId, string err)
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (id != null || themeId != null)
                 {
                     ViewData["themeID"] = "" + themeId;
+                    ViewData["err"] = err;
                     Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(user);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// add resource screen
 
         [HttpPost]
@@ -145,13 +146,14 @@ namespace SkyExams.Controllers
                     List<Study_Resource> resourceList = db.Study_Resource.ToList();
                     if (name == "" || resource == null)
                     {
-                        return RedirectToAction("addResource", new { id = id, themeId = themeId });
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("addResource", new { id = id, themeId = themeId, err = temp });
                     }// if fields are empty
                     else
                     {
-                        int resourceId = resourceList.Count + 2;
+                        //int resourceId = resourceList.Count + 2;
                         Study_Resource newResource = new Study_Resource();
-                        newResource.Study_Resource_ID = resourceId;
+                        //newResource.Study_Resource_ID = resourceId;
                         newResource.Resource_Name = name;
                         int theme = Convert.ToInt32(themeId);
                         newResource.Rating_ID = theme;
@@ -161,9 +163,16 @@ namespace SkyExams.Controllers
                         Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
                         newResource.Resources = fileDetails;
 
-                        db.Study_Resource.Add(newResource);
-                        db.SaveChanges();
-
+                        string ext = Path.GetExtension(resource.FileName).ToUpper();
+                        if(ext == ".PDF")
+                        {
+                            db.Study_Resource.Add(newResource);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            // error message
+                        }
                         return RedirectToAction("resourceScreen", new { id = id });
                     }// else
                 }
@@ -183,7 +192,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
+                if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     Study_Resource delResource = db.Study_Resource.ToList().Find(p => p.Study_Resource_ID == id);
@@ -192,14 +201,14 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
-            
+
         }// delete Resource
 
         public ActionResult deleteResourceConformation(int? loggedId, int? id)
@@ -211,12 +220,15 @@ namespace SkyExams.Controllers
                     Study_Resource delResource = db.Study_Resource.Find(id);
                     db.Study_Resource.Remove(delResource);
                     db.SaveChanges();
-                    Student_Resource delStuResource = db.Student_Resource.ToList().Find(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
+                    List <Student_Resource> delStuResource = db.Student_Resource.ToList().FindAll(r => r.Study_Resource_ID == delResource.Study_Resource_ID);
                     if (delStuResource != null)
                     {
-                        db.Student_Resource.Remove(delStuResource);
-                        db.SaveChanges();
-                    }
+                        foreach(var s in delStuResource)
+                        {
+                            db.Student_Resource.Remove(s);
+                            db.SaveChanges();
+                        }// for each
+                    }// if statement
                     return RedirectToAction("resourceScreen", new { id = loggedId });
                 }
                 else
