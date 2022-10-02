@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5ab37ed3e5c6403ca72ea5c12c91852b" Name="Diagram1">
+        <EntityTypeShape EntityType="masterModel.Country" Width="1.5" PointX="5.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.CUSTOMER" Width="1.5" PointX="9.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.Game_Session" Width="1.5" PointX="10" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.Indicator" Width="1.5" PointX="5.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.INVOICE_LINE" Width="1.5" PointX="10.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.INVOICE" Width="1.5" PointX="11.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.ITEM" Width="1.5" PointX="9.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.Map" Width="1.5" PointX="7.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.OFFICE" Width="1.5" PointX="11.75" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.OWNER" Width="1.5" PointX="12.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.Player" Width="1.5" PointX="12.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.PROPERTY" Width="1.5" PointX="5.75" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.RESIDENT" Width="1.5" PointX="13.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.SALES_REP" Width="1.5" PointX="13.75" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.SERVICE_CATEGORY" Width="1.5" PointX="14.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.SERVICE_REQUEST" Width="1.5" PointX="14.75" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.brand" Width="1.5" PointX="1.5" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.category" Width="1.5" PointX="1.5" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.product" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.stock" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.customer1" Width="1.5" PointX="3" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.order_items" Width="1.5" PointX="7.5" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.order" Width="1.5" PointX="5.25" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.staff" Width="1.5" PointX="3" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.store" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.MSreplication_options" Width="1.5" PointX="7.75" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.spt_fallback_db" Width="1.5" PointX="9.75" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.spt_fallback_dev" Width="1.5" PointX="11.75" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.spt_fallback_usg" Width="1.5" PointX="13.75" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.spt_monitor" Width="1.5" PointX="15.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.YearlyData" Width="1.5" PointX="8" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="masterModel.spt_values" Width="1.5" PointX="15.75" PointY="12.125" IsExpanded="true" />
+        <AssociationConnector Association="masterModel.FK__YearlyDat__count__4EA8A765" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__YearlyDat__count__536D5C82" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__Game_Sess__Map_N__16644E42" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__YearlyDat__indic__4F9CCB9E" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__YearlyDat__indic__546180BB" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__products__brand___70099B30" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__products__catego__70FDBF69" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__order_ite__produ__74CE504D" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__stocks__product___71F1E3A2" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__stocks__store_id__72E607DB" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__orders__customer__75C27486" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__order_ite__order__73DA2C14" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__orders__staff_id__0ABD916C" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__orders__staff_id__76B698BF" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__orders__store_id__77AABCF8" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__staffs__manager___0CA5D9DE" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__staffs__manager___789EE131" ManuallyRouted="false" />
+        <AssociationConnector Association="masterModel.FK__staffs__store_id__7993056A" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

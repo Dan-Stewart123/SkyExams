@@ -5,6 +5,7 @@
     var uID = ViewData["loggedId"];
     var updateID = Model.SysUser_ID;
     var role = ViewData["role"];
+    var time = ViewData["time"];
 }
 
 <h2>Update User Role</h2>
@@ -112,5 +113,5 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>

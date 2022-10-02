@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "bookingsScreen";
     var uID = ViewData["uID"];
+    var time = ViewData["time"];
 }
 
 <h2>Bookings</h2>
@@ -54,5 +55,5 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>

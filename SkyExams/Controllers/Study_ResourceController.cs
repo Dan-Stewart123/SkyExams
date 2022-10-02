@@ -29,6 +29,7 @@ namespace SkyExams.Controllers
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> planeTypes = db.Plane_Type.ToList();
 
                     return View(planeTypes);
@@ -62,6 +63,7 @@ namespace SkyExams.Controllers
                     ViewData["userID"] = "" + id;
                     Sys_User user = db.Sys_User.Find(id);
                     ViewData["userRole"] = "" + user.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     int userRole = Convert.ToInt32(user.User_Role_ID);
                     List<Study_Resource> resourceList = new List<Study_Resource>();
                     if (userRole == 1)
@@ -121,6 +123,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["themeID"] = "" + themeId;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     return View(user);
                 }
@@ -171,7 +174,8 @@ namespace SkyExams.Controllers
                         }
                         else
                         {
-                            // error message
+                            string temp = "Hint: Upload a PDF.";
+                            return RedirectToAction("addResource", new { id = id, themeId = themeId, err = temp });
                         }
                         return RedirectToAction("resourceScreen", new { id = id });
                     }// else
@@ -197,6 +201,7 @@ namespace SkyExams.Controllers
                     ViewData["loggedId"] = "" + loggedId;
                     Study_Resource delResource = db.Study_Resource.ToList().Find(p => p.Study_Resource_ID == id);
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delResource.Rating_ID).Type_Description;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(delResource);
                 }
                 else

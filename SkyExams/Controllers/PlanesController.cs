@@ -34,6 +34,7 @@ namespace SkyExams.Controllers
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> planeTypes = db.Plane_Type.ToList();
 
                     return View(planeTypes);
@@ -66,6 +67,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["userID"] = "" + id;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> typeList = db.Plane_Type.ToList();
                     return View(typeList);
                 }
@@ -135,6 +137,7 @@ namespace SkyExams.Controllers
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
                     List<Plane> planeList = new List<Plane>();
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == typeId).Type_Description;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     planeList = db.Planes.ToList().FindAll(p => p.Plane_Type_ID == typeId);
                     return View(planeList);
                 }
@@ -160,6 +163,7 @@ namespace SkyExams.Controllers
                     //ViewData["planeType"] = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     Plane delPlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlane.Plane_Type_ID).Type_Description;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(delPlane);
                 }
                 else
@@ -215,6 +219,7 @@ namespace SkyExams.Controllers
                     ViewData["loggedId"] = "" + loggedId;
                     Plane updatePlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(updatePlane);
                 }
                 else
@@ -298,6 +303,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Plane updatePlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     return View(updatePlane);
                 }
@@ -482,6 +488,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Plane updatePlane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     return View(updatePlane);
                 }
@@ -577,6 +584,7 @@ namespace SkyExams.Controllers
                 {
                     Sys_User user = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(user);
                 }
                 else
@@ -660,6 +668,7 @@ namespace SkyExams.Controllers
                 if (loggedId != null || id != null)
                 {
                     ViewData["loggedId"] = "" + loggedId;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Plane_Type delPlane = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == id);
                     return View(delPlane);
                 }
@@ -817,6 +826,7 @@ namespace SkyExams.Controllers
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     ViewData["err"] = err;
+                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Plane_Type plane_Type = db.Plane_Type.Find(id);
                     return View(plane_Type);
                 }

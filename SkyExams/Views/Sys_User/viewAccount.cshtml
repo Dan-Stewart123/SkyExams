@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Account";
+    var time = ViewData["time"];
+    var restoreMessage = ViewData["msg"];
 }
 
 <h2>Account Details</h2>
@@ -102,6 +104,34 @@
     </button>
     <br />
     <br />
+
+    <button type="button" id="timer" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("TimerView", "Sys_User", new { id = Model.SysUser_ID })'">
+        Adjust timer
+    </button>
+
+    <br />
+    <br />
+
+    <button type="button" id="btnBackup" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("BtnBackup_Click", "Sys_User", new { loggedId = Model.SysUser_ID })'">
+        Backup database
+    </button>
+
+    <br />
+    <br />
+
+    <button type="button" id="btnRestore" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("BtnRestore_Click", "Sys_User", new { loggedId = Model.SysUser_ID })'">
+        Restore database
+    </button>
+
+    <br />
+    <br />
+
+    <label>
+        @restoreMessage
+    </label>
+    <br />
+    <br />
+
 </div>
 <button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("resetPassword", "Sys_User", new { id = Model.SysUser_ID })'">
     Reset Password
@@ -146,6 +176,6 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>
 

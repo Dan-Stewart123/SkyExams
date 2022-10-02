@@ -1,0 +1,38 @@
+﻿@model SkyExams.Models.Timer
+
+@{
+    ViewBag.Title = "TimerView";
+    var uID = ViewData["userId"];
+    var error = ViewData["error"];
+    var time = ViewData["time"];
+}
+
+<h2>Adjust system timer</h2>
+<br />
+<br />
+<p>Please complete the following fields</p>
+<br />
+<label style="color:red">@error</label>
+
+@using (Html.BeginForm("TimerView", "Sys_User", FormMethod.Post))
+{
+    <div style="display:none;">
+        <input type="text" id="userId" name="userId" value="@uID">
+    </div>
+    <label class="col-md-3">@Html.Label("Time before logout(minutes):")</label>
+    <input class="col-md-3" type="number" id="time" name="time" value="@Model.Timer_Value">
+    <br />
+    <br />
+    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("viewAccount", "Sys_User", new { id = uID})'">
+        Cancel
+    </button>
+    <input type="submit" class="btn btn-primary" , value="Submit" id="submitButton" />
+}
+
+<script>
+    function timer() {
+        window.location.href = '/Sys_User/loginScreen';
+    }
+    window.oninput = setTimeout(timer, @time);
+</script>
+

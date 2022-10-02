@@ -6,6 +6,7 @@
     var rID = ViewData["ratingId"];
     var ex = ViewData["Exam"];
     var message = ViewData["message"];
+    var time = ViewData["time"];
 }
 
 <h2>Questions:</h2>
@@ -72,7 +73,7 @@
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }
-    window.oninput = setTimeout(timer, 300000);
+    window.oninput = setTimeout(timer, @time);
 </script>
 
 

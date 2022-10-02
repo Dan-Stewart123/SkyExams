@@ -19,10 +19,25 @@ namespace SkyExams.Controllers
 
         public ActionResult Index(int? id)
         {
-            Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == Convert.ToInt32(id));
-            ViewData["userId"] = "" + tempUser.SysUser_ID;
-            ViewData["role"] = "" + tempUser.User_Role_ID;
-            return View();
+            try
+            {
+                if (id != null)
+                {
+                    Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == Convert.ToInt32(id));
+                    ViewData["userId"] = "" + tempUser.SysUser_ID;
+                    ViewData["role"] = "" + tempUser.User_Role_ID;
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("loginScreen", "Sys_User");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("loginScreen", "Sys_User");
+            }
+
         }
 
         public JsonResult GetEvents()

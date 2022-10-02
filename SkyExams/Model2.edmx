@@ -1,0 +1,2020 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="masterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Countries">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Country_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Country_Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CUSTOMER">
+          <Key>
+            <PropertyRef Name="CUST_ID" />
+          </Key>
+          <Property Name="CUST_ID" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="varchar" MaxLength="20" />
+          <Property Name="LAST_NAME" Type="varchar" MaxLength="20" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="20" />
+          <Property Name="CITY" Type="varchar" MaxLength="15" />
+          <Property Name="STATE" Type="char" MaxLength="2" />
+          <Property Name="POSTAL" Type="char" MaxLength="5" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="30" />
+          <Property Name="BALANCE" Type="decimal" Precision="7" Scale="2" />
+          <Property Name="CREDIT_LIMIT" Type="decimal" Precision="7" Scale="2" />
+          <Property Name="REP_ID" Type="char" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="Game_Session">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Map_Number" Type="int" />
+          <Property Name="Start_Day" Type="date" Nullable="false" />
+          <Property Name="End_Day" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Indicators">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SeriesName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="SeriesCode" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="INVOICE_LINE">
+          <Key>
+            <PropertyRef Name="INVOICE_NUM" />
+            <PropertyRef Name="ITEM_ID" />
+          </Key>
+          <Property Name="INVOICE_NUM" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="ITEM_ID" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="QUANTITY" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="QUOTED_PRICE" Type="decimal" Precision="7" Scale="2" />
+        </EntityType>
+        <EntityType Name="INVOICES">
+          <Key>
+            <PropertyRef Name="INVOICE_NUM" />
+          </Key>
+          <Property Name="INVOICE_NUM" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="INVOICE_DATE" Type="date" />
+          <Property Name="CUST_ID" Type="varchar" MaxLength="3" />
+        </EntityType>
+        <EntityType Name="ITEM">
+          <Key>
+            <PropertyRef Name="ITEM_ID" />
+          </Key>
+          <Property Name="ITEM_ID" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="varchar" MaxLength="30" />
+          <Property Name="ON_HAND" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="CATEGORY" Type="char" MaxLength="3" />
+          <Property Name="LOCATION" Type="char" MaxLength="1" />
+          <Property Name="PRICE" Type="decimal" Precision="7" Scale="2" />
+        </EntityType>
+        <EntityType Name="Map">
+          <Key>
+            <PropertyRef Name="Map_Number" />
+          </Key>
+          <Property Name="Map_Number" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Map_Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'master.dbo.MSreplication_options' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MSreplication_options">
+          <Key>
+            <PropertyRef Name="optname" />
+            <PropertyRef Name="value" />
+            <PropertyRef Name="major_version" />
+            <PropertyRef Name="minor_version" />
+            <PropertyRef Name="revision" />
+            <PropertyRef Name="install_failures" />
+          </Key>
+          <Property Name="optname" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="value" Type="bit" Nullable="false" />
+          <Property Name="major_version" Type="int" Nullable="false" />
+          <Property Name="minor_version" Type="int" Nullable="false" />
+          <Property Name="revision" Type="int" Nullable="false" />
+          <Property Name="install_failures" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OFFICE">
+          <Key>
+            <PropertyRef Name="OFFICE_NUM" />
+          </Key>
+          <Property Name="OFFICE_NUM" Type="tinyint" Nullable="false" />
+          <Property Name="OFFICE_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="AREA" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CITY" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="STATE" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="ZIP_CODE" Type="char" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OWNER">
+          <Key>
+            <PropertyRef Name="OWNER_NUM" />
+          </Key>
+          <Property Name="OWNER_NUM" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="LAST_NAME" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="CITY" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="STATE" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="ZIP_CODE" Type="char" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="Player_Rank" />
+          </Key>
+          <Property Name="Player_Rank" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Player_Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PROPERTY">
+          <Key>
+            <PropertyRef Name="PROPERTY_ID" />
+          </Key>
+          <Property Name="PROPERTY_ID" Type="smallint" Nullable="false" />
+          <Property Name="OFFICE_NUM" Type="tinyint" Nullable="false" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="SQR_FT" Type="smallint" Nullable="false" />
+          <Property Name="BDRMS" Type="tinyint" Nullable="false" />
+          <Property Name="FLOORS" Type="tinyint" Nullable="false" />
+          <Property Name="MONTHLY_RENT" Type="smallint" />
+          <Property Name="OWNER_NUM" Type="char" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RESIDENTS">
+          <Key>
+            <PropertyRef Name="RESIDENT_ID" />
+          </Key>
+          <Property Name="RESIDENT_ID" Type="smallint" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="SURNAME" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="PROPERTY_ID" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SALES_REP">
+          <Key>
+            <PropertyRef Name="REP_ID" />
+          </Key>
+          <Property Name="REP_ID" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="varchar" MaxLength="20" />
+          <Property Name="LAST_NAME" Type="varchar" MaxLength="20" />
+          <Property Name="ADDRESS" Type="varchar" MaxLength="20" />
+          <Property Name="CITY" Type="varchar" MaxLength="15" />
+          <Property Name="STATE" Type="char" MaxLength="2" />
+          <Property Name="POSTAL" Type="char" MaxLength="5" />
+          <Property Name="CELL_PHONE" Type="char" MaxLength="12" />
+          <Property Name="COMMISSION" Type="decimal" Precision="7" Scale="2" />
+          <Property Name="RATE" Type="decimal" Precision="3" Scale="2" />
+        </EntityType>
+        <EntityType Name="SERVICE_CATEGORY">
+          <Key>
+            <PropertyRef Name="CATEGORY_NUM" />
+          </Key>
+          <Property Name="CATEGORY_NUM" Type="tinyint" Nullable="false" />
+          <Property Name="CATEGORY_DESCRIPTION" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SERVICE_REQUEST">
+          <Key>
+            <PropertyRef Name="SERVICE_ID" />
+          </Key>
+          <Property Name="SERVICE_ID" Type="smallint" Nullable="false" />
+          <Property Name="PROPERTY_ID" Type="smallint" Nullable="false" />
+          <Property Name="CATEGORY_NUMBER" Type="tinyint" Nullable="false" />
+          <Property Name="OFFICE_ID" Type="tinyint" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="STATUS" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="EST_HOURS" Type="tinyint" Nullable="false" />
+          <Property Name="SPENT_HOURS" Type="tinyint" Nullable="false" />
+          <Property Name="NEXT_SERVICE_DATE" Type="date" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'master.dbo.spt_fallback_db' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="spt_fallback_db">
+          <Key>
+            <PropertyRef Name="xserver_name" />
+            <PropertyRef Name="xdttm_ins" />
+            <PropertyRef Name="xdttm_last_ins_upd" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="dbid" />
+            <PropertyRef Name="status" />
+            <PropertyRef Name="version" />
+          </Key>
+          <Property Name="xserver_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="xdttm_ins" Type="datetime" Nullable="false" />
+          <Property Name="xdttm_last_ins_upd" Type="datetime" Nullable="false" />
+          <Property Name="xfallback_dbid" Type="smallint" />
+          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="dbid" Type="smallint" Nullable="false" />
+          <Property Name="status" Type="smallint" Nullable="false" />
+          <Property Name="version" Type="smallint" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'master.dbo.spt_fallback_dev' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="spt_fallback_dev">
+          <Key>
+            <PropertyRef Name="xserver_name" />
+            <PropertyRef Name="xdttm_ins" />
+            <PropertyRef Name="xdttm_last_ins_upd" />
+            <PropertyRef Name="low" />
+            <PropertyRef Name="high" />
+            <PropertyRef Name="status" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="phyname" />
+          </Key>
+          <Property Name="xserver_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="xdttm_ins" Type="datetime" Nullable="false" />
+          <Property Name="xdttm_last_ins_upd" Type="datetime" Nullable="false" />
+          <Property Name="xfallback_low" Type="int" />
+          <Property Name="xfallback_drive" Type="char" MaxLength="2" />
+          <Property Name="low" Type="int" Nullable="false" />
+          <Property Name="high" Type="int" Nullable="false" />
+          <Property Name="status" Type="smallint" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="phyname" Type="varchar" MaxLength="127" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'master.dbo.spt_fallback_usg' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="spt_fallback_usg">
+          <Key>
+            <PropertyRef Name="xserver_name" />
+            <PropertyRef Name="xdttm_ins" />
+            <PropertyRef Name="xdttm_last_ins_upd" />
+            <PropertyRef Name="dbid" />
+            <PropertyRef Name="segmap" />
+            <PropertyRef Name="lstart" />
+            <PropertyRef Name="sizepg" />
+            <PropertyRef Name="vstart" />
+          </Key>
+          <Property Name="xserver_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="xdttm_ins" Type="datetime" Nullable="false" />
+          <Property Name="xdttm_last_ins_upd" Type="datetime" Nullable="false" />
+          <Property Name="xfallback_vstart" Type="int" />
+          <Property Name="dbid" Type="smallint" Nullable="false" />
+          <Property Name="segmap" Type="int" Nullable="false" />
+          <Property Name="lstart" Type="int" Nullable="false" />
+          <Property Name="sizepg" Type="int" Nullable="false" />
+          <Property Name="vstart" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'master.dbo.spt_monitor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="spt_monitor">
+          <Key>
+            <PropertyRef Name="lastrun" />
+            <PropertyRef Name="cpu_busy" />
+            <PropertyRef Name="io_busy" />
+            <PropertyRef Name="idle" />
+            <PropertyRef Name="pack_received" />
+            <PropertyRef Name="pack_sent" />
+            <PropertyRef Name="connections" />
+            <PropertyRef Name="pack_errors" />
+            <PropertyRef Name="total_read" />
+            <PropertyRef Name="total_write" />
+            <PropertyRef Name="total_errors" />
+          </Key>
+          <Property Name="lastrun" Type="datetime" Nullable="false" />
+          <Property Name="cpu_busy" Type="int" Nullable="false" />
+          <Property Name="io_busy" Type="int" Nullable="false" />
+          <Property Name="idle" Type="int" Nullable="false" />
+          <Property Name="pack_received" Type="int" Nullable="false" />
+          <Property Name="pack_sent" Type="int" Nullable="false" />
+          <Property Name="connections" Type="int" Nullable="false" />
+          <Property Name="pack_errors" Type="int" Nullable="false" />
+          <Property Name="total_read" Type="int" Nullable="false" />
+          <Property Name="total_write" Type="int" Nullable="false" />
+          <Property Name="total_errors" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'master.dbo.YearlyData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="YearlyData">
+          <Key>
+            <PropertyRef Name="countryID" />
+            <PropertyRef Name="indicatorID" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="countryID" Type="int" Nullable="false" />
+          <Property Name="indicatorID" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Pct" Type="float" />
+        </EntityType>
+        <EntityType Name="brands">
+          <Key>
+            <PropertyRef Name="brand_id" />
+          </Key>
+          <Property Name="brand_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="brand_name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="categories">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="category_name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="products">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="product_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="brand_id" Type="int" Nullable="false" />
+          <Property Name="category_id" Type="int" Nullable="false" />
+          <Property Name="model_year" Type="smallint" Nullable="false" />
+          <Property Name="list_price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="stocks">
+          <Key>
+            <PropertyRef Name="store_id" />
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="store_id" Type="int" Nullable="false" />
+          <Property Name="product_id" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+        </EntityType>
+        <EntityType Name="customers">
+          <Key>
+            <PropertyRef Name="customer_id" />
+          </Key>
+          <Property Name="customer_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="first_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="last_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="phone" Type="varchar" MaxLength="25" />
+          <Property Name="email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="street" Type="varchar" MaxLength="255" />
+          <Property Name="city" Type="varchar" MaxLength="50" />
+          <Property Name="state" Type="varchar" MaxLength="25" />
+          <Property Name="zip_code" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="order_items">
+          <Key>
+            <PropertyRef Name="order_id" />
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="order_id" Type="int" Nullable="false" />
+          <Property Name="item_id" Type="int" Nullable="false" />
+          <Property Name="product_id" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="list_price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="discount" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customer_id" Type="int" />
+          <Property Name="order_status" Type="tinyint" Nullable="false" />
+          <Property Name="order_date" Type="date" Nullable="false" />
+          <Property Name="required_date" Type="date" Nullable="false" />
+          <Property Name="shipped_date" Type="date" />
+          <Property Name="store_id" Type="int" Nullable="false" />
+          <Property Name="staff_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="staffs">
+          <Key>
+            <PropertyRef Name="staff_id" />
+          </Key>
+          <Property Name="staff_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="first_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="last_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="phone" Type="varchar" MaxLength="25" />
+          <Property Name="active" Type="tinyint" Nullable="false" />
+          <Property Name="store_id" Type="int" Nullable="false" />
+          <Property Name="manager_id" Type="int" />
+        </EntityType>
+        <EntityType Name="stores">
+          <Key>
+            <PropertyRef Name="store_id" />
+          </Key>
+          <Property Name="store_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="store_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="phone" Type="varchar" MaxLength="25" />
+          <Property Name="email" Type="varchar" MaxLength="255" />
+          <Property Name="street" Type="varchar" MaxLength="255" />
+          <Property Name="city" Type="varchar" MaxLength="255" />
+          <Property Name="state" Type="varchar" MaxLength="10" />
+          <Property Name="zip_code" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'master.dbo.spt_values' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="spt_values">
+          <Key>
+            <PropertyRef Name="number" />
+            <PropertyRef Name="type" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="35" />
+          <Property Name="number" Type="int" Nullable="false" />
+          <Property Name="type" Type="nchar" MaxLength="3" Nullable="false" />
+          <Property Name="low" Type="int" />
+          <Property Name="high" Type="int" />
+          <Property Name="status" Type="int" />
+        </EntityType>
+        <Association Name="FK__Game_Sess__Map_N__16644E42">
+          <End Role="Map" Type="Self.Map" Multiplicity="0..1" />
+          <End Role="Game_Session" Type="Self.Game_Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Map">
+              <PropertyRef Name="Map_Number" />
+            </Principal>
+            <Dependent Role="Game_Session">
+              <PropertyRef Name="Map_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_ite__order__73DA2C14">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="order_items" Type="Self.order_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="order_id" />
+            </Principal>
+            <Dependent Role="order_items">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_ite__produ__74CE504D">
+          <End Role="products" Type="Self.products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="order_items" Type="Self.order_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="order_items">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__customer__75C27486">
+          <End Role="customers" Type="Self.customers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customers">
+              <PropertyRef Name="customer_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__staff_id__0ABD916C">
+          <End Role="staffs" Type="Self.staffs" Multiplicity="1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staffs">
+              <PropertyRef Name="staff_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="staff_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__staff_id__76B698BF">
+          <End Role="staffs" Type="Self.staffs" Multiplicity="1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staffs">
+              <PropertyRef Name="staff_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="staff_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__store_id__77AABCF8">
+          <End Role="stores" Type="Self.stores" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stores">
+              <PropertyRef Name="store_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="store_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__products__brand___70099B30">
+          <End Role="brands" Type="Self.brands" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="products" Type="Self.products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="brands">
+              <PropertyRef Name="brand_id" />
+            </Principal>
+            <Dependent Role="products">
+              <PropertyRef Name="brand_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__products__catego__70FDBF69">
+          <End Role="categories" Type="Self.categories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="products" Type="Self.products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="products">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__staffs__manager___0CA5D9DE">
+          <End Role="staffs" Type="Self.staffs" Multiplicity="0..1" />
+          <End Role="staffs1" Type="Self.staffs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staffs">
+              <PropertyRef Name="staff_id" />
+            </Principal>
+            <Dependent Role="staffs1">
+              <PropertyRef Name="manager_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__staffs__manager___789EE131">
+          <End Role="staffs" Type="Self.staffs" Multiplicity="0..1" />
+          <End Role="staffs1" Type="Self.staffs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staffs">
+              <PropertyRef Name="staff_id" />
+            </Principal>
+            <Dependent Role="staffs1">
+              <PropertyRef Name="manager_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__staffs__store_id__7993056A">
+          <End Role="stores" Type="Self.stores" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="staffs" Type="Self.staffs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stores">
+              <PropertyRef Name="store_id" />
+            </Principal>
+            <Dependent Role="staffs">
+              <PropertyRef Name="store_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__stocks__product___71F1E3A2">
+          <End Role="products" Type="Self.products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="stocks" Type="Self.stocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="stocks">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__stocks__store_id__72E607DB">
+          <End Role="stores" Type="Self.stores" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="stocks" Type="Self.stocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stores">
+              <PropertyRef Name="store_id" />
+            </Principal>
+            <Dependent Role="stocks">
+              <PropertyRef Name="store_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__YearlyDat__count__4EA8A765">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="1" />
+          <End Role="YearlyData" Type="Self.YearlyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YearlyData">
+              <PropertyRef Name="countryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__YearlyDat__count__536D5C82">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="1" />
+          <End Role="YearlyData" Type="Self.YearlyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YearlyData">
+              <PropertyRef Name="countryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__YearlyDat__indic__4F9CCB9E">
+          <End Role="Indicators" Type="Self.Indicators" Multiplicity="1" />
+          <End Role="YearlyData" Type="Self.YearlyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicators">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="YearlyData">
+              <PropertyRef Name="indicatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__YearlyDat__indic__546180BB">
+          <End Role="Indicators" Type="Self.Indicators" Multiplicity="1" />
+          <End Role="YearlyData" Type="Self.YearlyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicators">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="YearlyData">
+              <PropertyRef Name="indicatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_MScleanupmergepublisher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_MSrepl_startup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="masterModelStoreContainer">
+          <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CUSTOMER" EntityType="Self.CUSTOMER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Game_Session" EntityType="Self.Game_Session" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Indicators" EntityType="Self.Indicators" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="INVOICE_LINE" EntityType="Self.INVOICE_LINE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="INVOICES" EntityType="Self.INVOICES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ITEM" EntityType="Self.ITEM" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Map" EntityType="Self.Map" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OFFICE" EntityType="Self.OFFICE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OWNER" EntityType="Self.OWNER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROPERTY" EntityType="Self.PROPERTY" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RESIDENTS" EntityType="Self.RESIDENTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SALES_REP" EntityType="Self.SALES_REP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SERVICE_CATEGORY" EntityType="Self.SERVICE_CATEGORY" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SERVICE_REQUEST" EntityType="Self.SERVICE_REQUEST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="brands" EntityType="Self.brands" Schema="production" store:Type="Tables" />
+          <EntitySet Name="categories" EntityType="Self.categories" Schema="production" store:Type="Tables" />
+          <EntitySet Name="products" EntityType="Self.products" Schema="production" store:Type="Tables" />
+          <EntitySet Name="stocks" EntityType="Self.stocks" Schema="production" store:Type="Tables" />
+          <EntitySet Name="customers" EntityType="Self.customers" Schema="sales" store:Type="Tables" />
+          <EntitySet Name="order_items" EntityType="Self.order_items" Schema="sales" store:Type="Tables" />
+          <EntitySet Name="orders" EntityType="Self.orders" Schema="sales" store:Type="Tables" />
+          <EntitySet Name="staffs" EntityType="Self.staffs" Schema="sales" store:Type="Tables" />
+          <EntitySet Name="stores" EntityType="Self.stores" Schema="sales" store:Type="Tables" />
+          <EntitySet Name="MSreplication_options" EntityType="Self.MSreplication_options" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MSreplication_options].[optname] AS [optname], 
+    [MSreplication_options].[value] AS [value], 
+    [MSreplication_options].[major_version] AS [major_version], 
+    [MSreplication_options].[minor_version] AS [minor_version], 
+    [MSreplication_options].[revision] AS [revision], 
+    [MSreplication_options].[install_failures] AS [install_failures]
+    FROM [dbo].[MSreplication_options] AS [MSreplication_options]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="spt_fallback_db" EntityType="Self.spt_fallback_db" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [spt_fallback_db].[xserver_name] AS [xserver_name], 
+    [spt_fallback_db].[xdttm_ins] AS [xdttm_ins], 
+    [spt_fallback_db].[xdttm_last_ins_upd] AS [xdttm_last_ins_upd], 
+    [spt_fallback_db].[xfallback_dbid] AS [xfallback_dbid], 
+    [spt_fallback_db].[name] AS [name], 
+    [spt_fallback_db].[dbid] AS [dbid], 
+    [spt_fallback_db].[status] AS [status], 
+    [spt_fallback_db].[version] AS [version]
+    FROM [dbo].[spt_fallback_db] AS [spt_fallback_db]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="spt_fallback_dev" EntityType="Self.spt_fallback_dev" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [spt_fallback_dev].[xserver_name] AS [xserver_name], 
+    [spt_fallback_dev].[xdttm_ins] AS [xdttm_ins], 
+    [spt_fallback_dev].[xdttm_last_ins_upd] AS [xdttm_last_ins_upd], 
+    [spt_fallback_dev].[xfallback_low] AS [xfallback_low], 
+    [spt_fallback_dev].[xfallback_drive] AS [xfallback_drive], 
+    [spt_fallback_dev].[low] AS [low], 
+    [spt_fallback_dev].[high] AS [high], 
+    [spt_fallback_dev].[status] AS [status], 
+    [spt_fallback_dev].[name] AS [name], 
+    [spt_fallback_dev].[phyname] AS [phyname]
+    FROM [dbo].[spt_fallback_dev] AS [spt_fallback_dev]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="spt_fallback_usg" EntityType="Self.spt_fallback_usg" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [spt_fallback_usg].[xserver_name] AS [xserver_name], 
+    [spt_fallback_usg].[xdttm_ins] AS [xdttm_ins], 
+    [spt_fallback_usg].[xdttm_last_ins_upd] AS [xdttm_last_ins_upd], 
+    [spt_fallback_usg].[xfallback_vstart] AS [xfallback_vstart], 
+    [spt_fallback_usg].[dbid] AS [dbid], 
+    [spt_fallback_usg].[segmap] AS [segmap], 
+    [spt_fallback_usg].[lstart] AS [lstart], 
+    [spt_fallback_usg].[sizepg] AS [sizepg], 
+    [spt_fallback_usg].[vstart] AS [vstart]
+    FROM [dbo].[spt_fallback_usg] AS [spt_fallback_usg]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="spt_monitor" EntityType="Self.spt_monitor" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [spt_monitor].[lastrun] AS [lastrun], 
+    [spt_monitor].[cpu_busy] AS [cpu_busy], 
+    [spt_monitor].[io_busy] AS [io_busy], 
+    [spt_monitor].[idle] AS [idle], 
+    [spt_monitor].[pack_received] AS [pack_received], 
+    [spt_monitor].[pack_sent] AS [pack_sent], 
+    [spt_monitor].[connections] AS [connections], 
+    [spt_monitor].[pack_errors] AS [pack_errors], 
+    [spt_monitor].[total_read] AS [total_read], 
+    [spt_monitor].[total_write] AS [total_write], 
+    [spt_monitor].[total_errors] AS [total_errors]
+    FROM [dbo].[spt_monitor] AS [spt_monitor]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="YearlyData" EntityType="Self.YearlyData" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [YearlyData].[countryID] AS [countryID], 
+    [YearlyData].[indicatorID] AS [indicatorID], 
+    [YearlyData].[Year] AS [Year], 
+    [YearlyData].[Pct] AS [Pct]
+    FROM [dbo].[YearlyData] AS [YearlyData]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="spt_values" EntityType="Self.spt_values" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [spt_values].[name] AS [name], 
+    [spt_values].[number] AS [number], 
+    [spt_values].[type] AS [type], 
+    [spt_values].[low] AS [low], 
+    [spt_values].[high] AS [high], 
+    [spt_values].[status] AS [status]
+    FROM [dbo].[spt_values] AS [spt_values]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Game_Sess__Map_N__16644E42" Association="Self.FK__Game_Sess__Map_N__16644E42">
+            <End Role="Map" EntitySet="Map" />
+            <End Role="Game_Session" EntitySet="Game_Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_ite__order__73DA2C14" Association="Self.FK__order_ite__order__73DA2C14">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="order_items" EntitySet="order_items" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_ite__produ__74CE504D" Association="Self.FK__order_ite__produ__74CE504D">
+            <End Role="products" EntitySet="products" />
+            <End Role="order_items" EntitySet="order_items" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__customer__75C27486" Association="Self.FK__orders__customer__75C27486">
+            <End Role="customers" EntitySet="customers" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__staff_id__0ABD916C" Association="Self.FK__orders__staff_id__0ABD916C">
+            <End Role="staffs" EntitySet="staffs" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__staff_id__76B698BF" Association="Self.FK__orders__staff_id__76B698BF">
+            <End Role="staffs" EntitySet="staffs" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__store_id__77AABCF8" Association="Self.FK__orders__store_id__77AABCF8">
+            <End Role="stores" EntitySet="stores" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__products__brand___70099B30" Association="Self.FK__products__brand___70099B30">
+            <End Role="brands" EntitySet="brands" />
+            <End Role="products" EntitySet="products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__products__catego__70FDBF69" Association="Self.FK__products__catego__70FDBF69">
+            <End Role="categories" EntitySet="categories" />
+            <End Role="products" EntitySet="products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__staffs__manager___0CA5D9DE" Association="Self.FK__staffs__manager___0CA5D9DE">
+            <End Role="staffs" EntitySet="staffs" />
+            <End Role="staffs1" EntitySet="staffs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__staffs__manager___789EE131" Association="Self.FK__staffs__manager___789EE131">
+            <End Role="staffs" EntitySet="staffs" />
+            <End Role="staffs1" EntitySet="staffs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__staffs__store_id__7993056A" Association="Self.FK__staffs__store_id__7993056A">
+            <End Role="stores" EntitySet="stores" />
+            <End Role="staffs" EntitySet="staffs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__stocks__product___71F1E3A2" Association="Self.FK__stocks__product___71F1E3A2">
+            <End Role="products" EntitySet="products" />
+            <End Role="stocks" EntitySet="stocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__stocks__store_id__72E607DB" Association="Self.FK__stocks__store_id__72E607DB">
+            <End Role="stores" EntitySet="stores" />
+            <End Role="stocks" EntitySet="stocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__YearlyDat__count__4EA8A765" Association="Self.FK__YearlyDat__count__4EA8A765">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="YearlyData" EntitySet="YearlyData" />
+          </AssociationSet>
+          <AssociationSet Name="FK__YearlyDat__count__536D5C82" Association="Self.FK__YearlyDat__count__536D5C82">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="YearlyData" EntitySet="YearlyData" />
+          </AssociationSet>
+          <AssociationSet Name="FK__YearlyDat__indic__4F9CCB9E" Association="Self.FK__YearlyDat__indic__4F9CCB9E">
+            <End Role="Indicators" EntitySet="Indicators" />
+            <End Role="YearlyData" EntitySet="YearlyData" />
+          </AssociationSet>
+          <AssociationSet Name="FK__YearlyDat__indic__546180BB" Association="Self.FK__YearlyDat__indic__546180BB">
+            <End Role="Indicators" EntitySet="Indicators" />
+            <End Role="YearlyData" EntitySet="YearlyData" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="masterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Country_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Country_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="YearlyDatas" Relationship="Self.FK__YearlyDat__count__4EA8A765" FromRole="Countries" ToRole="YearlyData" />
+          <NavigationProperty Name="YearlyDatas1" Relationship="Self.FK__YearlyDat__count__536D5C82" FromRole="Countries" ToRole="YearlyData" />
+        </EntityType>
+        <EntityType Name="CUSTOMER">
+          <Key>
+            <PropertyRef Name="CUST_ID" />
+          </Key>
+          <Property Name="CUST_ID" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LAST_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CITY" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="STATE" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="POSTAL" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="BALANCE" Type="Decimal" Precision="7" Scale="2" />
+          <Property Name="CREDIT_LIMIT" Type="Decimal" Precision="7" Scale="2" />
+          <Property Name="REP_ID" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Game_Session">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Map_Number" Type="Int32" />
+          <Property Name="Start_Day" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="End_Day" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Map" Relationship="Self.FK__Game_Sess__Map_N__16644E42" FromRole="Game_Session" ToRole="Map" />
+        </EntityType>
+        <EntityType Name="Indicator">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SeriesName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SeriesCode" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="YearlyDatas" Relationship="Self.FK__YearlyDat__indic__4F9CCB9E" FromRole="Indicators" ToRole="YearlyData" />
+          <NavigationProperty Name="YearlyDatas1" Relationship="Self.FK__YearlyDat__indic__546180BB" FromRole="Indicators" ToRole="YearlyData" />
+        </EntityType>
+        <EntityType Name="INVOICE_LINE">
+          <Key>
+            <PropertyRef Name="INVOICE_NUM" />
+            <PropertyRef Name="ITEM_ID" />
+          </Key>
+          <Property Name="INVOICE_NUM" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ITEM_ID" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="QUANTITY" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="QUOTED_PRICE" Type="Decimal" Precision="7" Scale="2" />
+        </EntityType>
+        <EntityType Name="INVOICE">
+          <Key>
+            <PropertyRef Name="INVOICE_NUM" />
+          </Key>
+          <Property Name="INVOICE_NUM" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="INVOICE_DATE" Type="DateTime" Precision="0" />
+          <Property Name="CUST_ID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ITEM">
+          <Key>
+            <PropertyRef Name="ITEM_ID" />
+          </Key>
+          <Property Name="ITEM_ID" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ON_HAND" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CATEGORY" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="LOCATION" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="PRICE" Type="Decimal" Precision="7" Scale="2" />
+        </EntityType>
+        <EntityType Name="Map">
+          <Key>
+            <PropertyRef Name="Map_Number" />
+          </Key>
+          <Property Name="Map_Number" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Map_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Game_Session" Relationship="Self.FK__Game_Sess__Map_N__16644E42" FromRole="Map" ToRole="Game_Session" />
+        </EntityType>
+        <EntityType Name="OFFICE">
+          <Key>
+            <PropertyRef Name="OFFICE_NUM" />
+          </Key>
+          <Property Name="OFFICE_NUM" Type="Byte" Nullable="false" />
+          <Property Name="OFFICE_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AREA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CITY" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="STATE" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ZIP_CODE" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OWNER">
+          <Key>
+            <PropertyRef Name="OWNER_NUM" />
+          </Key>
+          <Property Name="OWNER_NUM" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="LAST_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CITY" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="STATE" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ZIP_CODE" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="Player_Rank" />
+          </Key>
+          <Property Name="Player_Rank" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Player_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PROPERTY">
+          <Key>
+            <PropertyRef Name="PROPERTY_ID" />
+          </Key>
+          <Property Name="PROPERTY_ID" Type="Int16" Nullable="false" />
+          <Property Name="OFFICE_NUM" Type="Byte" Nullable="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SQR_FT" Type="Int16" Nullable="false" />
+          <Property Name="BDRMS" Type="Byte" Nullable="false" />
+          <Property Name="FLOORS" Type="Byte" Nullable="false" />
+          <Property Name="MONTHLY_RENT" Type="Int16" />
+          <Property Name="OWNER_NUM" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RESIDENT">
+          <Key>
+            <PropertyRef Name="RESIDENT_ID" />
+          </Key>
+          <Property Name="RESIDENT_ID" Type="Int16" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SURNAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PROPERTY_ID" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SALES_REP">
+          <Key>
+            <PropertyRef Name="REP_ID" />
+          </Key>
+          <Property Name="REP_ID" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LAST_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CITY" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="STATE" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="POSTAL" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="CELL_PHONE" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="COMMISSION" Type="Decimal" Precision="7" Scale="2" />
+          <Property Name="RATE" Type="Decimal" Precision="3" Scale="2" />
+        </EntityType>
+        <EntityType Name="SERVICE_CATEGORY">
+          <Key>
+            <PropertyRef Name="CATEGORY_NUM" />
+          </Key>
+          <Property Name="CATEGORY_NUM" Type="Byte" Nullable="false" />
+          <Property Name="CATEGORY_DESCRIPTION" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SERVICE_REQUEST">
+          <Key>
+            <PropertyRef Name="SERVICE_ID" />
+          </Key>
+          <Property Name="SERVICE_ID" Type="Int16" Nullable="false" />
+          <Property Name="PROPERTY_ID" Type="Int16" Nullable="false" />
+          <Property Name="CATEGORY_NUMBER" Type="Byte" Nullable="false" />
+          <Property Name="OFFICE_ID" Type="Byte" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="STATUS" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EST_HOURS" Type="Byte" Nullable="false" />
+          <Property Name="SPENT_HOURS" Type="Byte" Nullable="false" />
+          <Property Name="NEXT_SERVICE_DATE" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="brand">
+          <Key>
+            <PropertyRef Name="brand_id" />
+          </Key>
+          <Property Name="brand_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="brand_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="products" Relationship="Self.FK__products__brand___70099B30" FromRole="brands" ToRole="products" />
+        </EntityType>
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="category_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="products" Relationship="Self.FK__products__catego__70FDBF69" FromRole="categories" ToRole="products" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="product_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="brand_id" Type="Int32" Nullable="false" />
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <Property Name="model_year" Type="Int16" Nullable="false" />
+          <Property Name="list_price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="brand" Relationship="Self.FK__products__brand___70099B30" FromRole="products" ToRole="brands" />
+          <NavigationProperty Name="category" Relationship="Self.FK__products__catego__70FDBF69" FromRole="products" ToRole="categories" />
+          <NavigationProperty Name="order_items" Relationship="Self.FK__order_ite__produ__74CE504D" FromRole="products" ToRole="order_items" />
+          <NavigationProperty Name="stocks" Relationship="Self.FK__stocks__product___71F1E3A2" FromRole="products" ToRole="stocks" />
+        </EntityType>
+        <EntityType Name="stock">
+          <Key>
+            <PropertyRef Name="store_id" />
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="store_id" Type="Int32" Nullable="false" />
+          <Property Name="product_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" />
+          <NavigationProperty Name="product" Relationship="Self.FK__stocks__product___71F1E3A2" FromRole="stocks" ToRole="products" />
+          <NavigationProperty Name="store" Relationship="Self.FK__stocks__store_id__72E607DB" FromRole="stocks" ToRole="stores" />
+        </EntityType>
+        <EntityType Name="customer1">
+          <Key>
+            <PropertyRef Name="customer_id" />
+          </Key>
+          <Property Name="customer_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="first_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="zip_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="orders" Relationship="Self.FK__orders__customer__75C27486" FromRole="customers" ToRole="orders" />
+        </EntityType>
+        <EntityType Name="order_items">
+          <Key>
+            <PropertyRef Name="order_id" />
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="order_id" Type="Int32" Nullable="false" />
+          <Property Name="item_id" Type="Int32" Nullable="false" />
+          <Property Name="product_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="list_price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="discount" Type="Decimal" Precision="4" Scale="2" Nullable="false" />
+          <NavigationProperty Name="product" Relationship="Self.FK__order_ite__produ__74CE504D" FromRole="order_items" ToRole="products" />
+          <NavigationProperty Name="order" Relationship="Self.FK__order_ite__order__73DA2C14" FromRole="order_items" ToRole="orders" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="order_status" Type="Byte" Nullable="false" />
+          <Property Name="order_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="required_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="shipped_date" Type="DateTime" Precision="0" />
+          <Property Name="store_id" Type="Int32" Nullable="false" />
+          <Property Name="staff_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="customer" Relationship="Self.FK__orders__customer__75C27486" FromRole="orders" ToRole="customers" />
+          <NavigationProperty Name="order_items" Relationship="Self.FK__order_ite__order__73DA2C14" FromRole="orders" ToRole="order_items" />
+          <NavigationProperty Name="staff" Relationship="Self.FK__orders__staff_id__0ABD916C" FromRole="orders" ToRole="staffs" />
+          <NavigationProperty Name="staff1" Relationship="Self.FK__orders__staff_id__76B698BF" FromRole="orders" ToRole="staffs" />
+          <NavigationProperty Name="store" Relationship="Self.FK__orders__store_id__77AABCF8" FromRole="orders" ToRole="stores" />
+        </EntityType>
+        <EntityType Name="staff">
+          <Key>
+            <PropertyRef Name="staff_id" />
+          </Key>
+          <Property Name="staff_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="active" Type="Byte" Nullable="false" />
+          <Property Name="store_id" Type="Int32" Nullable="false" />
+          <Property Name="manager_id" Type="Int32" />
+          <NavigationProperty Name="orders" Relationship="Self.FK__orders__staff_id__0ABD916C" FromRole="staffs" ToRole="orders" />
+          <NavigationProperty Name="orders1" Relationship="Self.FK__orders__staff_id__76B698BF" FromRole="staffs" ToRole="orders" />
+          <NavigationProperty Name="staffs1" Relationship="Self.FK__staffs__manager___0CA5D9DE" FromRole="staffs" ToRole="staffs1" />
+          <NavigationProperty Name="staff1" Relationship="Self.FK__staffs__manager___0CA5D9DE" FromRole="staffs1" ToRole="staffs" />
+          <NavigationProperty Name="staffs11" Relationship="Self.FK__staffs__manager___789EE131" FromRole="staffs" ToRole="staffs1" />
+          <NavigationProperty Name="staff2" Relationship="Self.FK__staffs__manager___789EE131" FromRole="staffs1" ToRole="staffs" />
+          <NavigationProperty Name="store" Relationship="Self.FK__staffs__store_id__7993056A" FromRole="staffs" ToRole="stores" />
+        </EntityType>
+        <EntityType Name="store">
+          <Key>
+            <PropertyRef Name="store_id" />
+          </Key>
+          <Property Name="store_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="store_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="zip_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="stocks" Relationship="Self.FK__stocks__store_id__72E607DB" FromRole="stores" ToRole="stocks" />
+          <NavigationProperty Name="orders" Relationship="Self.FK__orders__store_id__77AABCF8" FromRole="stores" ToRole="orders" />
+          <NavigationProperty Name="staffs" Relationship="Self.FK__staffs__store_id__7993056A" FromRole="stores" ToRole="staffs" />
+        </EntityType>
+        <EntityType Name="MSreplication_options">
+          <Key>
+            <PropertyRef Name="optname" />
+            <PropertyRef Name="value" />
+            <PropertyRef Name="major_version" />
+            <PropertyRef Name="minor_version" />
+            <PropertyRef Name="revision" />
+            <PropertyRef Name="install_failures" />
+          </Key>
+          <Property Name="optname" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="value" Type="Boolean" Nullable="false" />
+          <Property Name="major_version" Type="Int32" Nullable="false" />
+          <Property Name="minor_version" Type="Int32" Nullable="false" />
+          <Property Name="revision" Type="Int32" Nullable="false" />
+          <Property Name="install_failures" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="spt_fallback_db">
+          <Key>
+            <PropertyRef Name="xserver_name" />
+            <PropertyRef Name="xdttm_ins" />
+            <PropertyRef Name="xdttm_last_ins_upd" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="dbid" />
+            <PropertyRef Name="status" />
+            <PropertyRef Name="version" />
+          </Key>
+          <Property Name="xserver_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="xdttm_ins" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="xdttm_last_ins_upd" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="xfallback_dbid" Type="Int16" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dbid" Type="Int16" Nullable="false" />
+          <Property Name="status" Type="Int16" Nullable="false" />
+          <Property Name="version" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="spt_fallback_dev">
+          <Key>
+            <PropertyRef Name="xserver_name" />
+            <PropertyRef Name="xdttm_ins" />
+            <PropertyRef Name="xdttm_last_ins_upd" />
+            <PropertyRef Name="low" />
+            <PropertyRef Name="high" />
+            <PropertyRef Name="status" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="phyname" />
+          </Key>
+          <Property Name="xserver_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="xdttm_ins" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="xdttm_last_ins_upd" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="xfallback_low" Type="Int32" />
+          <Property Name="xfallback_drive" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="low" Type="Int32" Nullable="false" />
+          <Property Name="high" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="Int16" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phyname" Type="String" MaxLength="127" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="spt_fallback_usg">
+          <Key>
+            <PropertyRef Name="xserver_name" />
+            <PropertyRef Name="xdttm_ins" />
+            <PropertyRef Name="xdttm_last_ins_upd" />
+            <PropertyRef Name="dbid" />
+            <PropertyRef Name="segmap" />
+            <PropertyRef Name="lstart" />
+            <PropertyRef Name="sizepg" />
+            <PropertyRef Name="vstart" />
+          </Key>
+          <Property Name="xserver_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="xdttm_ins" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="xdttm_last_ins_upd" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="xfallback_vstart" Type="Int32" />
+          <Property Name="dbid" Type="Int16" Nullable="false" />
+          <Property Name="segmap" Type="Int32" Nullable="false" />
+          <Property Name="lstart" Type="Int32" Nullable="false" />
+          <Property Name="sizepg" Type="Int32" Nullable="false" />
+          <Property Name="vstart" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="spt_monitor">
+          <Key>
+            <PropertyRef Name="lastrun" />
+            <PropertyRef Name="cpu_busy" />
+            <PropertyRef Name="io_busy" />
+            <PropertyRef Name="idle" />
+            <PropertyRef Name="pack_received" />
+            <PropertyRef Name="pack_sent" />
+            <PropertyRef Name="connections" />
+            <PropertyRef Name="pack_errors" />
+            <PropertyRef Name="total_read" />
+            <PropertyRef Name="total_write" />
+            <PropertyRef Name="total_errors" />
+          </Key>
+          <Property Name="lastrun" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="cpu_busy" Type="Int32" Nullable="false" />
+          <Property Name="io_busy" Type="Int32" Nullable="false" />
+          <Property Name="idle" Type="Int32" Nullable="false" />
+          <Property Name="pack_received" Type="Int32" Nullable="false" />
+          <Property Name="pack_sent" Type="Int32" Nullable="false" />
+          <Property Name="connections" Type="Int32" Nullable="false" />
+          <Property Name="pack_errors" Type="Int32" Nullable="false" />
+          <Property Name="total_read" Type="Int32" Nullable="false" />
+          <Property Name="total_write" Type="Int32" Nullable="false" />
+          <Property Name="total_errors" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="YearlyData">
+          <Key>
+            <PropertyRef Name="countryID" />
+            <PropertyRef Name="indicatorID" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="countryID" Type="Int32" Nullable="false" />
+          <Property Name="indicatorID" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Pct" Type="Double" />
+          <NavigationProperty Name="Country" Relationship="Self.FK__YearlyDat__count__4EA8A765" FromRole="YearlyData" ToRole="Countries" />
+          <NavigationProperty Name="Country1" Relationship="Self.FK__YearlyDat__count__536D5C82" FromRole="YearlyData" ToRole="Countries" />
+          <NavigationProperty Name="Indicator" Relationship="Self.FK__YearlyDat__indic__4F9CCB9E" FromRole="YearlyData" ToRole="Indicators" />
+          <NavigationProperty Name="Indicator1" Relationship="Self.FK__YearlyDat__indic__546180BB" FromRole="YearlyData" ToRole="Indicators" />
+        </EntityType>
+        <EntityType Name="spt_values">
+          <Key>
+            <PropertyRef Name="number" />
+            <PropertyRef Name="type" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+          <Property Name="number" Type="Int32" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="3" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="low" Type="Int32" />
+          <Property Name="high" Type="Int32" />
+          <Property Name="status" Type="Int32" />
+        </EntityType>
+        <Association Name="FK__YearlyDat__count__4EA8A765">
+          <End Role="Countries" Type="Self.Country" Multiplicity="1" />
+          <End Role="YearlyData" Type="Self.YearlyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YearlyData">
+              <PropertyRef Name="countryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__YearlyDat__count__536D5C82">
+          <End Role="Countries" Type="Self.Country" Multiplicity="1" />
+          <End Role="YearlyData" Type="Self.YearlyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="YearlyData">
+              <PropertyRef Name="countryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Game_Sess__Map_N__16644E42">
+          <End Role="Map" Type="Self.Map" Multiplicity="0..1" />
+          <End Role="Game_Session" Type="Self.Game_Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Map">
+              <PropertyRef Name="Map_Number" />
+            </Principal>
+            <Dependent Role="Game_Session">
+              <PropertyRef Name="Map_Number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__YearlyDat__indic__4F9CCB9E">
+          <End Role="Indicators" Type="Self.Indicator" Multiplicity="1" />
+          <End Role="YearlyData" Type="Self.YearlyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicators">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="YearlyData">
+              <PropertyRef Name="indicatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__YearlyDat__indic__546180BB">
+          <End Role="Indicators" Type="Self.Indicator" Multiplicity="1" />
+          <End Role="YearlyData" Type="Self.YearlyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicators">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="YearlyData">
+              <PropertyRef Name="indicatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__products__brand___70099B30">
+          <End Role="brands" Type="Self.brand" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="products" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="brands">
+              <PropertyRef Name="brand_id" />
+            </Principal>
+            <Dependent Role="products">
+              <PropertyRef Name="brand_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__products__catego__70FDBF69">
+          <End Role="categories" Type="Self.category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="products" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="products">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_ite__produ__74CE504D">
+          <End Role="products" Type="Self.product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="order_items" Type="Self.order_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="order_items">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__stocks__product___71F1E3A2">
+          <End Role="products" Type="Self.product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="stocks" Type="Self.stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="stocks">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__stocks__store_id__72E607DB">
+          <End Role="stores" Type="Self.store" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="stocks" Type="Self.stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stores">
+              <PropertyRef Name="store_id" />
+            </Principal>
+            <Dependent Role="stocks">
+              <PropertyRef Name="store_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__customer__75C27486">
+          <End Role="customers" Type="Self.customer1" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="orders" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customers">
+              <PropertyRef Name="customer_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_ite__order__73DA2C14">
+          <End Role="orders" Type="Self.order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="order_items" Type="Self.order_items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="order_id" />
+            </Principal>
+            <Dependent Role="order_items">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__staff_id__0ABD916C">
+          <End Role="staffs" Type="Self.staff" Multiplicity="1" />
+          <End Role="orders" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staffs">
+              <PropertyRef Name="staff_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="staff_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__staff_id__76B698BF">
+          <End Role="staffs" Type="Self.staff" Multiplicity="1" />
+          <End Role="orders" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staffs">
+              <PropertyRef Name="staff_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="staff_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__store_id__77AABCF8">
+          <End Role="stores" Type="Self.store" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="orders" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stores">
+              <PropertyRef Name="store_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="store_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__staffs__manager___0CA5D9DE">
+          <End Role="staffs" Type="Self.staff" Multiplicity="0..1" />
+          <End Role="staffs1" Type="Self.staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staffs">
+              <PropertyRef Name="staff_id" />
+            </Principal>
+            <Dependent Role="staffs1">
+              <PropertyRef Name="manager_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__staffs__manager___789EE131">
+          <End Role="staffs" Type="Self.staff" Multiplicity="0..1" />
+          <End Role="staffs1" Type="Self.staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staffs">
+              <PropertyRef Name="staff_id" />
+            </Principal>
+            <Dependent Role="staffs1">
+              <PropertyRef Name="manager_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__staffs__store_id__7993056A">
+          <End Role="stores" Type="Self.store" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="staffs" Type="Self.staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stores">
+              <PropertyRef Name="store_id" />
+            </Principal>
+            <Dependent Role="staffs">
+              <PropertyRef Name="store_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masterEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Countries" EntityType="Self.Country" />
+          <EntitySet Name="CUSTOMERs" EntityType="Self.CUSTOMER" />
+          <EntitySet Name="Game_Session" EntityType="Self.Game_Session" />
+          <EntitySet Name="Indicators" EntityType="Self.Indicator" />
+          <EntitySet Name="INVOICE_LINE" EntityType="Self.INVOICE_LINE" />
+          <EntitySet Name="INVOICES" EntityType="Self.INVOICE" />
+          <EntitySet Name="ITEMs" EntityType="Self.ITEM" />
+          <EntitySet Name="Maps" EntityType="Self.Map" />
+          <EntitySet Name="OFFICEs" EntityType="Self.OFFICE" />
+          <EntitySet Name="OWNERs" EntityType="Self.OWNER" />
+          <EntitySet Name="Players" EntityType="Self.Player" />
+          <EntitySet Name="PROPERTies" EntityType="Self.PROPERTY" />
+          <EntitySet Name="RESIDENTS" EntityType="Self.RESIDENT" />
+          <EntitySet Name="SALES_REP" EntityType="Self.SALES_REP" />
+          <EntitySet Name="SERVICE_CATEGORY" EntityType="Self.SERVICE_CATEGORY" />
+          <EntitySet Name="SERVICE_REQUEST" EntityType="Self.SERVICE_REQUEST" />
+          <EntitySet Name="brands" EntityType="Self.brand" />
+          <EntitySet Name="categories" EntityType="Self.category" />
+          <EntitySet Name="products" EntityType="Self.product" />
+          <EntitySet Name="stocks" EntityType="Self.stock" />
+          <EntitySet Name="customers1" EntityType="Self.customer1" />
+          <EntitySet Name="order_items" EntityType="Self.order_items" />
+          <EntitySet Name="orders" EntityType="Self.order" />
+          <EntitySet Name="staffs" EntityType="Self.staff" />
+          <EntitySet Name="stores" EntityType="Self.store" />
+          <EntitySet Name="MSreplication_options" EntityType="Self.MSreplication_options" />
+          <EntitySet Name="spt_fallback_db" EntityType="Self.spt_fallback_db" />
+          <EntitySet Name="spt_fallback_dev" EntityType="Self.spt_fallback_dev" />
+          <EntitySet Name="spt_fallback_usg" EntityType="Self.spt_fallback_usg" />
+          <EntitySet Name="spt_monitor" EntityType="Self.spt_monitor" />
+          <EntitySet Name="YearlyDatas" EntityType="Self.YearlyData" />
+          <EntitySet Name="spt_values" EntityType="Self.spt_values" />
+          <AssociationSet Name="FK__YearlyDat__count__4EA8A765" Association="Self.FK__YearlyDat__count__4EA8A765">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="YearlyData" EntitySet="YearlyDatas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__YearlyDat__count__536D5C82" Association="Self.FK__YearlyDat__count__536D5C82">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="YearlyData" EntitySet="YearlyDatas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Game_Sess__Map_N__16644E42" Association="Self.FK__Game_Sess__Map_N__16644E42">
+            <End Role="Map" EntitySet="Maps" />
+            <End Role="Game_Session" EntitySet="Game_Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK__YearlyDat__indic__4F9CCB9E" Association="Self.FK__YearlyDat__indic__4F9CCB9E">
+            <End Role="Indicators" EntitySet="Indicators" />
+            <End Role="YearlyData" EntitySet="YearlyDatas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__YearlyDat__indic__546180BB" Association="Self.FK__YearlyDat__indic__546180BB">
+            <End Role="Indicators" EntitySet="Indicators" />
+            <End Role="YearlyData" EntitySet="YearlyDatas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__products__brand___70099B30" Association="Self.FK__products__brand___70099B30">
+            <End Role="brands" EntitySet="brands" />
+            <End Role="products" EntitySet="products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__products__catego__70FDBF69" Association="Self.FK__products__catego__70FDBF69">
+            <End Role="categories" EntitySet="categories" />
+            <End Role="products" EntitySet="products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_ite__produ__74CE504D" Association="Self.FK__order_ite__produ__74CE504D">
+            <End Role="products" EntitySet="products" />
+            <End Role="order_items" EntitySet="order_items" />
+          </AssociationSet>
+          <AssociationSet Name="FK__stocks__product___71F1E3A2" Association="Self.FK__stocks__product___71F1E3A2">
+            <End Role="products" EntitySet="products" />
+            <End Role="stocks" EntitySet="stocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__stocks__store_id__72E607DB" Association="Self.FK__stocks__store_id__72E607DB">
+            <End Role="stores" EntitySet="stores" />
+            <End Role="stocks" EntitySet="stocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__customer__75C27486" Association="Self.FK__orders__customer__75C27486">
+            <End Role="customers" EntitySet="customers1" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_ite__order__73DA2C14" Association="Self.FK__order_ite__order__73DA2C14">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="order_items" EntitySet="order_items" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__staff_id__0ABD916C" Association="Self.FK__orders__staff_id__0ABD916C">
+            <End Role="staffs" EntitySet="staffs" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__staff_id__76B698BF" Association="Self.FK__orders__staff_id__76B698BF">
+            <End Role="staffs" EntitySet="staffs" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__store_id__77AABCF8" Association="Self.FK__orders__store_id__77AABCF8">
+            <End Role="stores" EntitySet="stores" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__staffs__manager___0CA5D9DE" Association="Self.FK__staffs__manager___0CA5D9DE">
+            <End Role="staffs" EntitySet="staffs" />
+            <End Role="staffs1" EntitySet="staffs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__staffs__manager___789EE131" Association="Self.FK__staffs__manager___789EE131">
+            <End Role="staffs" EntitySet="staffs" />
+            <End Role="staffs1" EntitySet="staffs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__staffs__store_id__7993056A" Association="Self.FK__staffs__store_id__7993056A">
+            <End Role="stores" EntitySet="stores" />
+            <End Role="staffs" EntitySet="staffs" />
+          </AssociationSet>
+          <FunctionImport Name="sp_MScleanupmergepublisher" />
+          <FunctionImport Name="sp_MSrepl_startup" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="masterModelStoreContainer" CdmEntityContainer="masterEntities">
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="masterModel.Country">
+              <MappingFragment StoreEntitySet="Countries">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Country_Name" ColumnName="Country_Name" />
+                <ScalarProperty Name="Country_Code" ColumnName="Country_Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CUSTOMERs">
+            <EntityTypeMapping TypeName="masterModel.CUSTOMER">
+              <MappingFragment StoreEntitySet="CUSTOMER">
+                <ScalarProperty Name="CUST_ID" ColumnName="CUST_ID" />
+                <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+                <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="POSTAL" ColumnName="POSTAL" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="BALANCE" ColumnName="BALANCE" />
+                <ScalarProperty Name="CREDIT_LIMIT" ColumnName="CREDIT_LIMIT" />
+                <ScalarProperty Name="REP_ID" ColumnName="REP_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Game_Session">
+            <EntityTypeMapping TypeName="masterModel.Game_Session">
+              <MappingFragment StoreEntitySet="Game_Session">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Map_Number" ColumnName="Map_Number" />
+                <ScalarProperty Name="Start_Day" ColumnName="Start_Day" />
+                <ScalarProperty Name="End_Day" ColumnName="End_Day" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Indicators">
+            <EntityTypeMapping TypeName="masterModel.Indicator">
+              <MappingFragment StoreEntitySet="Indicators">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="SeriesName" ColumnName="SeriesName" />
+                <ScalarProperty Name="SeriesCode" ColumnName="SeriesCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="INVOICE_LINE">
+            <EntityTypeMapping TypeName="masterModel.INVOICE_LINE">
+              <MappingFragment StoreEntitySet="INVOICE_LINE">
+                <ScalarProperty Name="INVOICE_NUM" ColumnName="INVOICE_NUM" />
+                <ScalarProperty Name="ITEM_ID" ColumnName="ITEM_ID" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="QUOTED_PRICE" ColumnName="QUOTED_PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="INVOICES">
+            <EntityTypeMapping TypeName="masterModel.INVOICE">
+              <MappingFragment StoreEntitySet="INVOICES">
+                <ScalarProperty Name="INVOICE_NUM" ColumnName="INVOICE_NUM" />
+                <ScalarProperty Name="INVOICE_DATE" ColumnName="INVOICE_DATE" />
+                <ScalarProperty Name="CUST_ID" ColumnName="CUST_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ITEMs">
+            <EntityTypeMapping TypeName="masterModel.ITEM">
+              <MappingFragment StoreEntitySet="ITEM">
+                <ScalarProperty Name="ITEM_ID" ColumnName="ITEM_ID" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="ON_HAND" ColumnName="ON_HAND" />
+                <ScalarProperty Name="CATEGORY" ColumnName="CATEGORY" />
+                <ScalarProperty Name="LOCATION" ColumnName="LOCATION" />
+                <ScalarProperty Name="PRICE" ColumnName="PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Maps">
+            <EntityTypeMapping TypeName="masterModel.Map">
+              <MappingFragment StoreEntitySet="Map">
+                <ScalarProperty Name="Map_Number" ColumnName="Map_Number" />
+                <ScalarProperty Name="Map_Name" ColumnName="Map_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OFFICEs">
+            <EntityTypeMapping TypeName="masterModel.OFFICE">
+              <MappingFragment StoreEntitySet="OFFICE">
+                <ScalarProperty Name="OFFICE_NUM" ColumnName="OFFICE_NUM" />
+                <ScalarProperty Name="OFFICE_NAME" ColumnName="OFFICE_NAME" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="AREA" ColumnName="AREA" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="ZIP_CODE" ColumnName="ZIP_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OWNERs">
+            <EntityTypeMapping TypeName="masterModel.OWNER">
+              <MappingFragment StoreEntitySet="OWNER">
+                <ScalarProperty Name="OWNER_NUM" ColumnName="OWNER_NUM" />
+                <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+                <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="ZIP_CODE" ColumnName="ZIP_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Players">
+            <EntityTypeMapping TypeName="masterModel.Player">
+              <MappingFragment StoreEntitySet="Player">
+                <ScalarProperty Name="Player_Rank" ColumnName="Player_Rank" />
+                <ScalarProperty Name="Player_Name" ColumnName="Player_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROPERTies">
+            <EntityTypeMapping TypeName="masterModel.PROPERTY">
+              <MappingFragment StoreEntitySet="PROPERTY">
+                <ScalarProperty Name="PROPERTY_ID" ColumnName="PROPERTY_ID" />
+                <ScalarProperty Name="OFFICE_NUM" ColumnName="OFFICE_NUM" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="SQR_FT" ColumnName="SQR_FT" />
+                <ScalarProperty Name="BDRMS" ColumnName="BDRMS" />
+                <ScalarProperty Name="FLOORS" ColumnName="FLOORS" />
+                <ScalarProperty Name="MONTHLY_RENT" ColumnName="MONTHLY_RENT" />
+                <ScalarProperty Name="OWNER_NUM" ColumnName="OWNER_NUM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RESIDENTS">
+            <EntityTypeMapping TypeName="masterModel.RESIDENT">
+              <MappingFragment StoreEntitySet="RESIDENTS">
+                <ScalarProperty Name="RESIDENT_ID" ColumnName="RESIDENT_ID" />
+                <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+                <ScalarProperty Name="SURNAME" ColumnName="SURNAME" />
+                <ScalarProperty Name="PROPERTY_ID" ColumnName="PROPERTY_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SALES_REP">
+            <EntityTypeMapping TypeName="masterModel.SALES_REP">
+              <MappingFragment StoreEntitySet="SALES_REP">
+                <ScalarProperty Name="REP_ID" ColumnName="REP_ID" />
+                <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+                <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="POSTAL" ColumnName="POSTAL" />
+                <ScalarProperty Name="CELL_PHONE" ColumnName="CELL_PHONE" />
+                <ScalarProperty Name="COMMISSION" ColumnName="COMMISSION" />
+                <ScalarProperty Name="RATE" ColumnName="RATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SERVICE_CATEGORY">
+            <EntityTypeMapping TypeName="masterModel.SERVICE_CATEGORY">
+              <MappingFragment StoreEntitySet="SERVICE_CATEGORY">
+                <ScalarProperty Name="CATEGORY_NUM" ColumnName="CATEGORY_NUM" />
+                <ScalarProperty Name="CATEGORY_DESCRIPTION" ColumnName="CATEGORY_DESCRIPTION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SERVICE_REQUEST">
+            <EntityTypeMapping TypeName="masterModel.SERVICE_REQUEST">
+              <MappingFragment StoreEntitySet="SERVICE_REQUEST">
+                <ScalarProperty Name="SERVICE_ID" ColumnName="SERVICE_ID" />
+                <ScalarProperty Name="PROPERTY_ID" ColumnName="PROPERTY_ID" />
+                <ScalarProperty Name="CATEGORY_NUMBER" ColumnName="CATEGORY_NUMBER" />
+                <ScalarProperty Name="OFFICE_ID" ColumnName="OFFICE_ID" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="EST_HOURS" ColumnName="EST_HOURS" />
+                <ScalarProperty Name="SPENT_HOURS" ColumnName="SPENT_HOURS" />
+                <ScalarProperty Name="NEXT_SERVICE_DATE" ColumnName="NEXT_SERVICE_DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="brands">
+            <EntityTypeMapping TypeName="masterModel.brand">
+              <MappingFragment StoreEntitySet="brands">
+                <ScalarProperty Name="brand_id" ColumnName="brand_id" />
+                <ScalarProperty Name="brand_name" ColumnName="brand_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="categories">
+            <EntityTypeMapping TypeName="masterModel.category">
+              <MappingFragment StoreEntitySet="categories">
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="category_name" ColumnName="category_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="products">
+            <EntityTypeMapping TypeName="masterModel.product">
+              <MappingFragment StoreEntitySet="products">
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="product_name" ColumnName="product_name" />
+                <ScalarProperty Name="brand_id" ColumnName="brand_id" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="model_year" ColumnName="model_year" />
+                <ScalarProperty Name="list_price" ColumnName="list_price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="stocks">
+            <EntityTypeMapping TypeName="masterModel.stock">
+              <MappingFragment StoreEntitySet="stocks">
+                <ScalarProperty Name="store_id" ColumnName="store_id" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="customers1">
+            <EntityTypeMapping TypeName="masterModel.customer1">
+              <MappingFragment StoreEntitySet="customers">
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="zip_code" ColumnName="zip_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order_items">
+            <EntityTypeMapping TypeName="masterModel.order_items">
+              <MappingFragment StoreEntitySet="order_items">
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="list_price" ColumnName="list_price" />
+                <ScalarProperty Name="discount" ColumnName="discount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orders">
+            <EntityTypeMapping TypeName="masterModel.order">
+              <MappingFragment StoreEntitySet="orders">
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="order_status" ColumnName="order_status" />
+                <ScalarProperty Name="order_date" ColumnName="order_date" />
+                <ScalarProperty Name="required_date" ColumnName="required_date" />
+                <ScalarProperty Name="shipped_date" ColumnName="shipped_date" />
+                <ScalarProperty Name="store_id" ColumnName="store_id" />
+                <ScalarProperty Name="staff_id" ColumnName="staff_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="staffs">
+            <EntityTypeMapping TypeName="masterModel.staff">
+              <MappingFragment StoreEntitySet="staffs">
+                <ScalarProperty Name="staff_id" ColumnName="staff_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="store_id" ColumnName="store_id" />
+                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="stores">
+            <EntityTypeMapping TypeName="masterModel.store">
+              <MappingFragment StoreEntitySet="stores">
+                <ScalarProperty Name="store_id" ColumnName="store_id" />
+                <ScalarProperty Name="store_name" ColumnName="store_name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="zip_code" ColumnName="zip_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSreplication_options">
+            <EntityTypeMapping TypeName="masterModel.MSreplication_options">
+              <MappingFragment StoreEntitySet="MSreplication_options">
+                <ScalarProperty Name="optname" ColumnName="optname" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="major_version" ColumnName="major_version" />
+                <ScalarProperty Name="minor_version" ColumnName="minor_version" />
+                <ScalarProperty Name="revision" ColumnName="revision" />
+                <ScalarProperty Name="install_failures" ColumnName="install_failures" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spt_fallback_db">
+            <EntityTypeMapping TypeName="masterModel.spt_fallback_db">
+              <MappingFragment StoreEntitySet="spt_fallback_db">
+                <ScalarProperty Name="xserver_name" ColumnName="xserver_name" />
+                <ScalarProperty Name="xdttm_ins" ColumnName="xdttm_ins" />
+                <ScalarProperty Name="xdttm_last_ins_upd" ColumnName="xdttm_last_ins_upd" />
+                <ScalarProperty Name="xfallback_dbid" ColumnName="xfallback_dbid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="dbid" ColumnName="dbid" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="version" ColumnName="version" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spt_fallback_dev">
+            <EntityTypeMapping TypeName="masterModel.spt_fallback_dev">
+              <MappingFragment StoreEntitySet="spt_fallback_dev">
+                <ScalarProperty Name="xserver_name" ColumnName="xserver_name" />
+                <ScalarProperty Name="xdttm_ins" ColumnName="xdttm_ins" />
+                <ScalarProperty Name="xdttm_last_ins_upd" ColumnName="xdttm_last_ins_upd" />
+                <ScalarProperty Name="xfallback_low" ColumnName="xfallback_low" />
+                <ScalarProperty Name="xfallback_drive" ColumnName="xfallback_drive" />
+                <ScalarProperty Name="low" ColumnName="low" />
+                <ScalarProperty Name="high" ColumnName="high" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="phyname" ColumnName="phyname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spt_fallback_usg">
+            <EntityTypeMapping TypeName="masterModel.spt_fallback_usg">
+              <MappingFragment StoreEntitySet="spt_fallback_usg">
+                <ScalarProperty Name="xserver_name" ColumnName="xserver_name" />
+                <ScalarProperty Name="xdttm_ins" ColumnName="xdttm_ins" />
+                <ScalarProperty Name="xdttm_last_ins_upd" ColumnName="xdttm_last_ins_upd" />
+                <ScalarProperty Name="xfallback_vstart" ColumnName="xfallback_vstart" />
+                <ScalarProperty Name="dbid" ColumnName="dbid" />
+                <ScalarProperty Name="segmap" ColumnName="segmap" />
+                <ScalarProperty Name="lstart" ColumnName="lstart" />
+                <ScalarProperty Name="sizepg" ColumnName="sizepg" />
+                <ScalarProperty Name="vstart" ColumnName="vstart" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spt_monitor">
+            <EntityTypeMapping TypeName="masterModel.spt_monitor">
+              <MappingFragment StoreEntitySet="spt_monitor">
+                <ScalarProperty Name="lastrun" ColumnName="lastrun" />
+                <ScalarProperty Name="cpu_busy" ColumnName="cpu_busy" />
+                <ScalarProperty Name="io_busy" ColumnName="io_busy" />
+                <ScalarProperty Name="idle" ColumnName="idle" />
+                <ScalarProperty Name="pack_received" ColumnName="pack_received" />
+                <ScalarProperty Name="pack_sent" ColumnName="pack_sent" />
+                <ScalarProperty Name="connections" ColumnName="connections" />
+                <ScalarProperty Name="pack_errors" ColumnName="pack_errors" />
+                <ScalarProperty Name="total_read" ColumnName="total_read" />
+                <ScalarProperty Name="total_write" ColumnName="total_write" />
+                <ScalarProperty Name="total_errors" ColumnName="total_errors" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YearlyDatas">
+            <EntityTypeMapping TypeName="masterModel.YearlyData">
+              <MappingFragment StoreEntitySet="YearlyData">
+                <ScalarProperty Name="countryID" ColumnName="countryID" />
+                <ScalarProperty Name="indicatorID" ColumnName="indicatorID" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Pct" ColumnName="Pct" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="spt_values">
+            <EntityTypeMapping TypeName="masterModel.spt_values">
+              <MappingFragment StoreEntitySet="spt_values">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="low" ColumnName="low" />
+                <ScalarProperty Name="high" ColumnName="high" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_MScleanupmergepublisher" FunctionName="masterModel.Store.sp_MScleanupmergepublisher" />
+          <FunctionImportMapping FunctionImportName="sp_MSrepl_startup" FunctionName="masterModel.Store.sp_MSrepl_startup" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
