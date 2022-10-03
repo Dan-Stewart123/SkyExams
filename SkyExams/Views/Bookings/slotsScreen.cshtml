@@ -3,6 +3,7 @@
     ViewBag.Title = "slotsScreen";
     var uID = ViewData["userId"];
     var time = ViewData["time"];
+    var role = ViewData["role"];
 }
 
 <h2>Booking Slots</h2>
@@ -37,12 +38,10 @@
                 <td scope="row">
                     @Html.DisplayFor(modelItem => item.Booked)
                 </td>
-                <td scope="row">
+                <td scope="row" style="display:none;" class="insFunc">
                     <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("updateSlot", "Bookings", new { id = uID, slotId = item.Slot_ID })'">
                         Update
                     </button>
-                </td>
-                <td scope="row">
                     <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("deleteSlot", "Bookings", new { id = uID, slotId = item.Slot_ID })'">
                         Delete
                     </button>
@@ -58,6 +57,18 @@
 </button>
 
 <script>
+
+    function adminCheck() {
+        var userId = @role;
+        if (userId == '2') {
+            var func = document.getElementsByClassName("insFunc");
+            for (var i = 0; i <= func.length; i++) {
+                func[i].style.display = "block";
+            }
+        }
+    }
+    window.onload = adminCheck;
+
     function timer() {
         window.location.href = '/Sys_User/loginScreen';
     }

@@ -83,12 +83,6 @@
     function adminCheck() {
         var userId = @Html.Raw(Json.Encode(ViewData["userRole"]));
         var userRole = @Html.Raw(Json.Encode(ViewData["role"]));
-        if (userId == '2') {
-            document.getElementById("del").style.display = "block";
-            if (userRole == 'student') {
-                document.getElementById("studentFunctions").style.display = "block";
-            }
-        }
         if (userId == '3') {
             document.getElementById("del").style.display = "block";
             if (userRole == 'student') {

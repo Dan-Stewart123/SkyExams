@@ -67,9 +67,14 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    if (time == null || time < 1)
+                    if (time == null)
                     {
                         string temp = "Please complete all the required fields";
+                        return RedirectToAction("TimerView", new { id = id, err = temp });
+                    }// if statement
+                    if (time < 1)
+                    {
+                        string temp = "Timer value cannot be less than 0";
                         return RedirectToAction("TimerView", new { id = id, err = temp });
                     }// if statement
                     else
@@ -352,15 +357,15 @@ namespace SkyExams.Controllers
                 {
                     //create email
                     MimeMessage requestEmail = new MimeMessage();
-                    requestEmail.From.Add(new MailboxAddress("New user", "skyexams.fts@gmail.com"));
-                    requestEmail.To.Add(MailboxAddress.Parse("skyexams.fts@gmail.com"));
+                    requestEmail.From.Add(new MailboxAddress("New user", "skyexams2022@gmail.com"));
+                    requestEmail.To.Add(MailboxAddress.Parse("skyexams2022.fts@gmail.com"));
                     requestEmail.Subject = "New user request";
                     requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be registered on the system: User name: " + firstName + " " + lastName + " email address: " + email };
 
                     //send email
                     SmtpClient client = new SmtpClient();
                     client.Connect("smtp.gmail.com", 465, true);
-                    client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                    client.Authenticate("skyexams2022.fts@gmail.com", "fqtdnvezqzgjinc");
                     client.Send(requestEmail);
                     client.Disconnect(true);
                     client.Dispose();
@@ -459,7 +464,7 @@ namespace SkyExams.Controllers
 
 
                 Sys_User newAdminUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
-                newAdminUser.User_Role_ID = 2;
+                newAdminUser.User_Role_ID = 3;
                 db.Entry(newAdminUser).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 newAdmin.SysUser_ID = newAdminUser.SysUser_ID;
@@ -474,7 +479,7 @@ namespace SkyExams.Controllers
                 //newManager.Manager_ID = managerId;
 
                 Sys_User newManagerUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
-                newManagerUser.User_Role_ID = 2;
+                newManagerUser.User_Role_ID = 4;
                 db.Entry(newManagerUser).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 newManager.SysUser_ID = newManagerUser.SysUser_ID;
@@ -1436,11 +1441,16 @@ namespace SkyExams.Controllers
                 {
                     Student stu = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student updateHours = stu;
-                    if(hoursFlown < 0)
+                    if(hoursFlown <= 0)
                     {
                         string temp = "Hint: Hours flown cannot be a negative.";
                         return RedirectToAction("StudentHours", new { id = id, err = temp });
                     }// if hours is negative
+                    if(hoursFlown <= stu.Hours_Flown)
+                    {
+                        string temp = "Hint: Hours flown cannot be less than your current hours flown.";
+                        return RedirectToAction("StudentHours", new { id = id, err = temp });
+                    }
                     if (hoursFlown != null)
                     {
                         updateHours.Hours_Flown = hoursFlown;

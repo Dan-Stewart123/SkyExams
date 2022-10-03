@@ -387,7 +387,7 @@ namespace SkyExams.Controllers
                         int count = stuExamList.Count();
                         int totalMark = 0;
                         tempAverage.examId = e.Exam_ID;
-                        tempAverage.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == e.Exam_ID).Type_Description;
+                        tempAverage.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == e.Plane_Type_ID).Type_Description;
                         if (stuExamList.Count != 0)
                         {
                             foreach (var s in stuExamList)
@@ -413,12 +413,12 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
-            catch
+            catch(Exception e)
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// exam report

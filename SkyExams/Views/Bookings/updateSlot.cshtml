@@ -3,11 +3,13 @@
     ViewBag.Title = "updateSlot";
     var uID = ViewData["uID"];
     var time = ViewData["time"];
+    var error = ViewData["err"];
 }
 
 <h2>Update Booking Slot</h2>
 <p>Please enter the following information:</p>
 <br />
+<label style="color:red">@error</label>
 <br />
 @using (Html.BeginForm("updateSlot", "Bookings", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
