@@ -59,10 +59,7 @@
         {
             <ul>
                 <li>
-                    @Html.DisplayFor(modelItem => item.examName)
-                </li>
-                <li>
-                    @Html.Raw(item.examAvg)
+                    @Html.DisplayFor(modelItem => item.examName): @Html.Raw(item.examAvg)
                 </li>
             </ul>
         }

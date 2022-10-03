@@ -49,5 +49,12 @@
         window.location.href = '/Sys_User/loginScreen';
     }
     window.oninput = setTimeout(timer, 300000);
+
+    string viewNames = Session["AuthId"];
+    if (viewNames == null) {
+        $(document).ready(function () {
+            window.location.href = "../Sys_User/loginScreen";
+        });
+    }
 </script>
 
