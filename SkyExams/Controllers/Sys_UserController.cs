@@ -87,7 +87,19 @@ namespace SkyExams.Controllers
 
         public ActionResult loginScreen()
         {
-            return View();
+            try
+            {
+                if (Request.Cookies["AuthID"].Value != null)
+                {
+                    Response.Cookies["AuthID"].Expires = DateTime.Now.AddDays(-30);
+                    Session.Clear();
+                }
+            }
+            catch
+            {
+
+            }
+             return View();
         }// returns Login screen
 
         [HttpPost]
@@ -330,8 +342,8 @@ namespace SkyExams.Controllers
                 }// try
                 catch
                 {
-                    ViewData["err"] = "Email failed to send.";
-                    return View();
+                    string temp= "Email failed to send.";
+                    return RedirectToAction("registrationConformationScreen", new { err = temp });
                 }
                 return RedirectToAction("registrationConformationScreen");
             }// adds user, emails admin
@@ -365,7 +377,7 @@ namespace SkyExams.Controllers
         }// save profile image
 
         [HttpGet]
-        public ActionResult registrationConformationScreen()
+        public ActionResult registrationConformationScreen(string err)
         {
             return View();
         }// confirm registration
@@ -385,6 +397,7 @@ namespace SkyExams.Controllers
                 //int studentID = db.Students.ToList().Count + 1;
                 //newStudent.Student_ID = studentID;
                 newStudent.Licence_No = Convert.ToInt32(studentLicence);
+                newStudent.Hours_Flown = 0;
 
                 Sys_User newStudentUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
                 newStudentUser.User_Role_ID = 1;
@@ -444,6 +457,13 @@ namespace SkyExams.Controllers
                 db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// manager 
+            if(db.Sys_User.ToList().Find(s => s.User_Name == uName).User_Role_ID == null)
+            {
+                Sys_User temp = db.Sys_User.ToList().Find(s => s.User_Name == uName);
+                db.Sys_User.Remove(temp);
+                db.SaveChanges(); 
+                return RedirectToAction("loginScreen");
+            }
             else
             {
                 return View();
@@ -1370,6 +1390,11 @@ namespace SkyExams.Controllers
                 {
                     Student stu = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student updateHours = stu;
+                    if(hoursFlown < 0)
+                    {
+                        string temp = "Hint: Hours flown cannot be a negative.";
+                        return RedirectToAction("StudentHours", new { id = id, err = temp });
+                    }// if hours is negative
                     if (hoursFlown != null)
                     {
                         updateHours.Hours_Flown = hoursFlown;

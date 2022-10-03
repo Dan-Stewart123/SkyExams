@@ -53,6 +53,9 @@
 
 <script>
     function getInstructorSlots() {
+        if (document.getElementById("FromJson").length != 0) {
+            document.getElementById("FromJson").innerHTML = null;
+        }
         $.ajax({
             url: "/Bookings/getSlots",
             type: "GET",
