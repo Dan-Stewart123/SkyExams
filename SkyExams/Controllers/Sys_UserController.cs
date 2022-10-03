@@ -159,6 +159,14 @@ namespace SkyExams.Controllers
             // verify username and password here, if correct then display home screen, else login screen with a pop up
         }// returns home screen
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult homeScreen(int? id)
         {
             //ViewBag.Title = "Home";
@@ -167,7 +175,8 @@ namespace SkyExams.Controllers
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Sys_User loggedInUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
-                    return View(loggedInUser);
+                    SetPageCacheNoStore();
+                    return View(loggedInUser); 
                 }
                 else
                 {
