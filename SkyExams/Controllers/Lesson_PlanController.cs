@@ -21,18 +21,26 @@ namespace SkyExams.Controllers
             return View(db.Lesson_Plan.ToList());
         }
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult planScreen(int? id)
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> planeTypes = db.Plane_Type.ToList();
-
+                    SetPageCacheNoStore();
                     return View(planeTypes);
                 }
                 else
@@ -59,7 +67,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || topicId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User user = db.Sys_User.Find(id);
@@ -84,6 +92,7 @@ namespace SkyExams.Controllers
                                 }
                             }// inner for each
                         }// for each
+                        SetPageCacheNoStore();
                         return View(planList);
 
                     }// if user is a student
@@ -92,6 +101,7 @@ namespace SkyExams.Controllers
                         ViewData["topicID"] = "" + topicId;
                         ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == topicId).Type_Description;
                         planList = db.Lesson_Plan.ToList().FindAll(p => p.Rating_ID == topicId);
+                        SetPageCacheNoStore();
                         return View(planList);
                     }// else
                 }
@@ -119,12 +129,13 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || topicId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["topicID"] = "" + topicId;
                     ViewData["err"] = err;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    SetPageCacheNoStore();
                     return View(user);
                 }
                 else
@@ -192,6 +203,7 @@ namespace SkyExams.Controllers
                             db.Student_Lesson_Plan.Add(newStuPlan);
                             db.SaveChanges();
                         }// for each
+                        SetPageCacheNoStore();
                         return RedirectToAction("planScreen", new { id = id });
                     }// else
                 }
@@ -211,12 +223,13 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (loggedId != null || id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     Lesson_Plan delPlan = db.Lesson_Plan.ToList().Find(p => p.Lesson_Plan_ID == id);
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delPlan.Rating_ID).Type_Description;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    SetPageCacheNoStore();
                     return View(delPlan);
                 }
                 else
@@ -249,6 +262,7 @@ namespace SkyExams.Controllers
                             db.SaveChanges();
                         }
                     }
+                    SetPageCacheNoStore();
                     return RedirectToAction("planScreen", new { id = loggedId });
                 }
                 else

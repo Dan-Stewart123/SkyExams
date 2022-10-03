@@ -18,6 +18,14 @@ namespace SkyExams.Controllers
 
         private SkyExamsEntities db = new SkyExamsEntities();
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult studentCheck(int? id)
         {
             Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -279,6 +287,7 @@ namespace SkyExams.Controllers
                         ViewData["help"] = "By clicking on the “exam consultation” button, you can view all your available and booked consultation sessions. You can also create new booking slots as well as update or delete existing consultation bookings.(Please note that only instructors are able to do this.)";
                     }
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    ViewData["role"] = "" + temp.User_Role_ID;
                     return View(temp);
                 }
                 else

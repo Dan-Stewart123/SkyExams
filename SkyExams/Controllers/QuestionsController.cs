@@ -22,11 +22,19 @@ namespace SkyExams.Controllers
             return View(db.Questions.ToList());
         }
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult exams(int? id)
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -50,7 +58,7 @@ namespace SkyExams.Controllers
                     {
                         planeTypes = db.Plane_Type.ToList();
                     }// else     
-
+                    SetPageCacheNoStore();
                     return View(planeTypes);
                 }
                 else
@@ -77,7 +85,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || ratingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     List<Student_Exam> stuExam = db.Student_Exam.ToList().FindAll(e => e.Exam_ID == ratingId);
                     int stuId = db.Students.ToList().Find(s => s.SysUser_ID == id).Student_ID;
@@ -88,6 +96,7 @@ namespace SkyExams.Controllers
                         {
                             ViewData["userId"] = "" + id;
                             ViewData["ratingId"] = "" + ratingId;
+                            SetPageCacheNoStore();
                             return View();
                         }// if statement
                     }// foreach
@@ -123,7 +132,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || ratingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = "" + ratingId;
@@ -131,6 +140,7 @@ namespace SkyExams.Controllers
                     ViewData["message"] = message;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Question> questionList = db.Questions.ToList().FindAll(q => q.Question_Rating_ID == ratingId);
+                    SetPageCacheNoStore();
                     return View(questionList);
                 }
                 else
@@ -149,13 +159,14 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || questionId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question_Rating_ID;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["question"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question1;
                     List<Answer> answerList = db.Answers.ToList().FindAll(a => a.Question_ID == questionId);
+                    SetPageCacheNoStore();
                     return View(answerList);
                 }
                 else
@@ -175,12 +186,13 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || ratingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = "" + ratingId;
                     ViewData["err"] = err;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    SetPageCacheNoStore();
                     return View(db.Sections.ToList());
                 }
                 else
@@ -243,7 +255,7 @@ namespace SkyExams.Controllers
                         falseAns2.Correct_Answer = false;
                         db.Answers.Add(falseAns2);
                         db.SaveChanges();
-
+                        SetPageCacheNoStore();
                         return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
                     }// else
                 }
@@ -264,12 +276,13 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || ratingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["ratingId"] = "" + ratingId;
                     ViewData["err"] = err;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                    SetPageCacheNoStore();
                     return View(tempUser);
                 }
                 else
@@ -348,7 +361,7 @@ namespace SkyExams.Controllers
                             }
                         }// if load sheet exists
                     }// else
-
+                    SetPageCacheNoStore();
                     return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
                 }
                 else
@@ -381,7 +394,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || ratingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Load_Sheet delSheet = db.Load_Sheet.ToList().Find(l => l.Exam_ID == ratingId);
                     string temp = "No loadsheet found.";
@@ -410,13 +423,14 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || questionId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["ratingId"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question_Rating_ID;
                     ViewData["questionId"] = "" + questionId;
                     ViewData["question"] = db.Questions.ToList().Find(q => q.Question_ID == questionId).Question1;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    SetPageCacheNoStore();
                     return View(db.Answers.ToList().FindAll(a => a.Question_ID == questionId));
                 }
                 else
@@ -446,6 +460,7 @@ namespace SkyExams.Controllers
                         db.Answers.Remove(ans);
                         db.SaveChanges();
                     }// for each
+                    SetPageCacheNoStore();
                     return RedirectToAction("questionsScreen", new { id = id, ratingId = delQuest.Question_Rating_ID });
                 }
                 else
@@ -465,7 +480,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || questionId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userId"] = "" + id;
                     ViewData["questionId"] = "" + questionId;
@@ -481,6 +496,7 @@ namespace SkyExams.Controllers
                     ViewData["false2"] = db.Answers.ToList().Find(a => a.Answer_ID == correctAns.Answer_ID + 2).ANS;
                     ViewData["err"] = err;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    SetPageCacheNoStore();
                     return View(db.Sections.ToList());
                 }
                 else
@@ -553,7 +569,7 @@ namespace SkyExams.Controllers
                         db.Answers.Add(newFalse2);
                         db.SaveChanges();
                     }
-
+                    SetPageCacheNoStore();
                     return RedirectToAction("questionsScreen", new { id = id, ratingId = ratingId });
                 }
                 else
@@ -573,7 +589,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || ratingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Student_Exam stuExam = db.Student_Exam.ToList().Find(s => s.Student_ID == id && s.Exam_ID == ratingId);
                     if (stuExam.Started == true && stuExam.Completed == false)
@@ -702,7 +718,7 @@ namespace SkyExams.Controllers
                         {
                             questions.RemoveRange(100, questions.Count());
                         }// 100 questions
-
+                        SetPageCacheNoStore();
                         return View(questions);
                     }// if student hasent started the exam
                 }
