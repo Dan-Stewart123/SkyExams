@@ -309,8 +309,18 @@ namespace SkyExams.Controllers
                             Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
                             newLS.load_Sheet1 = fileDetails;
 
-                            db.Load_Sheet.Add(newLS);
-                            db.SaveChanges();
+                            string ext = Path.GetExtension(loadSheet.FileName).ToUpper();
+                            if (ext == ".PDF")
+                            {
+                                db.Load_Sheet.Add(newLS);
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                string temp = "Hint: Upload a PDF.";
+                                return RedirectToAction("addLoadSheet", new { id = id, ratingId = ratingId, err = temp });
+                            }
+
                         }// if no load sheet exists
                         else
                         {
@@ -325,8 +335,17 @@ namespace SkyExams.Controllers
                             Byte[] fileDetails = br.ReadBytes((Int32)str.Length);
                             newLS.load_Sheet1 = fileDetails;
 
-                            db.Load_Sheet.Add(newLS);
-                            db.SaveChanges();
+                            string ext = Path.GetExtension(loadSheet.FileName).ToUpper();
+                            if (ext == ".PDF")
+                            {
+                                db.Load_Sheet.Add(newLS);
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                string temp = "Hint: Upload a PDF.";
+                                return RedirectToAction("addLoadSheet", new { id = id, ratingId = ratingId, err = temp });
+                            }
                         }// if load sheet exists
                     }// else
 
