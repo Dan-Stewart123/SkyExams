@@ -56,13 +56,13 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen", "Sys_User");
             }
-          
+
         }// timer get
 
         [HttpPost]
         public ActionResult TimerView(int? id, int? time)
         {
-            if(time == null || time < 1)
+            if (time == null || time < 1)
             {
                 string temp = "Please complete all the required fields";
                 return RedirectToAction("TimerView", new { id = id, err = temp });
@@ -87,7 +87,19 @@ namespace SkyExams.Controllers
 
         public ActionResult loginScreen()
         {
-            return View();
+            try
+            {
+                if (Request.Cookies["AuthID"].Value != null)
+                {
+                    Response.Cookies["AuthID"].Expires = DateTime.Now.AddDays(-30);
+                    Session.Clear();
+                }
+            }
+            catch
+            {
+
+            }
+             return View();
         }// returns Login screen
 
         [HttpPost]
@@ -106,17 +118,17 @@ namespace SkyExams.Controllers
             {
                 foreach (Sys_User tempUser in db.Sys_User.ToList())
                 {
-                    if(userName == tempUser.User_Name)
+                    if (userName == tempUser.User_Name)
                     {
                         loginUser = tempUser;
-                        foreach(UserPassword tempPass in db.UserPasswords.ToList())
+                        foreach (UserPassword tempPass in db.UserPasswords.ToList())
                         {
-                            if(loginUser.Password_ID == tempPass.Password_ID)
+                            if (loginUser.Password_ID == tempPass.Password_ID)
                             {
                                 passwordFromDb = decodePassword(tempPass.Encrypted_password);
-                                if(password == passwordFromDb)
+                                if (password == passwordFromDb)
                                 {
-                                    return RedirectToAction ("homeScreen", new { id = loginUser.SysUser_ID});
+                                    return RedirectToAction("homeScreen", new { id = loginUser.SysUser_ID });
                                 }// checks is entered password matches db password
                             }// matches user and password ids
                         }// searches passwords
@@ -176,7 +188,7 @@ namespace SkyExams.Controllers
         [HttpPost]
         public ActionResult registerScreen(string firstName, string lastName, string uName, string title, string cellNo, string email, string pAddress, string country, string city, string zip, string dob, string empStatus, string password, string confPass)
         {
-            if(firstName == "" || lastName == "" || uName == "" || title == "" || cellNo == "" || email == "" || pAddress == "" || country == "" || city == "" || zip == "" || dob == "" || empStatus == "" || password =="" || confPass == "")
+            if (firstName == "" || lastName == "" || uName == "" || title == "" || cellNo == "" || email == "" || pAddress == "" || country == "" || city == "" || zip == "" || dob == "" || empStatus == "" || password == "" || confPass == "")
             {
                 ViewData["err"] = "Please complete all the required fields";
                 return View();
@@ -186,6 +198,11 @@ namespace SkyExams.Controllers
                 ViewData["err"] = "Passwords do not match";
                 return View();
             }// checks that passwords match
+            if(password.Length < 8 || confPass.Length < 8)
+            {
+                ViewData["err"] = "Password is not long enough.";
+                return View();
+            }// checks password length
             else
             {
                 System.TimeSpan dobDiff = DateTime.Now.Subtract(Convert.ToDateTime(dob));
@@ -194,6 +211,23 @@ namespace SkyExams.Controllers
                     ViewData["err"] = "You are not old enough to be registered on this system";
                     return View();
                 }// checks user is old enough
+                int cellNoCheck;
+                int zipCheck;
+                bool isCellNo = int.TryParse(cellNo, out cellNoCheck);
+                bool isZipCheck = int.TryParse(zip, out zipCheck);
+                if(isCellNo == false && isZipCheck == false)
+                {
+                    ViewData["err"] = "Please enter a number for your cell number and zip code";
+                    return View();
+                }// checks numeric inputs
+                foreach(var temp in db.Sys_User.ToList())
+                {
+                    if(temp.User_Name == uName)
+                    {
+                        ViewData["err"] = "Username already exists";
+                        return View();
+                    }
+                }// for each
                 DateTime DOB = DateTime.Parse(dob);
                 user.FName = firstName;
                 user.Surname = lastName;
@@ -206,7 +240,7 @@ namespace SkyExams.Controllers
                 List<Country> cList = db.Countries.ToList();
                 int countryIndex = -1;
                 countryIndex = cList.FindIndex(c => c.Country_Name == country);
-                if(countryIndex == -1)
+                if (countryIndex == -1)
                 {
                     Country newCountry = new Country();
                     //newCountry.Country_ID = cList.Count() + 1;
@@ -308,12 +342,12 @@ namespace SkyExams.Controllers
                 }// try
                 catch
                 {
-                    ViewData["err"] = "Email failed to send.";
-                    return View();
+                    string temp= "Email failed to send.";
+                    return RedirectToAction("registrationConformationScreen", new { err = temp });
                 }
                 return RedirectToAction("registrationConformationScreen");
             }// adds user, emails admin
-            
+
         }// registering users
 
         public ContentResult SaveCapture(string data)
@@ -343,7 +377,7 @@ namespace SkyExams.Controllers
         }// save profile image
 
         [HttpGet]
-        public ActionResult registrationConformationScreen()
+        public ActionResult registrationConformationScreen(string err)
         {
             return View();
         }// confirm registration
@@ -363,6 +397,7 @@ namespace SkyExams.Controllers
                 //int studentID = db.Students.ToList().Count + 1;
                 //newStudent.Student_ID = studentID;
                 newStudent.Licence_No = Convert.ToInt32(studentLicence);
+                newStudent.Hours_Flown = 0;
 
                 Sys_User newStudentUser = db.Sys_User.ToList().Find(u => u.User_Name == uName);
                 newStudentUser.User_Role_ID = 1;
@@ -422,6 +457,13 @@ namespace SkyExams.Controllers
                 db.SaveChanges();
                 return RedirectToAction("loginScreen");
             }// manager 
+            if(db.Sys_User.ToList().Find(s => s.User_Name == uName).User_Role_ID == null)
+            {
+                Sys_User temp = db.Sys_User.ToList().Find(s => s.User_Name == uName);
+                db.Sys_User.Remove(temp);
+                db.SaveChanges(); 
+                return RedirectToAction("loginScreen");
+            }
             else
             {
                 return View();
@@ -436,6 +478,8 @@ namespace SkyExams.Controllers
                 {
                     Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["msg"] = msg;
+                    ViewData["city"] = db.Cities.ToList().Find(c => c.City_ID == viewUser.City_ID).City_Name;
+                    ViewData["country"] = db.Countries.ToList().Find(co => co.Country_ID == viewUser.Country_ID).Country_Name;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     return View(viewUser);
                 }
@@ -444,7 +488,7 @@ namespace SkyExams.Controllers
                     return RedirectToAction("loginScreen");
                 }
             }
-            catch
+            catch  
             {
                 return RedirectToAction("loginScreen");
             }
@@ -493,7 +537,7 @@ namespace SkyExams.Controllers
                     ? new FileContentResult(byteArray, "image/jpeg")
                     : null;
             }// try
-            catch(Exception e)
+            catch (Exception e)
             {
                 return null;
             }// catch
@@ -594,7 +638,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// return update screen
 
         [HttpPost]
@@ -613,6 +657,30 @@ namespace SkyExams.Controllers
                     }// checks that fileds are not empty
                     else
                     {
+
+                        System.TimeSpan dobDiff = DateTime.Now.Subtract(Convert.ToDateTime(dob));
+                        if (dobDiff.TotalDays < 5478)
+                        {
+                            string temp = "You are not old enough to be registered on this system";
+                            return RedirectToAction("updateAccount", new { id = idUser, err = temp });
+                        }// checks user is old enough
+                        int cellNoCheck;
+                        int zipCheck;
+                        bool isCellNo = int.TryParse(cellNo, out cellNoCheck);
+                        bool isZipCheck = int.TryParse(zip, out zipCheck);
+                        if (isCellNo == false && isZipCheck == false)
+                        {
+                            string temp2 = "Please enter a number for your cell number and zip code";
+                            return RedirectToAction("updateAccount", new { id = idUser, err = temp2 });
+                        }// checks numeric inputs
+                        foreach (var temp in db.Sys_User.ToList())
+                        {
+                            if (temp.User_Name == uName)
+                            {
+                                string temp3 = "Username already exists";
+                                return RedirectToAction("updateAccount", new { id = idUser, err = temp3 });
+                            }
+                        }// for each
                         Sys_User updateUser = new Sys_User();
                         DateTime DOB = DateTime.Parse(dob);
                         updateUser = sys_User;
@@ -711,7 +779,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
 
         }// updating users
 
@@ -770,7 +838,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// add student resource post
 
         [HttpGet]
@@ -854,7 +922,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// add student instructor get
 
         [HttpPost]
@@ -903,7 +971,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// add student instructor post
 
         public ActionResult resetPassword(int? id, string err)
@@ -926,7 +994,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// reset password
 
         [HttpPost]
@@ -943,8 +1011,14 @@ namespace SkyExams.Controllers
                     }// if fields are empty
                     if (newPass != confPass)
                     {
-                        return View(db.Sys_User.ToList().Find(u => u.SysUser_ID == id));
+                        string temp = "Passwords don't match.";
+                        return RedirectToAction("resetPassword", new { id = id, err = temp });
                     }// if passwords dont match
+                    if (newPass.Length < 8 || confPass.Length < 8)
+                    {
+                        string temp = "Password is not long enough.";
+                        return RedirectToAction("resetPassword", new { id = id, err = temp });
+                    }// checks password length
                     else
                     {
                         Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -958,9 +1032,15 @@ namespace SkyExams.Controllers
                             pass.Encrypted_password = encNewPass;
                             pass.Date_Set = DateTime.Now;
                             db.Entry(pass).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChangesAsync();
+                            db.SaveChanges();
+                            return RedirectToAction("loginScreen");
                         }// if entered password matches db password
-                        return RedirectToAction("loginScreen");
+                        else
+                        {
+                            string temp = "Old password is incorrect.";
+                            return RedirectToAction("resetPassword", new { id = id, err = temp });
+                        }
+                        
                     }// else
                 }// if statement
                 else
@@ -972,7 +1052,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// reset password
 
         public ActionResult forgotPassword()
@@ -983,7 +1063,7 @@ namespace SkyExams.Controllers
         [HttpPost]
         public ActionResult forgotPassword(string userName, string email, string newPass, string confPass)
         {
-            if (userName == "" || email =="" || newPass == "" || confPass == "")
+            if (userName == "" || email == "" || newPass == "" || confPass == "")
             {
                 ViewData["err"] = "Please complete all the required fields";
                 return View();
@@ -992,19 +1072,32 @@ namespace SkyExams.Controllers
             {
                 return View();
             }// if passwords dont match
+            if (newPass.Length < 8 || confPass.Length < 8)
+            {
+                ViewData["err"] = "Password is not long enough.";
+                return View();
+            }// checks password length
             else
             {
-                Sys_User tempUser = db.Sys_User.ToList().Find(u => u.User_Name == userName && u.Email_Address == email);
-                int passID = tempUser.Password_ID;
-                UserPassword pass = db.UserPasswords.ToList().Find(p => p.Password_ID == passID);
-                string encPass = pass.Encrypted_password;
-                string decPass = decodePassword(encPass);
-                string encNewPass = encodePassword(confPass);
-                pass.Encrypted_password = encNewPass;
-                pass.Date_Set = DateTime.Now;
-                db.Entry(pass).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChangesAsync();
-                return RedirectToAction("loginScreen");
+                try
+                {
+                    Sys_User tempUser = db.Sys_User.ToList().Find(u => u.User_Name == userName && u.Email_Address == email);
+                    int passID = tempUser.Password_ID;
+                    UserPassword pass = db.UserPasswords.ToList().Find(p => p.Password_ID == passID);
+                    string encPass = pass.Encrypted_password;
+                    string decPass = decodePassword(encPass);
+                    string encNewPass = encodePassword(confPass);
+                    pass.Encrypted_password = encNewPass;
+                    pass.Date_Set = DateTime.Now;
+                    db.Entry(pass).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("loginScreen");
+                }// try
+                catch
+                {
+                    ViewData["err"] = "An error occured.";
+                    return View();
+                }// catch
             }
         }// forgot password
 
@@ -1029,7 +1122,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// delete get
 
         public ActionResult deleteConformation(int? loggedId, int? id)
@@ -1058,19 +1151,19 @@ namespace SkyExams.Controllers
                             db.Student_Instructor.Remove(delStudentInstructor);
                             db.SaveChanges();
                         }// if not null
-                        List <Student_Resource> delStuResource = db.Student_Resource.ToList().FindAll(s => s.Student_ID == id);
+                        List<Student_Resource> delStuResource = db.Student_Resource.ToList().FindAll(s => s.Student_ID == delStudent.Student_ID);
                         if (delStuResource != null)
                         {
-                            foreach(var r in delStuResource)
+                            foreach (var r in delStuResource)
                             {
                                 db.Student_Resource.Remove(r);
                                 db.SaveChanges();
                             }// for each
                         }// if not null
-                        List <Student_Lesson_Plan> delStuPlan = db.Student_Lesson_Plan.ToList().FindAll(s => s.Student_ID == id);
+                        List<Student_Lesson_Plan> delStuPlan = db.Student_Lesson_Plan.ToList().FindAll(s => s.Student_ID == delStudent.Student_ID);
                         if (delStuPlan != null)
                         {
-                            foreach(var l in delStuPlan)
+                            foreach (var l in delStuPlan)
                             {
                                 db.Student_Lesson_Plan.Remove(l);
                                 db.SaveChanges();
@@ -1084,7 +1177,7 @@ namespace SkyExams.Controllers
                         db.Instructors.Remove(delInstructor);
                         db.SaveChanges();
                         List<Student_Instructor> delStudentInstructor = db.Student_Instructor.ToList().FindAll(s => s.Instructor_ID == delInstructor.Instructor_ID);
-                        if(delStudentInstructor != null)
+                        if (delStudentInstructor != null)
                         {
                             foreach (var sI in delStudentInstructor)
                             {
@@ -1093,8 +1186,8 @@ namespace SkyExams.Controllers
                             }// for each
                         }// if statement
 
-                        List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(i => i.Instructor_ID == id);
-                        if(planList != null)
+                        List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(i => i.Instructor_ID == delInstructor.Instructor_ID);
+                        if (planList != null)
                         {
                             foreach (Lesson_Plan temp in planList)
                             {
@@ -1102,6 +1195,15 @@ namespace SkyExams.Controllers
                                 db.SaveChanges();
                             }// del lesson plans
                         }// if statement
+                        List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == delInstructor.Instructor_ID);
+                        if(slotsList != null)
+                        {
+                            foreach(var temp in slotsList)
+                            {
+                                db.Instructor_Slots.Remove(temp);
+                                db.SaveChanges();
+                            }
+                        }
                     }// instructors
                     if (sys_User.User_Role_ID == 3)
                     {
@@ -1128,7 +1230,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }
 
         [HttpGet]
@@ -1153,7 +1255,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }//update user role get
 
         [HttpPost]
@@ -1249,9 +1351,9 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }//update user role post
-                
+
         [HttpGet]
         public ActionResult StudentHours(int? id, string err)
         {
@@ -1276,7 +1378,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }//Update student hours Get
 
         [HttpPost]
@@ -1288,6 +1390,11 @@ namespace SkyExams.Controllers
                 {
                     Student stu = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student updateHours = stu;
+                    if(hoursFlown < 0)
+                    {
+                        string temp = "Hint: Hours flown cannot be a negative.";
+                        return RedirectToAction("StudentHours", new { id = id, err = temp });
+                    }// if hours is negative
                     if (hoursFlown != null)
                     {
                         updateHours.Hours_Flown = hoursFlown;
@@ -1311,7 +1418,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// update student hours post
 
         [HttpGet]
@@ -1333,7 +1440,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }// capture registration get
 
         [HttpGet]
@@ -1356,7 +1463,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }//Capture plane registration get
 
         [HttpPost]
@@ -1388,7 +1495,7 @@ namespace SkyExams.Controllers
             {
                 return RedirectToAction("loginScreen");
             }
-            
+
         }//capture plane registration post
 
         public FileResult ExportToExcel()
@@ -1403,7 +1510,7 @@ namespace SkyExams.Controllers
             var regSheet = from Registration_Sheet in db.Registration_Sheet select Registration_Sheet;
             foreach (var sheet in regSheet)
             {
-                //dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Type_Desctription, sheet.Paid);
+                dt.Rows.Add(sheet.First_Name, sheet.Surname, sheet.Licence_No, sheet.Date_Written, sheet.Type_Desctription, sheet.Mark);
             }
 
             using (XLWorkbook wb = new XLWorkbook())
@@ -1428,7 +1535,7 @@ namespace SkyExams.Controllers
                 Console.Write(encodedPassword);
                 return encodedPassword;
             }// try
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("Error in base64Encode" + ex);
             }// catch

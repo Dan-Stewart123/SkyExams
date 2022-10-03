@@ -4,6 +4,8 @@
     ViewBag.Title = "Account";
     var time = ViewData["time"];
     var restoreMessage = ViewData["msg"];
+    var city = ViewData["city"];
+    var country = ViewData["country"];
 }
 
 <h2>Account Details</h2>
@@ -70,7 +72,7 @@
     </dt>
 
     <dd>
-        @Html.DisplayFor(model => model.Physical_Address)
+        @Html.DisplayFor(model => model.Physical_Address), @city, @country
     </dd>
 
     <dt class="col-md-4">
@@ -143,7 +145,7 @@
 </button>
 <br />
 <br />
-<button type="button" class="btn btn-danger" style="width:250px;" onclick="location.href='@Url.Action("loginScreen", "Sys_User", new { id = Model.SysUser_ID })'">
+<button type="button" class="btn btn-danger" style="width:250px;" onclick="location.href='@Url.Action("loginScreen", "Sys_User")'">
     Logout
 </button>
 
