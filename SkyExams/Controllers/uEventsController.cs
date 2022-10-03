@@ -17,15 +17,24 @@ namespace SkyExams.Controllers
     {
         private SkyExamsEntities db = new SkyExamsEntities();
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult Index(int? id)
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == Convert.ToInt32(id));
                     ViewData["userId"] = "" + tempUser.SysUser_ID;
                     ViewData["role"] = "" + tempUser.User_Role_ID;
+                    SetPageCacheNoStore();
                     return View();
                 }
                 else

@@ -24,6 +24,14 @@ namespace SkyExams.Controllers
             return View(db.Bookings.ToList());
         }
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult studentCheck(int? id)
         {
             Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -43,13 +51,22 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
-                    List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
-                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
-                    ViewData["userId"] = "" + id;
-                    return View(slotsList);
+                    if(tempIns != null)
+                    {
+                        List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
+                        ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                        ViewData["userId"] = "" + id;
+                        SetPageCacheNoStore();
+                        return View(slotsList);
+                    }
+                    else
+                    {
+                        SetPageCacheNoStore();
+                        return View(db.Instructor_Slots.ToList());
+                    }
                 }
                 else
                 {
@@ -68,11 +85,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["err"] = err;
+                    SetPageCacheNoStore();
                     return View(tempIns);
                 }
                 else
@@ -119,7 +137,7 @@ namespace SkyExams.Controllers
                         db.Instructor_Slots.Add(newSlot);
                         db.SaveChanges();
                     }// if statement
-                    
+                    SetPageCacheNoStore();
                     return RedirectToAction("slotsScreen", new { id = id });
                 }
                 else
@@ -139,11 +157,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || slotId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Instructor_Slots delSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
+                    SetPageCacheNoStore();
                     return View(delSlot);
                 }
                 else
@@ -197,6 +216,7 @@ namespace SkyExams.Controllers
                             return RedirectToAction("bookingsScreen", new { id = id });
                         }// catch
                     }//if statement
+                    SetPageCacheNoStore();
                     return RedirectToAction("slotsScreen", new { id = id });
                 }
                 else
@@ -216,11 +236,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || slotId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
+                    SetPageCacheNoStore();
                     return View(updateSlot);
                 }
                 else
@@ -294,7 +315,7 @@ namespace SkyExams.Controllers
                         }// catch
 
                     }// if statement
-
+                    SetPageCacheNoStore();
                     return RedirectToAction("slotsScreen", new { id = id });
                 }
                 else
@@ -313,12 +334,13 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     List<Booking> bookingsList = db.Bookings.ToList().FindAll(b => b.Student_ID == tempStu.Student_ID);
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["uID"] = "" + id;
+                    SetPageCacheNoStore();
                     return View(bookingsList);
                 }
                 else
@@ -337,7 +359,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
@@ -361,6 +383,7 @@ namespace SkyExams.Controllers
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["err"] = err;
+                    SetPageCacheNoStore();
                     return View(instructors);
                 }
                 else
@@ -456,13 +479,14 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || bookingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == delBooking.Instructor_ID);
                     ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
+                    SetPageCacheNoStore();
                     return View(delBooking);
                 }
                 else
@@ -520,7 +544,7 @@ namespace SkyExams.Controllers
                     {
                         return RedirectToAction("bookingsScreen", new { id = id });
                     }// catch
-
+                    SetPageCacheNoStore();
                     return RedirectToAction("bookingsScreen", new { id = id });
                 }
                 else
@@ -540,7 +564,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || bookingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
@@ -550,6 +574,7 @@ namespace SkyExams.Controllers
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == stuIns.Instructor_ID);
                     ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
+                    SetPageCacheNoStore();
                     return View(slots);
                 }
                 else
@@ -569,7 +594,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || bookingId != null || slotId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Booking tempBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
                     Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == slotId);
@@ -627,7 +652,7 @@ namespace SkyExams.Controllers
                     {
                         return RedirectToAction("bookingsScreen", new { id = id });
                     }// catch
-
+                    SetPageCacheNoStore();
                     return RedirectToAction("bookingsScreen", new { id = id });
                 }
                 else
