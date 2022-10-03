@@ -8,7 +8,7 @@
 
 <h2>Booking Slots</h2>
 <div>
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("createSlot", "Bookings", new { id = uID })'">
+    <button type="button" id="addBtn" style="display:none;" class="btn btn-primary" onclick="location.href='@Url.Action("createSlot", "Bookings", new { id = uID })'">
         Create Booking Slot
     </button>
 </div>
@@ -61,6 +61,7 @@
     function adminCheck() {
         var userId = @role;
         if (userId == '2') {
+            document.getElementById("addBtn").style.display = "block";
             var func = document.getElementsByClassName("insFunc");
             for (var i = 0; i <= func.length; i++) {
                 func[i].style.display = "block";
