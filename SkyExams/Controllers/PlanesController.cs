@@ -90,9 +90,9 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    if (type == "" || description == "" || sign == "" || hoursFlown == 0 || serviceHours == 0)
+                    if (type == "" || description == "" || sign == "" || hoursFlown <= 0 || serviceHours <= 0)
                     {
-                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        string temp = "Hint: Complete all the fields before clicking submit. Note that numbers can't be negative.";
                         return RedirectToAction("addPlaneScreen", new { id = id, err = temp });
                     }// checks fields arent empty
                     else
@@ -243,9 +243,9 @@ namespace SkyExams.Controllers
                 {
                     int pID = Convert.ToInt32(id);
                     Plane plane = db.Planes.Find(pID);
-                    if (description == "" || sign == "" || hoursFlown == 0 || serviceHours == 0)
+                    if (description == "" || sign == "" || hoursFlown <= 0 || serviceHours <= 0)
                     {
-                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        string temp = "Hint: Complete all the fields before clicking submit. Note that numbers can't be negative.";
                         return RedirectToAction("updatePlane", new { loggedId = userId, id = id, err = temp });
                     }// checks if all fields are complete 
                     else
@@ -621,8 +621,17 @@ namespace SkyExams.Controllers
                         imageBytes = reader.ReadBytes((int)pic.ContentLength);
                         newPlaneType.Plane_Image = imageBytes;
 
-                        db.Plane_Type.Add(newPlaneType);
-                        db.SaveChanges();
+                        string ext = Path.GetExtension(pic.FileName).ToUpper();
+                        if (ext == ".JPEG" || ext == ".PNG" || ext == ".JPG")
+                        {
+                            db.Plane_Type.Add(newPlaneType);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            string temp = "Hint: Upload an image.";
+                            return RedirectToAction("addPlaneTypeScreen", new { id = id, err = temp });
+                        }
 
                         Exam newExam = new Exam();
                         //newExam.Exam_ID = newPlaneType.Plane_Type_ID;
