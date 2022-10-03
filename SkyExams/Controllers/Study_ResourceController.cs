@@ -20,18 +20,26 @@ namespace SkyExams.Controllers
             return View(db.Study_Resource.ToList());
         }
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult resourceScreen(int? id)
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User forRole = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["userRole"] = "" + forRole.User_Role_ID;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane_Type> planeTypes = db.Plane_Type.ToList();
-
+                    SetPageCacheNoStore();
                     return View(planeTypes);
                 }
                 else
@@ -58,7 +66,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || typeId != null)
+                if(Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userID"] = "" + id;
                     Sys_User user = db.Sys_User.Find(id);
@@ -83,6 +91,7 @@ namespace SkyExams.Controllers
                                 }
                             }// inner for each
                         }// for each
+                        SetPageCacheNoStore();
                         return View(resourceList);
 
                     }// if user is a student
@@ -91,6 +100,7 @@ namespace SkyExams.Controllers
                         ViewData["themeID"] = "" + typeId;
                         ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == typeId).Type_Description;
                         resourceList = db.Study_Resource.ToList().FindAll(p => p.Rating_ID == typeId);
+                        SetPageCacheNoStore();
                         return View(resourceList);
 
                     }// if user is not a student
@@ -119,12 +129,13 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || themeId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["themeID"] = "" + themeId;
                     ViewData["err"] = err;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User user = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
+                    SetPageCacheNoStore();
                     return View(user);
                 }
                 else
@@ -177,6 +188,7 @@ namespace SkyExams.Controllers
                             string temp = "Hint: Upload a PDF.";
                             return RedirectToAction("addResource", new { id = id, themeId = themeId, err = temp });
                         }
+                        SetPageCacheNoStore();
                         return RedirectToAction("resourceScreen", new { id = id });
                     }// else
                 }
@@ -196,12 +208,13 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (loggedId != null || id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["loggedId"] = "" + loggedId;
                     Study_Resource delResource = db.Study_Resource.ToList().Find(p => p.Study_Resource_ID == id);
                     ViewData["planeType"] = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == delResource.Rating_ID).Type_Description;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    SetPageCacheNoStore();
                     return View(delResource);
                 }
                 else
@@ -234,6 +247,7 @@ namespace SkyExams.Controllers
                             db.SaveChanges();
                         }// for each
                     }// if statement
+                    SetPageCacheNoStore();
                     return RedirectToAction("resourceScreen", new { id = loggedId });
                 }
                 else

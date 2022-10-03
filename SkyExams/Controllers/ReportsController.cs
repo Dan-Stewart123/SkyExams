@@ -18,14 +18,23 @@ namespace SkyExams.Controllers
 
         private SkyExamsEntities db = new SkyExamsEntities();
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult reportsScreen(int? id)
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Sys_User user = db.Sys_User.ToList().Find(s => s.SysUser_ID == id);
+                    SetPageCacheNoStore();
                     return View(user);
                 }
                 else
@@ -44,11 +53,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
                     List<Sys_User> students = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 1);
+                    SetPageCacheNoStore();
                     return View(students);
                 }
                 else
@@ -95,6 +105,7 @@ namespace SkyExams.Controllers
 
                     ViewData["userID"] = "" + loggedId;
                     ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
+                    SetPageCacheNoStore();
                     return View(reportStu);
                 }
                 else
@@ -114,11 +125,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
                     List<Country> countries = db.Countries.ToList();
+                    SetPageCacheNoStore();
                     return View(countries);
                 }
                 else
@@ -175,6 +187,7 @@ namespace SkyExams.Controllers
                     groupReport.totHours = totH;
                     ViewData["userID"] = "" + loggedId;
                     ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
+                    SetPageCacheNoStore();
                     return View(groupReport);
                 }
                 else
@@ -193,11 +206,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["userID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     List<Plane> planes = db.Planes.ToList();
+                    SetPageCacheNoStore();
                     return View(planes);
                 }
                 else
@@ -231,6 +245,7 @@ namespace SkyExams.Controllers
                     reportPlane.Call_Sign = tempPlane.Call_Sign;
                     reportPlane.Description = tempPlane.Description;
                     reportPlane.services = db.Plane_Service.ToList().FindAll(s => s.Plane_ID == tempPlane.Plane_ID);
+                    SetPageCacheNoStore();
                     return View(reportPlane);
                 }
                 else
@@ -249,11 +264,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
                     List<Sys_User> instructors = db.Sys_User.ToList().FindAll(s => s.User_Role_ID == 2);
+                    SetPageCacheNoStore();
                     return View(instructors);
                 }
                 else
@@ -317,6 +333,7 @@ namespace SkyExams.Controllers
 
                     ViewData["userID"] = "" + loggedId;
                     ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == loggedId).Surname;
+                    SetPageCacheNoStore();
                     return View(insReport);
                 }
                 else
@@ -335,10 +352,11 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
+                    SetPageCacheNoStore();
                     return View();
                 }
                 else
@@ -369,7 +387,7 @@ namespace SkyExams.Controllers
                         int count = stuExamList.Count();
                         int totalMark = 0;
                         tempAverage.examId = e.Exam_ID;
-                        tempAverage.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == e.Exam_ID).Type_Description;
+                        tempAverage.examName = db.Plane_Type.ToList().Find(p => p.Plane_Type_ID == e.Plane_Type_ID).Type_Description;
                         if (stuExamList.Count != 0)
                         {
                             foreach (var s in stuExamList)
@@ -390,16 +408,17 @@ namespace SkyExams.Controllers
                     ViewData["userID"] = "" + id;
                     ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
                     ViewBag.DataPoints = JsonConvert.SerializeObject(averages, _jsonSetting);
+                    SetPageCacheNoStore();
                     return View(avgs);
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
-            catch
+            catch(Exception e)
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// exam report
@@ -409,10 +428,11 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["userID"] = "" + id;
+                    SetPageCacheNoStore();
                     return View();
                 }
                 else
@@ -437,6 +457,7 @@ namespace SkyExams.Controllers
                     List<uEvent> events = db.uEvents.ToList().FindAll(u => u.Start >= startDate);
                     ViewData["userID"] = "" + id;
                     ViewData["userName"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == id).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == id).Surname;
+                    SetPageCacheNoStore();
                     return View(events);
                 }
                 else
