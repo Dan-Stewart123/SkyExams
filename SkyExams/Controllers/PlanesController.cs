@@ -348,6 +348,16 @@ namespace SkyExams.Controllers
                         string temp = "Hint: Complete all the fields before clicking submit.";
                         return RedirectToAction("updatePlaneHours", new { loggedId = userId, id = id, err = temp });
                     }// checks if all fields are complete 
+                    if (hoursFlown <= 0)
+                    {
+                        string temp = "Hint: Plane huors flown cannot be less than 0.";
+                        return RedirectToAction("updatePlaneHours", new { loggedId = userId, id = id, err = temp });
+                    }// if negative
+                    if (hoursFlown <= plane.Hours_Flown)
+                    {
+                        string temp = "Hint: Cannot be less than ccurrent hours flown.";
+                        return RedirectToAction("updatePlaneHours", new { loggedId = userId, id = id, err = temp });
+                    }// if negative
                     else
                     {
                         Plane updatePlane = new Plane();
@@ -530,7 +540,7 @@ namespace SkyExams.Controllers
                 {
                     Plane plane = db.Planes.ToList().Find(p => p.Plane_ID == id);
                     Plane updatePlane = new Plane();
-                    if (details == "")
+                    if (details == "" || parts == "")
                     {
                         string temp = "Hint: Complete all the fields before clicking submit.";
                         return RedirectToAction("captureServiceDetails", new { loggedId = loggedId, id = plane.Plane_ID, err = temp });

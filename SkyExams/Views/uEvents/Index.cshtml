@@ -212,7 +212,7 @@
             }
             //function for submitting event data to the server.
             var userRole = @Html.Raw(Json.Encode(ViewData["role"]));
-            if (userRole == '2' || userRole == '3' || userRole == '4') {
+            if (userRole == '3' || userRole == '4') {
                 $('#btnDelete').show();
                 function SaveEvent(data) {
                     $.ajax({
