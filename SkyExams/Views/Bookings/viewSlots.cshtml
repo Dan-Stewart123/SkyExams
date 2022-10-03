@@ -3,6 +3,7 @@
     ViewBag.Title = "viewSlots";
     var uID = ViewData["uID"];
     var time = ViewData["time"];
+    var err = ViewData["err"];
 }
 
 <h2>Booking slots</h2>
@@ -14,6 +15,9 @@
     <div style="display:none;">
         <input type="text" id="id" name="id" value="@uID">
     </div>
+    <label style="color:red">@err</label>
+    <br />
+    <br />
     <label for="insructors">Select an Instructor:</label>
     <select id="instructors" class="instructors">
         @foreach (var item in Model)
