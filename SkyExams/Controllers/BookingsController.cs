@@ -333,7 +333,7 @@ namespace SkyExams.Controllers
 
         }// bookings screen
 
-        public ActionResult viewSlots(int? id)
+        public ActionResult viewSlots(int? id, string err)
         {
             try
             {
@@ -360,6 +360,7 @@ namespace SkyExams.Controllers
                     ViewBag.planes = planeTypes;
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    ViewData["err"] = err;
                     return View(instructors);
                 }
                 else
@@ -387,53 +388,57 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
-                    Instructor_Slots bookSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == FromJson);
-                    Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
-                    Booking newBooking = new Booking();
-                    newBooking.Student_ID = sForId.Student_ID;
-                    newBooking.Instructor_ID = bookSlot.Instructor_ID;
-                    //newBooking.Slot_ID = bookSlot.Slot_ID + db.Instructor_Slots.ToList().Count;
-                    newBooking.Date_Time = Convert.ToDateTime(bookSlot.Date_Time);
-                    newBooking.Plane_Type_ID = Convert.ToInt32(planes);
-
-                    Instructor_Slots updateSlot = new Instructor_Slots();
-                    updateSlot.Instructor_ID = bookSlot.Instructor_ID;
-                    updateSlot.Date_Time = bookSlot.Date_Time;
-                    updateSlot.Booked = true;
-                    updateSlot.Date_Time_String = bookSlot.Date_Time_String;
-                    
-                    db.Entry(updateSlot).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-
-                    newBooking.Slot_ID = updateSlot.Slot_ID;
-                    db.Bookings.Add(newBooking);
-                    db.SaveChanges();
-
-                    Sys_User stu = db.Sys_User.ToList().Find(s => s.SysUser_ID == sForId.SysUser_ID);
-
-                    try
+                    if (FromJson == null)
                     {
-                        //create email
-                        MimeMessage requestEmail = new MimeMessage();
-                        requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
-                        requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
-                        requestEmail.Subject = "Booking Conformation";
-                        requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + updateSlot.Date_Time + " has been booked by " + stu.FName + " " + stu.Surname };
-
-                        //send email
-                        SmtpClient client = new SmtpClient();
-                        client.Connect("smtp.gmail.com", 465, true);
-                        client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
-                        client.Send(requestEmail);
-                        client.Disconnect(true);
-                        client.Dispose();
-                    }// try
-                    catch
+                        string temp = "Please search and select a slot.";
+                        return RedirectToAction("viewSlots", new { id = id, err = temp });
+                    }// if
+                    else
                     {
+                        Instructor_Slots bookSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == FromJson);
+                        Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
+                        Booking newBooking = new Booking();
+                        newBooking.Student_ID = sForId.Student_ID;
+                        newBooking.Instructor_ID = bookSlot.Instructor_ID;
+                        newBooking.Slot_ID = Convert.ToInt32(FromJson);
+                        newBooking.Date_Time = Convert.ToDateTime(bookSlot.Date_Time);
+                        newBooking.Plane_Type_ID = Convert.ToInt32(planes);
+
+                        bookSlot.Booked = true;
+
+                        db.Entry(bookSlot).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        newBooking.Slot_ID = bookSlot.Slot_ID;
+                        db.Bookings.Add(newBooking);
+                        db.SaveChanges();
+
+                        Sys_User stu = db.Sys_User.ToList().Find(s => s.SysUser_ID == sForId.SysUser_ID);
+
+                        try
+                        {
+                            //create email
+                            MimeMessage requestEmail = new MimeMessage();
+                            requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
+                            requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
+                            requestEmail.Subject = "Booking Conformation";
+                            requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + bookSlot.Date_Time + " has been booked by " + stu.FName + " " + stu.Surname };
+
+                            //send email
+                            SmtpClient client = new SmtpClient();
+                            client.Connect("smtp.gmail.com", 465, true);
+                            client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                            client.Send(requestEmail);
+                            client.Disconnect(true);
+                            client.Dispose();
+                        }// try
+                        catch
+                        {
+                            return RedirectToAction("bookingsScreen", new { id = id });
+                        }// catch
+
                         return RedirectToAction("bookingsScreen", new { id = id });
-                    }// catch
-
-                    return RedirectToAction("bookingsScreen", new { id = id });
+                    }
                 }
                 else
                 {
