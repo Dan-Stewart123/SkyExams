@@ -296,7 +296,22 @@ namespace SkyExams.Controllers
                     Instructor instructor = db.Instructors.ToList().Find(i => i.SysUser_ID == tempIns.SysUser_ID);
                     insReport.title = db.Titles.ToList().Find(t => t.Title_ID == tempIns.Title_ID).TitleDesc;
                     insReport.name = tempIns.FName + " " + tempIns.Surname;
-                    insReport.students = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == instructor.Instructor_ID).Count();
+                    //List<Student_Instructor> tempList = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == instructor.Instructor_ID);
+                    try
+                    {
+                        if (db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == instructor.Instructor_ID) != null)
+                        {
+                            insReport.students = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == instructor.Instructor_ID).Count();
+                        }// if statement
+                        else
+                        {
+                            insReport.students = 0;
+                        }
+                    }
+                    catch
+                    {
+                        insReport.students = 0;
+                    }
                     insReport.licence = "" + instructor.Licence_No;
                     int totHours = 0;
                     foreach (var h in db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == instructor.Instructor_ID))
@@ -310,22 +325,43 @@ namespace SkyExams.Controllers
                     List<ExamAverageVM> avgs = new List<ExamAverageVM>();
                     foreach (var p in db.Plane_Type.ToList())
                     {
-                        List<Student_Instructor> stuIns = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == instructor.Instructor_ID);
-                        ExamAverageVM avg = new ExamAverageVM();                      
-                        avg.examId = p.Plane_Type_ID;
-                        avg.examName = p.Type_Description;
-                        int tot = 0;
-                        List<Student_Exam> examList = db.Student_Exam.ToList().FindAll(s => s.Exam_ID == p.Plane_Type_ID && s.Exam_Mark != 0);
-                        foreach(var se in examList)
+                        try
                         {
-                            if (se != null)
+                            ExamAverageVM avg = new ExamAverageVM();
+                            List<Student_Instructor> stuIns = db.Student_Instructor.ToList().FindAll(i => i.Instructor_ID == instructor.Instructor_ID);
+                            Exam tempExam = db.Exams.ToList().Find(e => e.Plane_Type_ID == p.Plane_Type_ID);
+                            avg.examId = tempExam.Exam_ID;
+                            avg.examName = p.Type_Description;
+                            int tot = 0;
+                            List<Student_Exam> examList = new List<Student_Exam>();
+                            foreach(var t in stuIns)
                             {
-                                tot = tot + Convert.ToInt32(se.Exam_Mark);
-                                int average = (tot / examList.Count);
-                                avg.examAvg = average;
-                            }// inner if statement
-                        }// for each
-                        avgs.Add(avg);
+                                Student_Exam temp = db.Student_Exam.ToList().Find(s => s.Exam_ID == tempExam.Exam_ID && s.Exam_Mark != 0 && s.Student_ID == t.Student_ID);
+                                if(temp != null)
+                                {
+                                    examList.Add(temp);
+                                }// if
+                            }// for each
+                            foreach (var se in examList)
+                            {
+                                if (se != null)
+                                {
+                                    tot = tot + Convert.ToInt32(se.Exam_Mark);
+                                    int average = (tot / examList.Count);
+                                    avg.examAvg = average;
+                                }// inner if statement
+                            }// for each
+                            avgs.Add(avg);
+                        }
+                        catch
+                        {
+                            ExamAverageVM avg = new ExamAverageVM();
+                            Exam tempExam = db.Exams.ToList().Find(e => e.Plane_Type_ID == p.Plane_Type_ID);
+                            avg.examId = tempExam.Exam_ID;
+                            avg.examName = p.Type_Description;
+                            avg.examAvg = 0;
+                            avgs.Add(avg);
+                        }
 
                     }// for each
 
@@ -338,12 +374,12 @@ namespace SkyExams.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("loginScreen");
+                    return RedirectToAction("loginScreen", "Sys_User");
                 }
             }
             catch
             {
-                return RedirectToAction("loginScreen");
+                return RedirectToAction("loginScreen", "Sys_User");
             }
             
         }// generate instructor report
