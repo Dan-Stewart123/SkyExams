@@ -24,6 +24,14 @@ namespace SkyExams.Controllers
             return View(db.Bookings.ToList());
         }
 
+        public void SetPageCacheNoStore()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Expires", "0");
+        }
+
         public ActionResult studentCheck(int? id)
         {
             Sys_User temp = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
@@ -43,13 +51,26 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
-                    List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
-                    ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
-                    ViewData["userId"] = "" + id;
-                    return View(slotsList);
+                    if(tempIns != null)
+                    {
+                        List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == tempIns.Instructor_ID);
+                        ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                        ViewData["userId"] = id;
+                        ViewData["role"] = "" + db.Sys_User.ToList().Find(s => s.SysUser_ID == Convert.ToInt32(id)).User_Role_ID;
+                        SetPageCacheNoStore();
+                        return View(slotsList);
+                    }
+                    else
+                    {
+                        ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                        ViewData["userId"] = id;
+                        ViewData["role"] = "" + db.Sys_User.ToList().Find(s => s.SysUser_ID == Convert.ToInt32(id)).User_Role_ID;
+                        SetPageCacheNoStore();
+                        return View(db.Instructor_Slots.ToList());
+                    }
                 }
                 else
                 {
@@ -68,11 +89,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["err"] = err;
+                    SetPageCacheNoStore();
                     return View(tempIns);
                 }
                 else
@@ -99,6 +121,11 @@ namespace SkyExams.Controllers
                         string temp = "Hint: Complete all the fields before clicking submit.";
                         return RedirectToAction("createSlot", new { id = id, err = temp });
                     }
+                    if (slotTime < DateTime.Now)
+                    {
+                        string temp = "Hint: Cannot upload slots for past dates.";
+                        return RedirectToAction("createSlot", new { id = id, err = temp });
+                    }
                     Instructor_Slots newSlot = new Instructor_Slots();
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.SysUser_ID == id);
                     newSlot.Instructor_ID = tempIns.Instructor_ID;
@@ -119,7 +146,7 @@ namespace SkyExams.Controllers
                         db.Instructor_Slots.Add(newSlot);
                         db.SaveChanges();
                     }// if statement
-                    
+                    SetPageCacheNoStore();
                     return RedirectToAction("slotsScreen", new { id = id });
                 }
                 else
@@ -139,11 +166,12 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || slotId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Instructor_Slots delSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
+                    SetPageCacheNoStore();
                     return View(delSlot);
                 }
                 else
@@ -173,21 +201,21 @@ namespace SkyExams.Controllers
                         Student tempStu = db.Students.ToList().Find(s => s.Student_ID == delBooking.Student_ID);
                         Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == tempStu.SysUser_ID);
                         db.Bookings.Remove(delBooking);
-                        db.SaveChangesAsync();                      
+                        db.SaveChangesAsync();
 
                         try
                         {
                             //create email
                             MimeMessage requestEmail = new MimeMessage();
-                            requestEmail.From.Add(new MailboxAddress("Booking Cancellation", "skyexams.fts@gmail.com"));
-                            requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to student
+                            requestEmail.From.Add(new MailboxAddress("Booking Cancellation", "skyexams2022@gmail.com"));
+                            requestEmail.To.Add(MailboxAddress.Parse(tempUser.Email_Address));// to student
                             requestEmail.Subject = "Booking Cancellation";
                             requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + delSlot.Date_Time + " has been cancelled by  your instructor" };
 
                             //send email
                             SmtpClient client = new SmtpClient();
                             client.Connect("smtp.gmail.com", 465, true);
-                            client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                            client.Authenticate("skyexams2022@gmail.com", "zsulguuirkfwkkqe");
                             client.Send(requestEmail);
                             client.Disconnect(true);
                             client.Dispose();
@@ -197,6 +225,7 @@ namespace SkyExams.Controllers
                             return RedirectToAction("bookingsScreen", new { id = id });
                         }// catch
                     }//if statement
+                    SetPageCacheNoStore();
                     return RedirectToAction("slotsScreen", new { id = id });
                 }
                 else
@@ -212,15 +241,17 @@ namespace SkyExams.Controllers
         }// delete slot conformation
 
         [HttpGet]
-        public ActionResult updateSlot(int? id, int? slotId)
+        public ActionResult updateSlot(int? id, int? slotId, string err)
         {
             try
             {
-                if (id != null || slotId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
+                    ViewData["err"] = err;
                     Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
+                    SetPageCacheNoStore();
                     return View(updateSlot);
                 }
                 else
@@ -242,6 +273,16 @@ namespace SkyExams.Controllers
             {
                 if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
+                    if (slotTime == null)
+                    {
+                        string temp = "Hint: Complete all the fields before clicking submit.";
+                        return RedirectToAction("updateSlot", new { id = id, err = temp });
+                    }
+                    if (slotTime < DateTime.Now)
+                    {
+                        string temp = "Hint: Cannot upload slots for past dates.";
+                        return RedirectToAction("updateSlot", new { id = id, slotId = slotId, err = temp });
+                    }
                     Instructor_Slots tempSlot = db.Instructor_Slots.ToList().Find(s => s.Slot_ID == slotId);
                     Instructor_Slots updateSlot = new Instructor_Slots();
                     updateSlot.Instructor_ID = tempSlot.Instructor_ID;
@@ -257,7 +298,7 @@ namespace SkyExams.Controllers
 
                     Booking tempBooking = db.Bookings.ToList().Find(b => b.Slot_ID == slotId);
                     Booking updateBooking = new Booking();
-                    if (tempSlot.Booked == true)
+                    if (tempSlot.Booked == true && tempSlot != null)
                     {
                         updateBooking.Student_ID = tempBooking.Student_ID;
                         updateBooking.Instructor_ID = tempBooking.Instructor_ID;
@@ -271,19 +312,22 @@ namespace SkyExams.Controllers
                         db.Bookings.Add(updateBooking);
                         db.SaveChanges();
 
+                        Student tempStu = db.Students.ToList().Find(st => st.Student_ID == updateBooking.Student_ID);
+                        Sys_User tempUser = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempStu.SysUser_ID);
+                        
                         try
                         {
                             //create email
                             MimeMessage requestEmail = new MimeMessage();
-                            requestEmail.From.Add(new MailboxAddress("Booking Change", "skyexams.fts@gmail.com"));
-                            requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to student
+                            requestEmail.From.Add(new MailboxAddress("Booking Change", "skyexams2022@gmail.com"));
+                            requestEmail.To.Add(MailboxAddress.Parse(tempUser.Email_Address));// to student
                             requestEmail.Subject = "Booking Change";
                             requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + tempSlot.Date_Time + " has been changed to " + updateSlot.Date_Time + " by  your instructor" };
 
                             //send email
                             SmtpClient client = new SmtpClient();
                             client.Connect("smtp.gmail.com", 465, true);
-                            client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                            client.Authenticate("skyexams2022@gmail.com", "zsulguuirkfwkkqe");
                             client.Send(requestEmail);
                             client.Disconnect(true);
                             client.Dispose();
@@ -294,7 +338,7 @@ namespace SkyExams.Controllers
                         }// catch
 
                     }// if statement
-
+                    SetPageCacheNoStore();
                     return RedirectToAction("slotsScreen", new { id = id });
                 }
                 else
@@ -313,12 +357,13 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Student tempStu = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     List<Booking> bookingsList = db.Bookings.ToList().FindAll(b => b.Student_ID == tempStu.Student_ID);
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["uID"] = "" + id;
+                    SetPageCacheNoStore();
                     return View(bookingsList);
                 }
                 else
@@ -337,7 +382,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
@@ -361,6 +406,7 @@ namespace SkyExams.Controllers
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     ViewData["err"] = err;
+                    SetPageCacheNoStore();
                     return View(instructors);
                 }
                 else
@@ -413,21 +459,24 @@ namespace SkyExams.Controllers
                         db.Bookings.Add(newBooking);
                         db.SaveChanges();
 
+                        Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == bookSlot.Instructor_ID);
+                        Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == tempIns.SysUser_ID);
+
                         Sys_User stu = db.Sys_User.ToList().Find(s => s.SysUser_ID == sForId.SysUser_ID);
 
                         try
                         {
                             //create email
                             MimeMessage requestEmail = new MimeMessage();
-                            requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams.fts@gmail.com"));
-                            requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
+                            requestEmail.From.Add(new MailboxAddress("Booking conformation", "skyexams2022@gmail.com"));
+                            requestEmail.To.Add(MailboxAddress.Parse(tempUser.Email_Address));// to instructor
                             requestEmail.Subject = "Booking Conformation";
                             requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + bookSlot.Date_Time + " has been booked by " + stu.FName + " " + stu.Surname };
 
                             //send email
                             SmtpClient client = new SmtpClient();
                             client.Connect("smtp.gmail.com", 465, true);
-                            client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                            client.Authenticate("skyexams2022@gmail.com", "zsulguuirkfwkkqe");
                             client.Send(requestEmail);
                             client.Disconnect(true);
                             client.Dispose();
@@ -456,13 +505,14 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || bookingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     ViewData["uID"] = "" + id;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Booking delBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == delBooking.Instructor_ID);
                     ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
+                    SetPageCacheNoStore();
                     return View(delBooking);
                 }
                 else
@@ -499,19 +549,22 @@ namespace SkyExams.Controllers
                     db.Instructor_Slots.Add(updateSlot);
                     db.SaveChanges();
 
+                    Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == bookSlot.Instructor_ID);
+                    Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == tempIns.SysUser_ID);
+
                     try
                     {
                         //create email
                         MimeMessage requestEmail = new MimeMessage();
-                        requestEmail.From.Add(new MailboxAddress("Booking Cancellation", "skyexams.fts@gmail.com"));
-                        requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
+                        requestEmail.From.Add(new MailboxAddress("Booking Cancellation", "skyexams2022@gmail.com"));
+                        requestEmail.To.Add(MailboxAddress.Parse(tempUser.Email_Address));// to instructor
                         requestEmail.Subject = "Booking Cancellation";
                         requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + bookSlot.Date_Time + " has been cancelled by the student" };
 
                         //send email
                         SmtpClient client = new SmtpClient();
                         client.Connect("smtp.gmail.com", 465, true);
-                        client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                        client.Authenticate("skyexams2022@gmail.com", "zsulguuirkfwkkqe");
                         client.Send(requestEmail);
                         client.Disconnect(true);
                         client.Dispose();
@@ -520,7 +573,7 @@ namespace SkyExams.Controllers
                     {
                         return RedirectToAction("bookingsScreen", new { id = id });
                     }// catch
-
+                    SetPageCacheNoStore();
                     return RedirectToAction("bookingsScreen", new { id = id });
                 }
                 else
@@ -540,7 +593,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || bookingId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Student sForId = db.Students.ToList().Find(s => s.SysUser_ID == id);
                     Student_Instructor stuIns = db.Student_Instructor.ToList().Find(s => s.Student_ID == sForId.Student_ID);
@@ -550,6 +603,7 @@ namespace SkyExams.Controllers
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == stuIns.Instructor_ID);
                     ViewData["ins"] = db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).FName + " " + db.Sys_User.ToList().Find(s => s.SysUser_ID == tempIns.SysUser_ID).Surname;
+                    SetPageCacheNoStore();
                     return View(slots);
                 }
                 else
@@ -569,7 +623,7 @@ namespace SkyExams.Controllers
         {
             try
             {
-                if (id != null || bookingId != null || slotId != null)
+                if (Request.Cookies["AuthID"].Value == Session["AuthID"].ToString())
                 {
                     Booking tempBooking = db.Bookings.ToList().Find(b => b.Booking_ID == bookingId);
                     Instructor_Slots updateSlot = db.Instructor_Slots.ToList().Find(i => i.Slot_ID == slotId);
@@ -606,19 +660,22 @@ namespace SkyExams.Controllers
                     db.Bookings.Add(updateBooking);
                     db.SaveChanges();
 
+                    Instructor tempIns = db.Instructors.ToList().Find(i => i.Instructor_ID == tempSlot.Instructor_ID);
+                    Sys_User tempUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == tempIns.SysUser_ID);
+
                     try
                     {
                         //create email
                         MimeMessage requestEmail = new MimeMessage();
-                        requestEmail.From.Add(new MailboxAddress("Booking Change", "skyexams.fts@gmail.com"));
-                        requestEmail.To.Add(MailboxAddress.Parse("danielmarcstewart@gmail.com"));// to instructor
+                        requestEmail.From.Add(new MailboxAddress("Booking Change", "skyexams2022@gmail.com"));
+                        requestEmail.To.Add(MailboxAddress.Parse(tempUser.Email_Address));// to instructor
                         requestEmail.Subject = "Booking Change";
                         requestEmail.Body = new TextPart("plain") { Text = "Your slot on " + tempSlot.Date_Time + " has been changed to " + updateSlot.Date_Time + "  by the student" };
 
                         //send email
                         SmtpClient client = new SmtpClient();
                         client.Connect("smtp.gmail.com", 465, true);
-                        client.Authenticate("skyexams.fts@gmail.com", "hyekkmqkosqoqmth");
+                        client.Authenticate("skyexams2022@gmail.com", "zsulguuirkfwkkqe");
                         client.Send(requestEmail);
                         client.Disconnect(true);
                         client.Dispose();
@@ -627,7 +684,7 @@ namespace SkyExams.Controllers
                     {
                         return RedirectToAction("bookingsScreen", new { id = id });
                     }// catch
-
+                    SetPageCacheNoStore();
                     return RedirectToAction("bookingsScreen", new { id = id });
                 }
                 else
