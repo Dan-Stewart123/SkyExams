@@ -53,7 +53,7 @@
     <br />
     <br />
     <div id="submitButton" style="display:none;">
-        <input type="submit" class="btn btn-primary" , value="Submit" />
+        <input type="submit" class="btn btn-primary" , value="Submit" id="submitButton" />
     </div>
 }
 
@@ -91,6 +91,7 @@
             });
         });
         $("#btnUpload").click(function () {
+            document.getElementById("submitButton").disabled = false;
             $.ajax({
                 type: "POST",
                 url: "/Sys_User/SaveCapture",

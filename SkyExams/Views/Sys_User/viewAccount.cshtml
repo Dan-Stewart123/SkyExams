@@ -4,8 +4,7 @@
     ViewBag.Title = "Account";
     var time = ViewData["time"];
     var restoreMessage = ViewData["msg"];
-    var city = ViewData["city"];
-    var country = ViewData["country"];
+    
 }
 
 <h2>Account Details</h2>
@@ -72,7 +71,7 @@
     </dt>
 
     <dd>
-        @Html.DisplayFor(model => model.Physical_Address), @city, @country
+        @Html.DisplayFor(model => model.Physical_Address)
     </dd>
 
     <dt class="col-md-4">
