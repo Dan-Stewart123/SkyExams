@@ -358,7 +358,7 @@ namespace SkyExams.Controllers
                     //create email
                     MimeMessage requestEmail = new MimeMessage();
                     requestEmail.From.Add(new MailboxAddress("New user", "skyexams2022@gmail.com"));
-                    requestEmail.To.Add(MailboxAddress.Parse("skyexams2022.fts@gmail.com"));
+                    requestEmail.To.Add(MailboxAddress.Parse("skyexams2022@gmail.com"));
                     requestEmail.Subject = "New user request";
                     requestEmail.Body = new TextPart("plain") { Text = "A new user wishes to be registered on the system: User name: " + firstName + " " + lastName + " email address: " + email };
 
@@ -508,8 +508,6 @@ namespace SkyExams.Controllers
                 {
                     Sys_User viewUser = db.Sys_User.ToList().Find(u => u.SysUser_ID == id);
                     ViewData["msg"] = msg;
-                    ViewData["city"] = db.Cities.ToList().Find(c => c.City_ID == viewUser.City_ID).City_Name;
-                    ViewData["country"] = db.Countries.ToList().Find(co => co.Country_ID == viewUser.Country_ID).Country_Name;
                     ViewData["time"] = db.Timers.ToList().Find(t => t.Timer_ID == 1).Timer_Value * 60000;
                     SetPageCacheNoStore();
                     return View(viewUser);
@@ -1221,36 +1219,58 @@ namespace SkyExams.Controllers
                     {
                         List<Instructor> tempInstructorList = db.Instructors.ToList();
                         Instructor delInstructor = tempInstructorList.Find(u => u.SysUser_ID == id);
-                        db.Instructors.Remove(delInstructor);
-                        db.SaveChanges();
-                        List<Student_Instructor> delStudentInstructor = db.Student_Instructor.ToList().FindAll(s => s.Instructor_ID == delInstructor.Instructor_ID);
-                        if (delStudentInstructor != null)
+                        try
                         {
-                            foreach (var sI in delStudentInstructor)
+                            List<Student_Instructor> delStudentInstructor = db.Student_Instructor.ToList().FindAll(s => s.Instructor_ID == delInstructor.Instructor_ID);
+                            if (delStudentInstructor != null)
                             {
-                                db.Student_Instructor.Remove(sI);
-                                db.SaveChanges();
-                            }// for each
-                        }// if statement
+                                foreach (var sI in delStudentInstructor)
+                                {
+                                    db.Student_Instructor.Remove(sI);
+                                    db.SaveChanges();
+                                }// for each
+                            }// if statement
 
-                        List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(i => i.Instructor_ID == delInstructor.Instructor_ID);
-                        if (planList != null)
+                        }
+                        catch
                         {
-                            foreach (Lesson_Plan temp in planList)
-                            {
-                                db.Lesson_Plan.Remove(temp);
-                                db.SaveChanges();
-                            }// del lesson plans
-                        }// if statement
-                        List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == delInstructor.Instructor_ID);
-                        if(slotsList != null)
+
+                        }
+                        try
                         {
-                            foreach(var temp in slotsList)
+                            List<Lesson_Plan> planList = db.Lesson_Plan.ToList().FindAll(i => i.Instructor_ID == delInstructor.Instructor_ID);
+                            if (planList != null)
                             {
-                                db.Instructor_Slots.Remove(temp);
-                                db.SaveChanges();
+                                foreach (Lesson_Plan temp in planList)
+                                {
+                                    db.Lesson_Plan.Remove(temp);
+                                    db.SaveChanges();
+                                }// del lesson plans
+                            }// if statement
+                        }
+                        catch
+                        {
+
+                        }
+                        try
+                        {
+                            List<Instructor_Slots> slotsList = db.Instructor_Slots.ToList().FindAll(s => s.Instructor_ID == delInstructor.Instructor_ID);
+                            if (slotsList != null)
+                            {
+                                foreach (var temp in slotsList)
+                                {
+                                    db.Instructor_Slots.Remove(temp);
+                                    db.SaveChanges();
+                                }
                             }
                         }
+                        catch
+                        {
+
+                        }
+
+                        db.Instructors.Remove(delInstructor);
+                        db.SaveChanges();
                     }// instructors
                     if (sys_User.User_Role_ID == 3)
                     {
