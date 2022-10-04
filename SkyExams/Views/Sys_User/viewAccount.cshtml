@@ -107,32 +107,34 @@
     <br />
     <br />
 
-    <button type="button" id="timer" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("TimerView", "Sys_User", new { id = Model.SysUser_ID })'">
-        Adjust timer
-    </button>
+    <div id="managerFunc" style="display:none;">
+        <button type="button" id="timer" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("TimerView", "Sys_User", new { id = Model.SysUser_ID })'">
+            Adjust timer
+        </button>
 
-    <br />
-    <br />
+        <br />
+        <br />
 
-    <button type="button" id="btnBackup" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("BtnBackup_Click", "Sys_User", new { loggedId = Model.SysUser_ID })'">
-        Backup database
-    </button>
+        <button type="button" id="btnBackup" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("BtnBackup_Click", "Sys_User", new { loggedId = Model.SysUser_ID })'">
+            Backup database
+        </button>
 
-    <br />
-    <br />
+        <br />
+        <br />
 
-    <button type="button" id="btnRestore" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("BtnRestore_Click", "Sys_User", new { loggedId = Model.SysUser_ID })'">
-        Restore database
-    </button>
+        <button type="button" id="btnRestore" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("BtnRestore_Click", "Sys_User", new { loggedId = Model.SysUser_ID })'">
+            Restore database
+        </button>
 
-    <br />
-    <br />
+        <br />
+        <br />
 
-    <label>
-        @restoreMessage
-    </label>
-    <br />
-    <br />
+        <label>
+            @restoreMessage
+        </label>
+        <br />
+        <br />
+    </div>
 
 </div>
 <button type="button" class="btn btn-info" style="width:250px;" onclick="location.href='@Url.Action("resetPassword", "Sys_User", new { id = Model.SysUser_ID })'">
@@ -170,8 +172,11 @@
         if (@Model.User_Role_ID == 1){
             document.getElementById("persHrs").style.display = "block";
         }
-        if (@Model.User_Role_ID == 2){
+        if (@Model.User_Role_ID == 3 || @Model.User_Role_ID == 4){
             document.getElementById("captureReg").style.display = "block";
+        }
+        if (@Model.User_Role_ID == 4) {
+            document.getElementById("managerFunc").style.display = "block";
         }
     }
     window.onload = displayTitle;
